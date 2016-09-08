@@ -1,0 +1,134 @@
+.behavior {
+  .graph-labels {
+    overflow: hidden;
+    padding-top: 20px;
+    position: relative;
+    max-width: 100px;
+  }
+
+  .graph-header {
+    background: #f2f2f2;
+    margin-left: -20px;
+    margin-right: -20px;
+    border-top: 1px solid #DBE0E4;
+    border-bottom: 1px solid #DBE0E4;
+    text-transform: uppercase;
+    font-size: 14px;
+  }
+
+  .img-responsive {
+    max-width: 60%;
+  }
+
+  .graph-label {
+    width: 100%;
+    padding-left: 20px;
+
+    .col-md-4 {
+      padding-left: 10px;
+      padding-right: 0px;
+    }
+
+    ul {
+      float: left;
+      display: block;
+      width: 100%;
+    }
+
+    .label-tm {
+      background-color: $brand-primary;
+      color: white;
+      padding: 4px;
+      display: inline-block;
+      float: left;
+      &:after {
+        content: "";
+        position: absolute;
+        margin-left: -70px;
+        height: 1px;
+        background: $brand-black;
+        width: 80px;
+        top: 19px;
+        left: 0px;
+      }
+    }
+
+    span {
+      font-size: 12px;
+      line-height: 1em;
+    }
+
+    li {
+      line-height: 1em
+    }
+
+
+    .actions,
+    .drops {
+      li {
+        width: 100%;
+      }
+
+      .tag {
+        padding: 5px;
+        line-height: 1em;
+        display: inline-block;
+        width: 42px;
+        text-align: center;
+
+        &.yellow {
+          background-color: rgba(#f39c12, .6);
+        }
+        &.red {
+          background-color: rgba(#e74c3c, .6);
+        }
+        &.green {
+          background-color: rgba(#2ecc71, .6);
+        }
+        &.blue {
+          background-color: $brand-primary;
+          color: white;
+        }
+      }
+
+      .val {
+        display: inline-block;
+        line-height: 1em;
+        padding: 5px;
+        margin-left: 15px;
+      }
+    }
+
+
+  }
+
+  .importance {
+    height: 0;
+    border-top: 1px solid $brand-primary;
+  }
+
+  .selector {
+    .idx {
+      background-color: $brand-primary;
+      padding: 0 5px;
+      color: $brand-white;
+      text-align: center;
+      line-height: 1em;
+      font-size: 12px;
+      text-transform: uppercase;
+      padding: 4px;
+    }
+
+    .tag {
+      color: $brand-darker;
+      line-height: 1.3em;
+    }
+
+    .options {
+      background-color: white;
+      text-align: center;
+      li {
+      }
+    }
+  }
+}

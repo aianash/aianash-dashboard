@@ -1,0 +1,47 @@
+.sidebar {
+  color: white;
+  float: left;
+  position: absolute;
+  width: 150px;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  height: 100%;
+  bottom: 0;
+  background-color: $brand-darker;
+
+  .navbar {
+    border-radius: 0px;
+    min-height: 0;
+    margin-bottom: 10px;
+  }
+
+  .aian-logo {
+    font-size: 25px;
+    line-height: 25px;
+
+    span {
+      font-size: 35px;
+      line-height: 35px;
+    }
+  }
+
+  .sb-link {
+    display: block;
+    float: left;
+    width: 100%;
+    padding: 15px;
+    text-transform: uppercase;
+
+    color: rgba($brand-white, .7);
+
+    &.selected {
+      background-color: $brand-black;
+      color: $brand-primary;
+    }
+
+    &:hover {
+      background-color: $brand-black;
+    }
+  }
+}

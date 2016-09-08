@@ -1,0 +1,137 @@
+@import 'variables';
+@import 'bootstrap';
+@import 'utils';
+@import 'button';
+
+// @font-face {
+//   font-family: 'icomoon';
+//   src:  url('./fonts/icomoon.eot?vngltp');
+//   src:  url('./fonts/icomoon.eot?vngltp#iefix') format('embedded-opentype'),
+//     url('./fonts/icomoon.ttf?vngltp') format('truetype'),
+//     url('./fonts/icomoon.woff?vngltp') format('woff'),
+//     url('./fonts/icomoon.svg?vngltp#icomoon') format('svg');
+//   font-weight: normal;
+//   font-style: normal;
+// }
+
+@font-face {
+  font-family: 'icomoon';
+  src:  url('./fonts/icomoon.eot');
+  src:  url('./fonts/icomoon.eot') format('embedded-opentype'),
+    url('./fonts/icomoon.ttf') format('truetype'),
+    url('./fonts/icomoon.woff') format('woff'),
+    url('./fonts/icomoon.svg') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-heart:before {
+  content: "\e024";
+}
+.icon-check:before {
+  content: "\e116";
+}
+.icon-google:before {
+  content: "\ea8a";
+}
+.icon-facebook:before {
+  content: "\ea91";
+}
+.icon-twitter:before {
+  content: "\ea96";
+}
+.icon-linkedin:before {
+  content: "\eac9";
+}
+
+body {
+  font-family: $font-primary;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.7;
+  color: $brand-white;
+  background: $brand-black;
+}
+
+#page {
+  position: relative;
+  overflow-x: hidden;
+  width: 100%;
+  height: 100%;
+  @include transition(.5s);
+  .offcanvas & {
+    overflow: hidden; 
+    position: absolute;
+
+    &:after {
+      @include transition(2s);
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      z-index: 101;
+      background: rgba(0,0,0,.7);
+      content: "";
+    }
+  }
+}
+
+a {
+  @include transition(.5s);
+  &:hover, &:active, &:focus {
+    color: $brand-primary;
+    outline: none;
+    text-decoration: none;
+  }
+}
+p {
+  margin-bottom: 20px;
+}
+
+h1, h2, h3, h4, h5, h6, figure {
+  color: $brand-black;
+  font-family: $font-primary;
+  font-weight: 400;
+  margin: 0 0 20px 0;
+}
+
+.aianash {
+  color: white;
+}
+
+.hd-row {
+  margin-bottom: 6em;
+}
+
+.box-heading {
+  font-size: 32px;
+  font-family: $font-primary;
+  padding: 0px 20px;
+  text-transform: uppercase;
+  color: $brand-primary;
+  border: 4px solid $brand-primary;
+}
+
+// dashboard
+@import 'components/dashboard/dash';
+@import 'components/dashboard/sidebar';
+@import 'components/dashboard/footer';
+@import 'components/dashboard/graph';
+@import 'components/dashboard/behavior';
+@import 'components/dashboard/predict';

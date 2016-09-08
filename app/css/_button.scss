@@ -1,0 +1,19 @@
+.btn {
+  margin-right: 4px;
+  margin-bottom: 4px;
+  font-family: $font-primary;
+  font-size: 16px;
+  font-weight: 400;
+  @include transition(.5s);
+  padding: 8px 20px;
+  &.btn-md {
+    padding: 8px 20px!important;
+  }
+  &.btn-lg {
+    padding: 18px 36px!important;
+  }
+  &:hover, &:active, &:focus {
+    box-shadow: none!important;
+    outline: none!important;
+  }
+}

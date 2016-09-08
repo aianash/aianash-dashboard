@@ -1,0 +1,11 @@
+{
+    "verbose": false,
+    "watch": [
+      "server",
+      "app/components",
+      "webpack/webpack.config.dev-client.js",
+      "webpack/webpack.config.dev-server.js",
+      ".stylelintrc"
+    ],
+    "exec": "npm run build:dev && npm run babel-node -- server/index.js"
+}

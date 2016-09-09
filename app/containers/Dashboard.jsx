@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import classNames from 'classnames/bind';
 import styles from 'css/main';
-import { Sidebar } from 'components/dashboard';
+import { Sidebar } from 'components';
 
 const cx = classNames.bind(styles);
 

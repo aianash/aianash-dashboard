@@ -1,7 +1,8 @@
 import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux'
 import styles from 'css/main'
-import { Graph, Header } from 'components/dashboard'
+import { Graph } from 'components/commons'
+import { Header } from 'components/behavior'
 
 import {behaviorImg, pageseq} from 'images'
 const cx = require('classnames/bind').bind(styles)

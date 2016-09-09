@@ -2,7 +2,7 @@ import React, { PropTypes, Component } from 'react';
 import classNames from 'classnames/bind';
 import styles from 'css/main';
 
-import { PageStats } from 'components/dashboard';
+import { PageStats } from 'components/behavior';
 
 const cx = classNames.bind(styles);
 

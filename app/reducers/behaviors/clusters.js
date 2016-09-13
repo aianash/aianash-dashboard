@@ -6,7 +6,6 @@ const clusters = (
     default:
       return state;
   }
-}
+};
 
-
-export default clusters;
+export default clusters

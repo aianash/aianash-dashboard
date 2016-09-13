@@ -1,4 +1,3 @@
-import 'babel-polyfill'
 import Express from 'express'
 import React from 'react'
 import ReactDOM from 'react-dom/server'
@@ -28,7 +27,31 @@ import header from 'components/Meta'
 export default function render(req, res) {
   const authenticated = false // req.isAuthenticated()
   const history = createMemoryHistory()
-  const store = configureStore({}, history)
+  const store = configureStore({
+    context: {
+      contextType: 'PAGE',
+      tokenId: '123456',
+      pageId: '',
+      instanceId: '',
+      pages: {
+        isFetching: false,
+        entities: []
+      },
+      instances: {
+        isFetching: false,
+        entities: []
+      }
+    },
+    behaviors: {
+      behaviorId: '',
+      clusters: {},
+      stories: {},
+      stats: {},
+      informations: {},
+      pageSeqs: {}
+    },
+    errorMessage: ''
+  }, history)
   const routes = createRoutes(store)
 
   /*

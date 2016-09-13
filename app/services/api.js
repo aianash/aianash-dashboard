@@ -22,6 +22,7 @@ function callApi(method, endpoint, body) {
     )
 }
 
+export const fetchPages = (tokenId) => callApi('GET', `pages/${tokenId}`);
 export const fetchInstances = (tokenId, {pageId, forDate}) => callApi('GET', `instances/${tokenId}/${pageId}`, {forDate});
 export const fetchClusters = (tokenId, {pageId, instanceId}) => callApi('GET', `clusters/${tokenId}/${pageId}/${instanceId}`);
 

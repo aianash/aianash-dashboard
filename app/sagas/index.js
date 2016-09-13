@@ -20,8 +20,8 @@ function* fetchEntity(entity, apiFn, tokenId, query) {
   try {
     yield put(entity.request(query))
     const {response, error} = yield call(apiFn, tokenId, query)
-    if(response) yield put(entity.success(query))
-    else yield put(entity.failure(query))
+    if(response) yield put(entity.success(query, response))
+    else yield put(entity.failure(query, error))
   } finally {
     if(yield cancelled()) yield put(entity.abort(query))
   }
@@ -181,12 +181,40 @@ function* watchLoadInstances() {
   }
 }
 
+//////////////////////
+// Watch Load Pages //
+//////////////////////
+
+function* fetchPages(tokenId) {
+  try {
+    const query = {tokenId}
+    yield put(pages.request(query))
+    const {response, error} = yield call(api.fetchPages, tokenId)
+    if(response) yield put(pages.success(query, response))
+    else yield put(pages.failure(query, error))
+  } finally {
+    if(yield cancelled()) yield put(pages.abort(query))
+  }
+}
+
+
+function *watchLoadPages() {
+  let task
+  while(true) {
+    yield take(PAGES.LOAD)
+    const tokenId = yield select(getTokenId)
+    if(task) yield cancel(task)
+    task = yield fork(fetchPages, tokenId)
+  }
+}
+
 ///////////////
 // Root Saga //
 ///////////////
 
 export default function* root() {
   yield [
+    fork(watchLoadPages),
     fork(watchLoadInstances),
     fork(watchLoadClusters),
     fork(watchLoadBehavior)

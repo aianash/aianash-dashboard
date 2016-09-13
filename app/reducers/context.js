@@ -4,7 +4,7 @@ import * as actions from 'actions'
 const { INSTANCES, PAGES } = actions
 
 // [NOTE] only supporting one tokenId per account
-function tokenId(state, action) {
+function tokenId(state = '', action) {
   return state
 }
 

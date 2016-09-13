@@ -7,7 +7,7 @@ import DevTools from 'containers/DevTools'
 
 export default function configureStore(initialState, history) {
   const sagaMiddleware = createSagaMiddleware()
-  const middleware = [sagaMiddleware, routerMiddleware(history), createLogger()]
+  const middleware = [routerMiddleware(history), sagaMiddleware, createLogger()]
   const  store = createStore(
     rootReducer,
     initialState,

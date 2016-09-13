@@ -5,7 +5,7 @@ import rootReducer from 'reducers'
 
 export default function configureStore(initialState, history) {
   const sagaMiddleware = createSagaMiddleware()
-  const middleware = [sagaMiddleware, routerMiddleware(history)]
+  const middleware = [routerMiddleware(history), sagaMiddleware]
   const  store = createStore(
     rootReducer,
     initialState,

@@ -1,68 +1,78 @@
-/** Action Types */
+//////////////////
+// Action Types //
+//////////////////
 
 const REQUEST = 'REQUEST'
 const SUCCESS = 'SUCCESS'
 const FAILURE = 'FAILURE'
 const ABORT   = 'ABORT'
 
-function createRequestTypes(base) {
-  return [REQUEST, SUCCESS, FAILURE, ABORT].reduce((acc, type) => {
-    acc[type] = `${base}_${type}`
-    return acc
-  }, {})
-}
-
 const LOAD = 'LOAD'
 const CANCEL_LOAD = 'CANCEL_LOAD'
 
-function createLoadTypes(base) {
-  return [LOAD, CANCEL_LOAD].reduce((acc, type) => {
+const SELECT = 'SELECT'
+const INVALIDATE = 'INVALIDATE'
+
+function createActionTypes(base, types) {
+  return types.reduce((acc, type) => {
     acc[type] = `${base}_${type}`
     return acc
   }, {})
 }
 
-export const INSTANCES   = {...createRequestTypes('INSTANCES'), ...createLoadTypes('INSTANCES')}
-export const PAGES       = {...createRequestTypes('PAGES'), ...createLoadTypes('PAGES')}
-export const CLUSTERS    = createRequestTypes('CLUSTERS')
-export const STORY       = createRequestTypes('STORY')
-export const STAT        = createRequestTypes('STAT')
-export const INFORMATION = createRequestTypes('INFORMATION')
-export const PAGESEQ     = createRequestTypes('PAGESEQ')
+const RequestTypes = [REQUEST, SUCCESS, FAILURE, ABORT]
+const LoadTypes    = [LOAD, CANCEL_LOAD]
+const SelectTypes  = [SELECT, INVALIDATE]
 
-export const BEHAVIOR    = createLoadTypes('BEHAVIOR')
-
-export const SELECT_CONTEXT_TYPE = 'SELECT_CONTEXT_TYPE'
-export const SELECT_PAGE = 'SELECT_PAGE'
-export const SELECT_INSTANCE = 'SELECT_INSTANCE'
+export const INSTANCES   = createActionTypes('INSTANCES', [...RequestTypes, ...LoadTypes, ...SelectTypes])
+export const PAGES       = createActionTypes('PAGES', [...RequestTypes, ...LoadTypes, ...SelectTypes])
+export const CLUSTERS    = createActionTypes('CLUSTERS', [...RequestTypes, ...LoadTypes])
+export const STORY       = createActionTypes('STORY', [...RequestTypes])
+export const STAT        = createActionTypes('STAT', [...RequestTypes])
+export const INFORMATION = createActionTypes('INFORMATION', [...RequestTypes])
+export const PAGESEQ     = createActionTypes('PAGESEQ', [...RequestTypes])
+export const BEHAVIOR    = createActionTypes('BEHAVIOR', [...LoadTypes])
 
 export const RESET_ERROR_MESSAGE = 'RESET_ERROR_MESSAGE'
 
-
-/** Actions creators */
+//////////////////////
+// Actions creators //
+//////////////////////
 
 function action(type, payload = {}) {
   return {type, ...payload}
 }
 
 function createActionCreators(ACTION, respName) {
-  let creators = {}
+  let requestCreators = {}
+  let loadCreators = {}
+  let selectCreators = {}
 
   if(ACTION.REQUEST)
-    creators = {
+    requestCreators = {
       request: query => action(ACTION.REQUEST, query),
       success: (query, response) => action(ACTION.SUCCESS, {...query, respName: response}),
       failure: (query, error) => action(ACTION.FAILURE, {...query, error}),
-      abort  : (query) => action(ACTION.ABORT, query)
+      abort  : query => action(ACTION.ABORT, query)
     }
 
   if(ACTION.LOAD)
-    creators = {...creators,
+    loadCreators = {
       load: query => action(ACTION.LOAD, query),
       cancelLoad: () => action(ACTION.CANCEL_LOAD)
     }
 
-  return creators
+  if(ACTION.SELECT)
+    selectCreators = {
+      select: query => action(ACTION.SELECT, query),
+      invalidate: query => action(ACTION.INVALIDATE, query)
+    }
+
+  return {
+    ...requestCreators,
+    ...loadCreators,
+    ...selectCreators
+  }
 }
 
 export const pages       = createActionCreators(PAGES, 'pages')
@@ -73,9 +83,5 @@ export const stat        = createActionCreators(STAT, 'stat')
 export const information = createActionCreators(INFORMATION, 'information')
 export const pageSeq     = createActionCreators(PAGESEQ, 'pageSeq')
 export const behavior    = createActionCreators(BEHAVIOR)
-
-
-export const selectContextType = contextType => action(SELECT_CONTEXT_TYPE, {contextType});
-export const selectPage = pageId => action(SELECT_PAGE, {pageId});
 
 export const resetErrorMessage = () => action(RESET_ERROR_MESSAGE);

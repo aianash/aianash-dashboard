@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { routerReducer as router } from 'react-router-redux';
+import { routerReducer as routing } from 'react-router-redux';
 import behaviors from 'reducers/behaviors';
 import context from 'reducers/context';
 import * as AT from 'actions';
@@ -19,7 +19,7 @@ const rootReducer = combineReducers({
   context,
   behaviors,
   errorMessage,
-  router
+  routing
 });
 
 export default rootReducer;

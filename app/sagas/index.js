@@ -41,7 +41,7 @@ function* loadBehaviorEntity(entity, selector, apiFn, tokenId, pageId, instanceI
   const key = cacheKey(pageId, instanceId, behaviorId)
   const entity = yield select(selector, key)
   if(!entity)
-    yield call(fetchEntity, entity, apiFn, tokenId, {pageId, instanceId, behaviorId})
+    yield call(fetchEntity, entity, apiFn, tokenId, {pageId, instanceId, behaviorId, key})
 }
 
 //
@@ -94,33 +94,33 @@ function* watchLoadBehavior() {
 // Watching and loading clusters for seleted instance //
 ////////////////////////////////////////////////////////
 
-const fetchClusters = fetchEntity.bind(null, clusters, api.fetchClusters)
+const fetchCluster = fetchEntity.bind(null, clusters, api.fetchCluster)
 
 //
-function* loadClusters(tokenId, pageId, instanceId) {
+function* loadCluster(tokenId, pageId, instanceId) {
   const cluster = yield select(getCluster, pageId, instanceId)
-  if(!cluster) yield call(fetchClusters, tokenId, {pageId, instanceId})
+  if(!cluster) yield call(fetchCluster, tokenId, {pageId, instanceId})
 }
 
 // will load clusters
-function* watchLoadClusters() {
+function* watchLoadCluster() {
   let task, prevInstanceId
   while(true) {
-    const action = yield take([CLUSTERS.LOAD, CLUSTERS.CANCEL_LOAD])
+    const action = yield take([CLUSTER.LOAD, CLUSTER.CANCEL_LOAD])
 
     switch (action.type) {
-      case CLUSTERS.CANCEL_LOAD:
+      case CLUSTER.CANCEL_LOAD:
         if(task) yield cancel(task)
         prevInstanceId = undefined
         break;
 
-      case CLUSTERS.LOAD:
+      case CLUSTER.LOAD:
         const {pageId, instanceId} = action
         if(prevInstanceId !== instanceId) {
           const tokenId = yield select(getTokenId)
 
           if(task) yield cancel(task)
-          task = yield fork(loadClusters, tokenId, pageId, instanceId)
+          task = yield fork(loadCluster, tokenId, pageId, instanceId)
         }
 
         prevInstanceId = instanceId
@@ -216,7 +216,7 @@ export default function* root() {
   yield [
     fork(watchLoadPages),
     fork(watchLoadInstances),
-    fork(watchLoadClusters),
+    fork(watchLoadCluster),
     fork(watchLoadBehavior)
   ]
 }

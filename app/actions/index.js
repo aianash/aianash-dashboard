@@ -26,7 +26,7 @@ const SelectTypes  = [SELECT, INVALIDATE]
 
 export const INSTANCES   = createActionTypes('INSTANCES', [...RequestTypes, ...LoadTypes, ...SelectTypes])
 export const PAGES       = createActionTypes('PAGES', [...RequestTypes, ...LoadTypes, ...SelectTypes])
-export const CLUSTERS    = createActionTypes('CLUSTERS', [...RequestTypes, ...LoadTypes])
+export const CLUSTER    = createActionTypes('CLUSTER', [...RequestTypes, ...LoadTypes])
 export const STORY       = createActionTypes('STORY', [...RequestTypes])
 export const STAT        = createActionTypes('STAT', [...RequestTypes])
 export const INFORMATION = createActionTypes('INFORMATION', [...RequestTypes])
@@ -77,7 +77,7 @@ function createActionCreators(ACTION, respName) {
 
 export const pages       = createActionCreators(PAGES, 'pages')
 export const instances   = createActionCreators(INSTANCES, 'configs')
-export const clusters    = createActionCreators(CLUSTERS, 'clusters')
+export const cluster     = createActionCreators(CLUSTER, 'cluster')
 export const story       = createActionCreators(STORY, 'story')
 export const stat        = createActionCreators(STAT, 'stat')
 export const information = createActionCreators(INFORMATION, 'information')

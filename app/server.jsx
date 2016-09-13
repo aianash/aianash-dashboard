@@ -1,23 +1,23 @@
-import Express from 'express';
-import React from 'react';
-import ReactDOM from 'react-dom/server';
+import Express from 'express'
+import React from 'react'
+import ReactDOM from 'react-dom/server'
 
-import compression from 'compression';
-import path from 'path';
-import PrettyError from 'pretty-error';
-import http from 'http';
-import axios from 'axios';
-import bodyParser from 'body-parser';
-import methodOverride from 'method-override';
+import compression from 'compression'
+import path from 'path'
+import PrettyError from 'pretty-error'
+import http from 'http'
+import axios from 'axios'
+import bodyParser from 'body-parser'
+import methodOverride from 'method-override'
 
-import { createMemoryHistory, match, RouterContext } from 'react-router';
-import { Provider } from 'react-redux';
+import { createMemoryHistory, match, RouterContext } from 'react-router'
+import { Provider } from 'react-redux'
 
-import config from './config';
-import createRoutes from 'routes';
-import configureStore from 'store/configureStore';
-import preRenderMiddleware from 'middlewares/preRenderMiddleware';
-import header from 'components/Meta';
+import config from './config'
+import createRoutes from 'routes'
+import configureStore from 'store/configureStore'
+import preRenderMiddleware from 'middlewares/preRenderMiddleware'
+import header from 'components/Meta'
 
 /*
  * Export render function to be used in server/index.js
@@ -25,10 +25,34 @@ import header from 'components/Meta';
  * and pass it into the Router.run function.
  */
 export default function render(req, res) {
-  const authenticated = false; // req.isAuthenticated();
-  const history = createMemoryHistory();
-  const store = configureStore({}, history);
-  const routes = createRoutes(store);
+  const authenticated = false // req.isAuthenticated()
+  const history = createMemoryHistory()
+  const store = configureStore({
+    context: {
+      contextType: 'PAGE',
+      tokenId: '123456',
+      pageId: '',
+      instanceId: '',
+      pages: {
+        isFetching: false,
+        entities: []
+      },
+      instances: {
+        isFetching: false,
+        entities: []
+      }
+    },
+    behaviors: {
+      behaviorId: '',
+      clusters: {},
+      stories: {},
+      stats: {},
+      informations: {},
+      pageSeqs: {}
+    },
+    errorMessage: ''
+  }, history)
+  const routes = createRoutes(store)
 
   /*
    * From the react-router docs:
@@ -53,21 +77,21 @@ export default function render(req, res) {
    */
   match({routes, location: req.url}, (err, redirect, props) => {
     if(err) {
-      res.status(500).json(err);
+      res.status(500).json(err)
     } else if(redirect) {
-      res.redirect(302, redirect.pathname + redirect.search);
+      res.redirect(302, redirect.pathname + redirect.search)
     } else if(props) {
       preRenderMiddleware(
         store.dispatch,
         props.components,
         props.params
       ).then(() => {
-        const initialState = store.getState();
+        const initialState = store.getState()
         const componentHTML = ReactDOM.renderToString(
           <Provider store={store}>
             <RouterContext {...props}/>
           </Provider>
-        );
+        )
 
         res.status(200).send(`
           <!doctype html>
@@ -79,18 +103,18 @@ export default function render(req, res) {
             </head>
             <body>
               <div id="app">${componentHTML}</div>
-              <script>window.__INITIAL_STATE__ = ${JSON.stringify(initialState)};</script>
+              <script>window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}</script>
               <script type="text/javascript" charset="utf-8" src="/assets/app.js"></script>
             </body>
           </html>
-        `);
+        `)
       })
       .catch((err) => {
-        console.log(err);
-        res.status(500).json(err);
-      });
+        console.log(err)
+        res.status(500).json(err)
+      })
     } else {
-      res.status(404).send('Not found');
+      res.status(404).send('Not found')
     }
-  });
+  })
 }

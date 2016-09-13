@@ -1,49 +1,50 @@
-import React from 'react';
-import { IndexRoute, Route } from 'react-router';
+import React from 'react'
+import { IndexRoute, Route, IndexRedirect } from 'react-router'
 
 import {
   App,
   Dashboard,
+  Behavior,
   LoginOrRegister,
   NotFound,
-} from 'containers';
+} from 'containers'
 
+// [TODO] move to containers
 import {
-  Behavior,
   Predict,
   ABTest
-} from 'components/dashboard';
+} from 'components/dashboard'
 
 export default (store) => {
   const requireLogin = (nextState, replace, callback) => {
-    const { user: { authenticated }} = store.getState();
+    const { user: { authenticated }} = store.getState()
     if(!authenticated) {
       replace({
         pathname: '/login',
         state: { nextPathname: nextState.location.pathname }
-      });
+      })
     }
   };
 
   const redirectAuth = (nextState, replace, callback) => {
-    const { user: { authenticated }} = store.getState();
+    const { user: { authenticated }} = store.getState()
     if(authenticated) {
       replace({
         pathname: '/'
-      });
+      })
     }
-    callback();
+    callback()
   };
 
   return (
     <Route path="/" component={App}>
       <Route path="dashboard" component={Dashboard}>
+        <IndexRedirect to="behavior"/>
         <Route path="behavior" component={Behavior}/>
         <Route path="predict" component={Predict}/>
         <Route path="abtest" component={ABTest}/>
       </Route>
       <Route path="login" component={LoginOrRegister}/>
     </Route>
-  );
-};
-      // </Route>
+  )
+}

@@ -7,17 +7,24 @@ import stats from 'reducers/behaviors/stats';
 import informations from 'reducers/behaviors/informations';
 import pageSeqs from 'reducers/behaviors/pageSeqs';
 
+const { BEHAVIOR } = actions
+
 //
 const behaviorId = (
   state = '',
   action
 ) => {
   switch (action.type) {
+    case BEHAVIOR.SELECT:
+      return action.behaviorId
+    case BEHAVIOR.INVALIDATE:
+      return ''
     default:
       return state
   }
 };
 
+//
 const behaviorsReducer = combineReducers({
   behaviorId,     // seleted behavior id
   clusters,       // clusters

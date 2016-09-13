@@ -24,8 +24,8 @@ function cluster(state = {}, action) {
       }
     case CLUSTER.ABORT:
       return {
+        ...state,
         isFetching: false,
-        cluster: {}
       }
     default:
       return state

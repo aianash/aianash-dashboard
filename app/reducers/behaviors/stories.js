@@ -24,8 +24,8 @@ function story(state = {}, action) {
       }
     case STORY.ABORT:
       return {
+        ...state,
         isFetching: false,
-        story: {}
       }
     default:
       return state

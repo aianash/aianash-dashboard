@@ -24,8 +24,8 @@ function pageSeq(state = {}, action) {
       }
     case PAGESEQ.ABORT:
       return {
+        ...state,
         isFetching: false,
-        pageSeq: {}
       }
     default:
       return state

@@ -31,7 +31,7 @@ export const STORY       = createActionTypes('STORY', [...RequestTypes])
 export const STAT        = createActionTypes('STAT', [...RequestTypes])
 export const INFORMATION = createActionTypes('INFORMATION', [...RequestTypes])
 export const PAGESEQ     = createActionTypes('PAGESEQ', [...RequestTypes])
-export const BEHAVIOR    = createActionTypes('BEHAVIOR', [...LoadTypes])
+export const BEHAVIOR    = createActionTypes('BEHAVIOR', [...LoadTypes, ...SelectTypes])
 
 export const RESET_ERROR_MESSAGE = 'RESET_ERROR_MESSAGE'
 

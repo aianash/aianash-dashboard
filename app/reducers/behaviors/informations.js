@@ -24,8 +24,8 @@ function information(state = {}, action) {
       }
     case INFORMATION.ABORT:
       return {
+        ...state,
         isFetching: false,
-        information: {}
       }
     default:
       return state

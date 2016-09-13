@@ -24,8 +24,8 @@ function stat(state = {}, action) {
       }
     case STAT.ABORT:
       return {
+        ...state,
         isFetching: false,
-        stat: {}
       }
     default:
       return state

@@ -11,22 +11,27 @@ function tokenId(state = '', action) {
 //
 function pageId(state = '', action) {
   switch (action.type) {
+    case PAGES.SELECT:
+      return action.pageId
+    case PAGES.INVALIDATE:
+      return ''
     default:
       return state
   }
 }
 
-//
-function contextType(state = '', action) {
-  switch (action.type) {
-    default:
-      return state
-  }
+// [NOTE] only supporting page context type
+function contextType(state = 'page', action) {
+  return state
 }
 
 //
 function instanceId(state = '', action) {
   switch (action.type) {
+    case INSTANCES.SELECT:
+      return action.instanceId
+    case INSTANCES.INVALIDATE:
+      return ''
     default:
       return state
   }
@@ -58,13 +63,21 @@ function instance(
         isFetching: false,
         configs
       }
-    case INSTANCES.ABORT:
     case INSTANCES.FAILURE:
-      return state
+      const {error} = action
+      return {
+        isFetching: false,
+        error
+      }
+    case INSTANCES.ABORT:
+      return {
+        ...state,
+        isFetching: false,
+      }
     default:
       return state
   }
-};
+}
 
 // instances by pageId
 // {
@@ -127,6 +140,17 @@ function pages(
       return {
         isFetching: false,
         entities: action.pages
+      }
+    case PAGES.FAILURE:
+      const { error } = action
+      return {
+        isFetching: false,
+        error
+      }
+    case PAGES.ABORT:
+      return {
+        ...state,
+        isFetching: false,
       }
     default:
       return state

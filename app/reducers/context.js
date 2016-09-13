@@ -52,7 +52,7 @@ function instance(
         isFetching: true
       }
     case INSTANCES.SUCCESS:
-      const configs = action.res.map(conf => {
+      const configs = action.configs.map(conf => {
         return {
           ...conf,
           activeFrom: moment(conf.activeFrom),

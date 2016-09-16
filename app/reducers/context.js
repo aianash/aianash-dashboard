@@ -1,5 +1,6 @@
 import { combineReducers } from 'redux'
 import * as actions from 'actions'
+import moment from 'moment'
 
 const { INSTANCES, PAGES } = actions
 
@@ -38,11 +39,8 @@ function instanceId(state = '', action) {
 }
 
 // instance for a page id
-function instance(
-  state = {
-    isFetching: false,
-    configs: [],
-  },
+function instances(
+  state = {isFetching: false},
   action
 ) {
   switch (action.type) {
@@ -52,16 +50,12 @@ function instance(
         isFetching: true
       }
     case INSTANCES.SUCCESS:
-      const configs = action.configs.map(conf => {
-        return {
-          ...conf,
-          activeFrom: moment(conf.activeFrom),
-          activeTo: moment(conf.activeTo)
-        }
-      })
+      const {activeFrom, activeTo} = action.config
       return {
+        ...action.config,
         isFetching: false,
-        configs
+        activeFrom: moment(activeFrom),
+        activeTo: (activeTo === 'ACTIVE' ? activeTo: moment(activeTo))
       }
     case INSTANCES.FAILURE:
       const {error} = action
@@ -79,7 +73,7 @@ function instance(
   }
 }
 
-// instances by pageId
+// instancesByPageId by pageId
 // {
 //  pageId: {
 //    isFetching: true/false,
@@ -96,7 +90,7 @@ function instance(
 //    ]
 //  }
 // }
-function instances(state = {}, action) {
+function instancesByPageId(state = {}, action) {
   switch (action.type) {
     case INSTANCES.REQUEST:
     case INSTANCES.SUCCESS:
@@ -104,7 +98,7 @@ function instances(state = {}, action) {
     case INSTANCES.ABORT:
       return {
         ...state,
-        [action.pageId]: instance(state[action.pageId], action)
+        [action.pageId]: instances(state[action.pageId], action)
       }
     default:
       return state
@@ -116,7 +110,7 @@ function instances(state = {}, action) {
 //  isFetching: true/false,
 //  entities: [
 //    {
-//      pageId,
+//      pageId
 //      url,
 //      name
 //    },
@@ -161,12 +155,12 @@ function pages(
 // Context tell what instance of page from
 // a website is being used for analysis.
 const contextReducer = combineReducers({
-  contextType,  // website or page
-  tokenId,      // tokenId for the current context
-  pageId,       // pageId for the current context
-  instanceId,   // selected instance from the current context
-  pages,        // pages for the current tokenId
-  instances     // instance details by pageId.
+  contextType,          // website or page
+  tokenId,              // tokenId for the current context
+  pageId,               // pageId for the current context
+  instanceId,           // selected instance from the current context
+  pages,                // pages for the current tokenId
+  instancesByPageId     // instance details by pageId.
 })
 
 export default contextReducer

@@ -4,8 +4,6 @@ import * as actions from 'actions'
 import clusters from 'reducers/behaviors/clusters';
 import stories from 'reducers/behaviors/stories';
 import stats from 'reducers/behaviors/stats';
-import informations from 'reducers/behaviors/informations';
-import pageSeqs from 'reducers/behaviors/pageSeqs';
 
 const { BEHAVIOR } = actions
 
@@ -30,8 +28,6 @@ const behaviorsReducer = combineReducers({
   clusters,       // clusters
   stories,        // contain stories for behavior
   stats,          // contain both global and behavior stats
-  informations,   // information details for behavior
-  pageSeqs        // page sequences for behaviors
 })
 
 export default behaviorsReducer

@@ -75,7 +75,7 @@ body {
   height: 100%;
   @include transition(.5s);
   .offcanvas & {
-    overflow: hidden; 
+    overflow: hidden;
     position: absolute;
 
     &:after {

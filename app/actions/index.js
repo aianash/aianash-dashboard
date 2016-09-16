@@ -26,11 +26,9 @@ const SelectTypes  = [SELECT, INVALIDATE]
 
 export const INSTANCES   = createActionTypes('INSTANCES', [...RequestTypes, ...LoadTypes, ...SelectTypes])
 export const PAGES       = createActionTypes('PAGES', [...RequestTypes, ...LoadTypes, ...SelectTypes])
-export const CLUSTER    = createActionTypes('CLUSTER', [...RequestTypes, ...LoadTypes])
+export const CLUSTER     = createActionTypes('CLUSTER', [...RequestTypes, ...LoadTypes])
 export const STORY       = createActionTypes('STORY', [...RequestTypes])
 export const STAT        = createActionTypes('STAT', [...RequestTypes])
-export const INFORMATION = createActionTypes('INFORMATION', [...RequestTypes])
-export const PAGESEQ     = createActionTypes('PAGESEQ', [...RequestTypes])
 export const BEHAVIOR    = createActionTypes('BEHAVIOR', [...LoadTypes, ...SelectTypes])
 
 export const RESET_ERROR_MESSAGE = 'RESET_ERROR_MESSAGE'
@@ -51,7 +49,7 @@ function createActionCreators(ACTION, respName) {
   if(ACTION.REQUEST)
     requestCreators = {
       request: query => action(ACTION.REQUEST, query),
-      success: (query, response) => action(ACTION.SUCCESS, {...query, respName: response}),
+      success: (query, response) => action(ACTION.SUCCESS, {...query, [respName]: response[respName]}),
       failure: (query, error) => action(ACTION.FAILURE, {...query, error}),
       abort  : query => action(ACTION.ABORT, query)
     }
@@ -76,12 +74,10 @@ function createActionCreators(ACTION, respName) {
 }
 
 export const pages       = createActionCreators(PAGES, 'pages')
-export const instances   = createActionCreators(INSTANCES, 'configs')
+export const instances   = createActionCreators(INSTANCES, 'config')
 export const cluster     = createActionCreators(CLUSTER, 'cluster')
 export const story       = createActionCreators(STORY, 'story')
 export const stat        = createActionCreators(STAT, 'stat')
-export const information = createActionCreators(INFORMATION, 'information')
-export const pageSeq     = createActionCreators(PAGESEQ, 'pageSeq')
 export const behavior    = createActionCreators(BEHAVIOR)
 
 export const resetErrorMessage = () => action(RESET_ERROR_MESSAGE);

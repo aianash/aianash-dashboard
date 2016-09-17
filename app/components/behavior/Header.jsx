@@ -40,6 +40,7 @@ export default class Header extends Component {
     pageId: PropTypes.string.isRequired,
     pages: PropTypes.object.isRequired,
     instances: PropTypes.object.isRequired,
+    pageStat: PropTypes.object.isRequired,
     refreshPages: PropTypes.func.isRequired,
     selectPage: PropTypes.func.isRequired,
     selectForDate: PropTypes.func.isRequired,
@@ -78,6 +79,7 @@ export default class Header extends Component {
       pageId,
       pages,
       instances,
+      pageStat,
       refreshPages,
       selectPage,
       selectForDate,
@@ -104,19 +106,12 @@ export default class Header extends Component {
 
     return (
       <Row>
-        <div className={cx('calendar')}>
+        <Column size='md-2'>
           <Widget>
             <WidgetContent>
-              <DatePicker inline
-                          fixedHeight
+              <DatePicker fixedHeight
                           selected={forDate}
                           onChange={selectForDate}/>
-            </WidgetContent>
-          </Widget>
-        </div>
-        <Column size='md-2'>
-          <Widget className={cx('header')}>
-            <WidgetContent>
               {instanceRndr}
             </WidgetContent>
           </Widget>
@@ -133,6 +128,24 @@ export default class Header extends Component {
             </WidgetContent>
           </Widget>
         </Column>
+      {/*page stats*/}
+      <Column size='md-6'>
+        <Row>
+          {_.map(pageStat.stats, (stat, name) =>
+            <Column size='md-4'>
+              <Widget><WidgetContent>{name}</WidgetContent></Widget>
+            </Column>
+          )}
+        </Row>
+        <Row>
+          <Column size='md-6'>
+            <Widget><WidgetContent>previous</WidgetContent></Widget>
+          </Column>
+          <Column size='md-6'>
+            <Widget><WidgetContent>previous</WidgetContent></Widget>
+          </Column>
+        </Row>
+      </Column>
       </Row>
     )
   }

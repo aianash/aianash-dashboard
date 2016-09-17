@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import styles from 'css/main'
 import { Container, Row, Column } from 'components/commons'
-import { Header, Cluster, Story } from 'components/behavior'
+import { Header, Cluster, Story, BehaviorStats } from 'components/behavior'
 import { instancesCacheKey, behaviorEntityCacheKey } from 'utils'
 
 const cx = require('classnames/bind').bind(styles)
@@ -34,7 +34,8 @@ class Behavior extends Component {
     forDate: PropTypes.object,
     pageId: PropTypes.string,
     pages: PropTypes.object,
-    instanceConfig: PropTypes.object,
+    instances: PropTypes.object,
+    pageStat: PropTypes.object,
     instanceId: PropTypes.string,
     cluster: PropTypes.object,
     behaviorId: PropTypes.string,
@@ -79,8 +80,9 @@ class Behavior extends Component {
   //
   render() {
     const {tokenId, forDate, pageId, instanceId, behaviorId} = this.props
-    const {pages, instances} = this.props
+    const {pages, instances, pageStat} = this.props
     const {cluster, story, stat} = this.props
+
     return (
       <Container fluid={true}>
         <Header
@@ -89,19 +91,25 @@ class Behavior extends Component {
           pageId={pageId}
           pages={pages}
           instances={instances}
+          pageStat={pageStat}
           refreshPages={this.refreshPages}
           selectPage={this.selectPage}
           selectForDate={this.selectForDate}
           selectInstance={this.selectInstance}/>
-        <Row column='md-12'>
-          <Cluster
-            instanceId={instanceId}
-            cluster={cluster}
-            stat={stat}
-            selectBehavior={this.selectBehavior}/>
-        </Row>
         <Row>
-          <Column size='md-8'><Story story={story}/></Column>
+          <Column size='md-2'>
+            <Cluster
+              instanceId={instanceId}
+              cluster={cluster}
+              stat={stat}
+              selectBehavior={this.selectBehavior}/>
+          </Column>
+          <Column size='md-10'>
+            <Row>
+              <Column size='md-8'><Story story={story}/></Column>
+              <Column size='md-4'><BehaviorStats stat={stat}/></Column>
+            </Row>
+          </Column>
         </Row>
       </Container>
     )
@@ -110,10 +118,12 @@ class Behavior extends Component {
 
 //
 function mapStateToProps(state) {
-  const {tokenId, forDate, pageId, instanceId, pages, instances} = state.context
+  const {tokenId, forDate, pageId, instanceId, pages, instances, pageStats} = state.context
   const {behaviorId, clusters, stories, stats} = state.behaviors
 
-  const cluster = clusters[instancesCacheKey(pageId, instanceId)] || {}
+  const ikey = instancesCacheKey(pageId, instanceId)
+  const pageStat = pageStats[ikey] || {}
+  const cluster = clusters[ikey] || {}
 
   const key = behaviorEntityCacheKey(pageId, instanceId, behaviorId)
   const story = stories[key] || {}
@@ -125,6 +135,7 @@ function mapStateToProps(state) {
     pageId,
     pages,
     instances,
+    pageStat,
     instanceId,
     cluster,
     behaviorId,

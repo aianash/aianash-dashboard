@@ -50,7 +50,6 @@ ReactDOM.render(
   <Provider store={store}>
     <div>
       {component}
-      <DevTools/>
     </div>
   </Provider>,
   destination

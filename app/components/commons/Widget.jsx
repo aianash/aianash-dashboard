@@ -5,9 +5,10 @@ const cx = require('classnames/bind').bind(styles)
 
 //
 const Widget = ({className, children}) => {
-  const clazz = ['widget']
+  let clazz = cx('widget')
+  if(className) clazz = clazz + ' ' + className
   return (
-    <div className={cx(...clazz) + ' ' + className}>{children}</div>
+    <div className={clazz}>{children}</div>
   )
 };
 
@@ -20,8 +21,8 @@ Widget.propTypes = {
 const WidgetHeading = ({title, subtitle, children}) => {
   return (
     <div className={cx('widget-heading')}>
-        {title && <h2>{title}</h2>}
-        {subtitle && <p>{subtitle}</p>}
+        {title && <h2 className={cx('title')}>{title}</h2>}
+        {subtitle && <p className={cx('subtitle')}>{subtitle}</p>}
         {children && children}
     </div>
   )

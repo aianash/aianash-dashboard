@@ -128,6 +128,19 @@ h1, h2, h3, h4, h5, h6, figure {
   border: 4px solid $brand-primary;
 }
 
+.calendar {
+  float: left;
+  margin-left: 15px;
+  margin-right: 15px;
+  .widget {
+    border-radius: 4px;
+    .widget-content {
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+  }
+}
+
 // dashboard
 @import 'components/dashboard/dash';
 @import 'components/dashboard/sidebar';

@@ -16,6 +16,7 @@ export default class Query extends Component {
   }
 
   static propTypes = {
+    collapsed: PropTypes.bool,
     entries: PropTypes.array.isRequired,
     mapper: PropTypes.func,
     formatter: PropTypes.func,
@@ -49,8 +50,8 @@ export default class Query extends Component {
 
 
   render() {
-    const {entries, mapper, formatter, onSelectEntry, ...others} = this.props
-    const {selected, result} = this.state
+    const {collapsed, entries, mapper, formatter, onSelectEntry, ...others} = this.props
+    const result = _.isEmpty(this.state.result) ? entries : this.state.result
     return (
       <div {...others}>
         <input type="search" className={cx('form-control')} placeholder="Search webpages" onChange={this.onQuery}/>
@@ -58,7 +59,7 @@ export default class Query extends Component {
           {_.map(result, (entry, idx) => {
             return (
               <li key={idx}
-                  className={cx({selected: (selected === idx)})}
+                  className={cx({selected: (this.state.selected === idx)})}
                   onClick={this.onClick.bind(null, idx)}>
                 {formatter(entry)}
               </li>

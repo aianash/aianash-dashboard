@@ -24,8 +24,11 @@ const RequestTypes = [REQUEST, SUCCESS, FAILURE, ABORT]
 const LoadTypes    = [LOAD, CANCEL_LOAD]
 const SelectTypes  = [SELECT, INVALIDATE]
 
+export const FOR_DATE    = createActionTypes('FOR_DATE', [...SelectTypes])
 export const INSTANCES   = createActionTypes('INSTANCES', [...RequestTypes, ...LoadTypes, ...SelectTypes])
 export const PAGES       = createActionTypes('PAGES', [...RequestTypes, ...LoadTypes, ...SelectTypes])
+export const PAGE_STATS  = createActionTypes('PAGE_STATS', [...RequestTypes, ...LoadTypes])
+
 export const CLUSTER     = createActionTypes('CLUSTER', [...RequestTypes, ...LoadTypes])
 export const STORY       = createActionTypes('STORY', [...RequestTypes])
 export const STAT        = createActionTypes('STAT', [...RequestTypes])
@@ -73,8 +76,11 @@ function createActionCreators(ACTION, respName) {
   }
 }
 
+export const forDate     = createActionCreators(FOR_DATE, 'forDate')
 export const pages       = createActionCreators(PAGES, 'pages')
 export const instances   = createActionCreators(INSTANCES, 'config')
+export const pageStats   = createActionCreators(PAGE_STATS, 'stats')
+
 export const cluster     = createActionCreators(CLUSTER, 'cluster')
 export const story       = createActionCreators(STORY, 'story')
 export const stat        = createActionCreators(STAT, 'stat')

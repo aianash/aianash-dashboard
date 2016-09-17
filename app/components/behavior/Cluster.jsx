@@ -28,14 +28,21 @@ export default class Cluster extends Component {
       <Widget className={cx('cluster')}>
         <WidgetHeading title='Behaviors' subtitle='List of user behaviors'/>
         <WidgetContent>
-          {JSON.stringify(this.props.instanceId)}<br/>
-          <ol className={cx("list-unstyled")}>
-            {_.map(cluster.cluster, (b, idx) =>
-              <li key={idx}
-                   onClick={selectBehavior.bind(null, b.behaviorId)}>{b.name}- {b.behaviorId}</li>
-            )}
-          </ol>
-          {JSON.stringify(this.props.stat)}
+          <table className={cx('table', 'table-hover', 'table-bordered')}>
+            <thead>
+              <tr>
+                <th>Behavior Cluster</th>
+              </tr>
+            </thead>
+            <tbody>
+              {_.map(cluster.cluster, ({behaviorId, name}, idx) =>
+                <tr key={behaviorId}>
+                  <td key={behaviorId}
+                      onClick={selectBehavior.bind(null, behaviorId)}>{name}</td>
+                </tr>
+              )}
+            </tbody>
+          </table>
         </WidgetContent>
       </Widget>
     )

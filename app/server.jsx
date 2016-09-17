@@ -1,4 +1,3 @@
-// import 'babel-polyfill'
 import Express from 'express'
 import React from 'react'
 import ReactDOM from 'react-dom/server'
@@ -40,7 +39,10 @@ export default function render(req, res) {
         isFetching: false,
         entities: []
       },
-      instancesByPageId: {}
+      instances: {
+        isFetching: false
+      },
+      pageStats: {}
     },
     behaviors: {
       behaviorId: '',

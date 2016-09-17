@@ -4,29 +4,34 @@ import { connect } from 'react-redux'
 import styles from 'css/main'
 import { Container, Row, Column } from 'components/commons'
 import { Header, Cluster, Story } from 'components/behavior'
+import { instancesCacheKey, behaviorEntityCacheKey } from 'utils'
 
 const cx = require('classnames/bind').bind(styles)
 
 import * as actions from 'actions'
-const { instances, pages, cluster, behavior } = actions
 
+//
 class Behavior extends Component {
   constructor(props) {
     super(props)
 
-    this.refreshPages = this.refreshPages.bind(this)
-    this.selectPageForDate = this.selectPageForDate.bind(this)
+    const {forDate, dispatch} = props
+    dispatch(actions.instances.load({forDate}))
+
+    this.refreshPages   = this.refreshPages.bind(this)
+    this.selectPage     = this.selectPage.bind(this)
+    this.selectForDate  = this.selectForDate.bind(this)
     this.selectInstance = this.selectInstance.bind(this)
     this.selectBehavior = this.selectBehavior.bind(this)
   }
 
   componentDidMount() {
-    if(this.props.pages.entities.length === 0)
-      this.refreshPages()
+    if(this.props.pages.entities.length === 0) this.refreshPages()
   }
 
   static propTypes = {
     tokenId: PropTypes.string.isRequired,
+    forDate: PropTypes.object,
     pageId: PropTypes.string,
     pages: PropTypes.object,
     instanceConfig: PropTypes.object,
@@ -41,49 +46,54 @@ class Behavior extends Component {
   //
   refreshPages() {
     const {dispatch, tokenId} = this.props
-    dispatch(pages.load({tokenId}))
+    dispatch(actions.pages.load({tokenId}))
   }
 
   //
-  selectPageForDate(pageId, forDate) {
+  selectForDate(forDate) {
     const {dispatch} = this.props
-    dispatch(pages.select({pageId}))
-    dispatch(instances.load({pageId, forDate}))
+    dispatch(actions.forDate.select({forDate}))
+    dispatch(actions.instances.load({forDate}))
+  }
+
+  //
+  selectPage(page) {
+    const {pageId} = page
+    const {instanceId, dispatch} = this.props
+    dispatch(actions.pages.select({pageId}))
   }
 
   //
   selectInstance(instanceId) {
     const {dispatch, pageId} = this.props
-    dispatch(instances.select({instanceId}))
-    dispatch(cluster.load({pageId, instanceId}))
+    dispatch(actions.instances.select({instanceId}))
   }
 
   //
   selectBehavior(behaviorId) {
     const {dispatch, pageId, instanceId} = this.props
-    dispatch(behavior.select({behaviorId}))
-    dispatch(behavior.load({pageId, instanceId, behaviorId}))
+    dispatch(actions.behavior.select({behaviorId}))
+    dispatch(actions.behavior.load({pageId, instanceId, behaviorId}))
   }
 
   //
   render() {
-    const {tokenId, pageId, instanceId, behaviorId} = this.props
+    const {tokenId, forDate, pageId, instanceId, behaviorId} = this.props
     const {pages, instances} = this.props
-    const {cluster, story, stat, information, pageSeq} = this.props
-
+    const {cluster, story, stat} = this.props
     return (
       <Container fluid={true}>
-        <Row>
-          <Header
-            tokenId={tokenId}
-            pageId={pageId}
-            pages={pages}
-            instances={instances}
-            refreshPages={this.refreshPages}
-            selectPageForDate={this.selectPageForDate}
-            selectInstance={this.selectInstance}/>
-        </Row>
-        <Row>
+        <Header
+          tokenId={tokenId}
+          forDate={forDate}
+          pageId={pageId}
+          pages={pages}
+          instances={instances}
+          refreshPages={this.refreshPages}
+          selectPage={this.selectPage}
+          selectForDate={this.selectForDate}
+          selectInstance={this.selectInstance}/>
+        <Row column='md-12'>
           <Cluster
             instanceId={instanceId}
             cluster={cluster}
@@ -91,26 +101,27 @@ class Behavior extends Component {
             selectBehavior={this.selectBehavior}/>
         </Row>
         <Row>
-          <Column size='md-8'><Story story={story} information={information}/></Column>
+          <Column size='md-8'><Story story={story}/></Column>
         </Row>
       </Container>
     )
   }
 }
 
+//
 function mapStateToProps(state) {
-  const {tokenId, pageId, instanceId, pages, instancesByPageId} = state.context
+  const {tokenId, forDate, pageId, instanceId, pages, instances} = state.context
   const {behaviorId, clusters, stories, stats} = state.behaviors
 
-  const instances = instancesByPageId[pageId] || {}
-  const cluster = clusters[`${pageId}:${instanceId}`] || {}
+  const cluster = clusters[instancesCacheKey(pageId, instanceId)] || {}
 
-  const key = `${pageId}:${instanceId}:${behaviorId}`
+  const key = behaviorEntityCacheKey(pageId, instanceId, behaviorId)
   const story = stories[key] || {}
   const stat = stats[key] || {}
 
   return {
     tokenId,
+    forDate,
     pageId,
     pages,
     instances,

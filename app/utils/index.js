@@ -1,5 +1,5 @@
 //
-export function isInstancesValid(instnaces, forDate) {
+export function isInstancesValid(instances, forDate) {
   const {activeFrom, activeTo} = instances
   if(activeTo === 'ACTIVE')
     if(forDate.isAfter(activeFrom, 'day')) return true

@@ -22,9 +22,9 @@ function callApi(method, endpoint, body) {
 }
 
 export const fetchPages = (tokenId) => callApi('GET', `pages/${tokenId}`);
-export const fetchInstances = (tokenId, {pageId, forDate}) => callApi('GET', `instances/${tokenId}/${pageId}/${forDate.format('YYYY-MM-DD')}`);
-
+export const fetchInstances = (tokenId, {forDate}) => callApi('GET', `instances/${tokenId}/${forDate.format('YYYY-MM-DD')}`);
 export const fetchCluster = (tokenId, {pageId, instanceId}) => callApi('GET', `clusters/${tokenId}/${pageId}/${instanceId}`);
+export const fetchPageStats = (tokenId, {pageId, instanceId}) => callApi('GET', `stats/${tokenId}/${pageId}/${instanceId}`);
 
 //
 function fetchBehaviorEntities(name) {

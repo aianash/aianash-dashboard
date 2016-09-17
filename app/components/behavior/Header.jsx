@@ -1,9 +1,12 @@
 import React, { PropTypes, Component } from 'react'
 import _ from 'lodash'
 import fuzzy from 'fuzzy'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
 
 import styles from 'css/main'
 import {
+  Query,
   Row,
   Column,
   Widget,
@@ -13,64 +16,38 @@ import {
   isInstancesValid,
   createInstanceId
 } from 'utils'
-import {Selector} from 'components/behavior'
 
 const cx = require('classnames/bind').bind(styles)
 
-const fuzzyOpts = {
-  extract: el => el.name + ' - ' + el.url
-}
-
-//
-const Summary = ({page, forDate, instance, onClick}) => {
-  return (
-    <Row onClick={onClick}>
-      <Column size='md-4'>
-        {page ? JSON.stringify(page) : "Select page"}
-      </Column>
-      <Column size='md-4'>
-        {forDate ? "asdf" : "Select date to view instances"}
-      </Column>
-      <Column size='md-4'>
-        {instance ? "asdf" : "Select an instance to view behaviors"}
-      </Column>
-    </Row>
-  )
-};
-
-Summary.propTypes = {
-  page: PropTypes.object,
-  forDate: PropTypes.object,
-  instance: PropTypes.object,
-  onClick: PropTypes.func.isRequired
-}
+const pageMapper = (page) => `${page.name}-${page.url}`;
+const pageEntryFormatter = (page) => `${page.name}-${page.url}`
 
 //
 export default class Header extends Component {
   constructor(props) {
     super(props)
 
-    const {pages, refreshPages} = this.props
+    const {forDate, pages, refreshPages, instances, dispatch} = this.props
     _.isEmpty(pages) && refreshPages()
 
-    this.selectPage = this.selectPage.bind(this)
-    this.onDateChange = this.onDateChange.bind(this)
     this.onSelectInstance = this.onSelectInstance.bind(this)
-
-    this.toggleSelector = this.toggleSelector.bind(this)
+    this.toggleSelector   = this.toggleSelector.bind(this)
   }
 
   static propTypes = {
     tokenId: PropTypes.string.isRequired,
+    forDate: PropTypes.object,
     pageId: PropTypes.string.isRequired,
     pages: PropTypes.object.isRequired,
     instances: PropTypes.object.isRequired,
     refreshPages: PropTypes.func.isRequired,
-    selectPageForDate: PropTypes.func.isRequired,
+    selectPage: PropTypes.func.isRequired,
+    selectForDate: PropTypes.func.isRequired,
     selectInstance: PropTypes.func.isRequired
   }
 
   state = {
+    collapsed: false,
     showSelector: _.isEmpty(this.props.pageId),
     result: this.props.pages.entities
   }
@@ -86,28 +63,9 @@ export default class Header extends Component {
   }
 
   //
-  selectPage(page) {
-    const {pageId} = page
-    this.setState({selectedPageId: pageId})
-    const {selectedForDate} = this.state
-    if(selectedForDate)
-      this.props.selectPageForDate(pageId, selectedForDate)
-  }
-
-  //
-  onDateChange(dateString, {dateMoment}) {
-    this.setState({selectedForDate: dateMoment})
-    const {selectedPageId} = this.state
-    if(selectedPageId)
-      this.props.selectPageForDate(selectedPageId, dateMoment)
-  }
-
-  //
   onSelectInstance(idx, span, event) {
-    console.log(idx, span)
-    const {selectedForDate} = this.state
-    const {pageId, selectInstance} = this.props
-    const instanceId = createInstanceId(selectedForDate, span)
+    const {pageId, selectInstance, forDate} = this.props
+    const instanceId = createInstanceId(forDate, span)
     selectInstance(instanceId)
     event.preventDefault()
   }
@@ -116,37 +74,66 @@ export default class Header extends Component {
   render() {
     const {
       tokenId,
+      forDate,
       pageId,
       pages,
       instances,
       refreshPages,
-      selectPageForDate,
+      selectPage,
+      selectForDate,
       selectInstance } = this.props
 
     const {
+      collapsed,
       selectedPageId,
-      selectedForDate,
       showSelector } = this.state
 
-    const page = _.find(pages, {pageId})
-    const instance = {}
+    let instanceRndr
+    if(instances) {
+      const {spans} = instances
+      instanceRndr =
+        <ol className={cx('list-unstyled')}>
+          {_.map(spans, (span, idx) =>
+            <li key={idx}
+                onClick={_.bind(this.onSelectInstance, null, idx, span)}>
+              {span[2]}: {span[0]} - {span[1]}
+            </li>
+          )}
+        </ol>
+    }
 
     return (
-      <Widget className={cx('header')}>
-        <WidgetHeading>
-          <Summary page={page} forDate={selectedForDate} instance={instance} onClick={this.toggleSelector}/>
-        </WidgetHeading>
-        <WidgetContent>
-          {showSelector &&
-            <Selector selectedPageId={selectedPageId}
-                      selectedForDate={selectedForDate}
-                      pages={pages}
-                      instances={instances}
-                      selectPage={this.selectPage}
-                      onDateChange={this.onDateChange}
-                      onSelectInstance={this.onSelectInstance}/>}
-        </WidgetContent>
-      </Widget>
+      <Row>
+        <div className={cx('calendar')}>
+          <Widget>
+            <WidgetContent>
+              <DatePicker inline
+                          fixedHeight
+                          selected={forDate}
+                          onChange={selectForDate}/>
+            </WidgetContent>
+          </Widget>
+        </div>
+        <Column size='md-2'>
+          <Widget className={cx('header')}>
+            <WidgetContent>
+              {instanceRndr}
+            </WidgetContent>
+          </Widget>
+        </Column>
+        {/*page selector*/}
+        <Column size='md-4'>
+          <Widget className={cx('header')}>
+            <WidgetContent>
+              <Query collapsed={collapsed}
+                     entries={pages.entities}
+                     mapper={pageMapper}
+                     formatter={pageEntryFormatter}
+                     onSelectEntry={selectPage}/>
+            </WidgetContent>
+          </Widget>
+        </Column>
+      </Row>
     )
   }
 }

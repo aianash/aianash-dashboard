@@ -6,16 +6,18 @@ import {
   getTokenId,
   getPageId,
   getInstanceId,
-
+  getForDate,
   getInstances,
   getCluster,
   getPageStats,
+  getPages,
   // behavior entities
   getStory,
   getStat
 } from 'reducers/selectors'
 
 import {
+  createInstanceId,
   isInstancesValid,
   behaviorEntityCacheKey,
   instancesCacheKey
@@ -248,6 +250,41 @@ function* watchSelect() {
   }
 }
 
+
+/////////////////////////
+// Fetch Initial State //
+/////////////////////////
+
+function* fetchInitialState() {
+  const tokenId = yield select(getTokenId)
+  const forDate = yield select(getForDate)
+  yield put(instances.load({forDate}))
+  yield put(pages.load({tokenId}))
+
+  let instanceId, pageId
+  while(!instanceId || !pageId) {
+    const action = yield take([INSTANCES.SUCCESS, PAGES.SUCCESS])
+    switch (action.type) {
+      case INSTANCES.SUCCESS:
+        console.log(action)
+        const {spans} = action.config
+        const span = spans[0]
+        instanceId = createInstanceId(forDate, span)
+        break;
+
+      case PAGES.SUCCESS:
+        pageId = action.pages[0].pageId
+    }
+  }
+  yield put(instances.select({instanceId}))
+  yield put(pages.select({pageId}))
+
+  const action = yield take(CLUSTER.SUCCESS)
+  const behaviorId = action.cluster[0].behaviorId
+  yield put(behavior.select({behaviorId}))
+  yield put(behavior.load({pageId, instanceId, behaviorId}))
+}
+
 ///////////////
 // Root Saga //
 ///////////////
@@ -261,4 +298,6 @@ export default function* root() {
     fork(watchLoadCluster),
     fork(watchLoadBehavior)
   ]
+
+  yield fork(fetchInitialState)
 }

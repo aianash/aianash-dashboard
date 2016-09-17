@@ -27,9 +27,6 @@ export default class Header extends Component {
   constructor(props) {
     super(props)
 
-    const {forDate, pages, refreshPages, instances, dispatch} = this.props
-    _.isEmpty(pages) && refreshPages()
-
     this.onSelectInstance = this.onSelectInstance.bind(this)
     this.toggleSelector   = this.toggleSelector.bind(this)
   }
@@ -132,7 +129,7 @@ export default class Header extends Component {
       <Column size='md-6'>
         <Row>
           {_.map(pageStat.stats, (stat, name) =>
-            <Column size='md-4'>
+            <Column size='md-4' key={name}>
               <Widget><WidgetContent>{name}</WidgetContent></Widget>
             </Column>
           )}

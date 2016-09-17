@@ -23,6 +23,7 @@ function pageId(state = '', action) {
   }
 }
 
+//
 function forDate(state = moment(), action) {
   switch (action.type) {
     case FOR_DATE.SELECT:

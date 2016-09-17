@@ -15,8 +15,8 @@ class Behavior extends Component {
   constructor(props) {
     super(props)
 
-    const {forDate, dispatch} = props
-    dispatch(actions.instances.load({forDate}))
+    // const {forDate, dispatch} = props
+    // dispatch(actions.instances.load({forDate}))
 
     this.refreshPages   = this.refreshPages.bind(this)
     this.selectPage     = this.selectPage.bind(this)

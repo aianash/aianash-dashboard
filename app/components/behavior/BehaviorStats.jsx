@@ -26,7 +26,7 @@ export default class BehaviorStats extends Component {
     return (
       <Row>
         {_.map(this.props.stat.stat, (stat, name) =>
-          <Column size='md-4'>
+          <Column size='md-4' key={name}>
             <Widget><WidgetContent>{name}</WidgetContent></Widget>
           </Column>
         )}

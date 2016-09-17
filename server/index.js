@@ -40,8 +40,9 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(methodOverride());
 
 if(ENV === 'production') {
-  // app.use(Express.static(path.join(__dirname, '..', 'public'), { maxAge: '30 days'}));
   app.use(Express.static(path.join(__dirname, '..', 'public')));
+  // app.use(Express.static(path.join(__dirname, '..', 'public'), { maxAge: '30 days'}));
+  // app.use(Express.static(path.join(__dirname, '..', 'public')));
 } else {
   app.use(Express.static(path.join(__dirname, '..', 'public')));
 }

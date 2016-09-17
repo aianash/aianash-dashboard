@@ -9,6 +9,7 @@ import http from 'http'
 import axios from 'axios'
 import bodyParser from 'body-parser'
 import methodOverride from 'method-override'
+import moment from 'moment'
 
 import { createMemoryHistory, match, RouterContext } from 'react-router'
 import { Provider } from 'react-redux'
@@ -18,6 +19,7 @@ import createRoutes from 'routes'
 import configureStore from 'store/configureStore'
 import preRenderMiddleware from 'middlewares/preRenderMiddleware'
 import header from 'components/Meta'
+import rootSaga from 'sagas'
 
 /*
  * Export render function to be used in server/index.js
@@ -38,20 +40,19 @@ export default function render(req, res) {
         entities: []
       },
       instances: {
-        isFetching: false,
-        entities: []
-      }
+        isFetching: false
+      },
+      pageStats: {}
     },
     behaviors: {
       behaviorId: '',
       clusters: {},
       stories: {},
-      stats: {},
-      informations: {},
-      pageSeqs: {}
+      stats: {}
     },
     errorMessage: ''
   }, history)
+
   const routes = createRoutes(store)
 
   /*
@@ -93,21 +94,26 @@ export default function render(req, res) {
           </Provider>
         )
 
-        res.status(200).send(`
-          <!doctype html>
-          <html ${header.htmlAttributes.toString()}>
-            <head>
-              ${header.title.toString()}
-              ${header.meta.toString()}
-              ${header.link.toString()}
-            </head>
-            <body>
-              <div id="app">${componentHTML}</div>
-              <script>window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}</script>
-              <script type="text/javascript" charset="utf-8" src="/assets/app.js"></script>
-            </body>
-          </html>
-        `)
+        store.runSaga(rootSaga).done.then(() => {
+          console.log('sagas complete')
+          res.status(200).send(`
+            <!doctype html>
+            <html ${header.htmlAttributes.toString()}>
+              <head>
+                ${header.title.toString()}
+                ${header.meta.toString()}
+                ${header.link.toString()}
+              </head>
+              <body>
+                <div id="app">${componentHTML}</div>
+                <script>window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}</script>
+                <script type="text/javascript" charset="utf-8" src="/assets/app.js"></script>
+              </body>
+            </html>
+          `)
+        })
+
+        store.close()
       })
       .catch((err) => {
         console.log(err)

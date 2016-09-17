@@ -1,7 +1,7 @@
 import React, { PropTypes, Component } from 'react';
 import classNames from 'classnames/bind';
 import styles from 'css/main';
-import { Graph } from 'components/dashboard';
+import { Graph } from 'components/commons';
 import {behavior, pageseq} from 'images';
 
 const cx = classNames.bind(styles);
@@ -80,7 +80,7 @@ const createLabel = (time, idx, behavior, action) => {
   const style = { position: 'absolute', top: time };
   return (
     <div style={style} key={idx} className={cx("graph-label", "row")}>
-      <div className={cx("col-md-6")}>
+      <div className={cx("col-md-4")}>
         <span className={cx("label-tm")}>{time}ms</span>
         <ul className={cx("list-unstyled")}>
           {randomize(behavior).map((b, i) => (
@@ -91,7 +91,8 @@ const createLabel = (time, idx, behavior, action) => {
           ))}
         </ul>
       </div>
-      <div className={cx("col-md-6")}>{sampleAction()}</div>
+      <div className={cx("col-md-4")}>{sampleAction()}</div>
+      <div className={cx("col-md-4")}>{sampleDrops()}</div>
     </div>
   )
 }
@@ -109,6 +110,40 @@ GraphLabel.propTypes = {
   gheight: PropTypes.string.isRequired,
   timePos: PropTypes.array.isRequired,
   behavior: PropTypes.array.isRequired
+}
+
+const Query = ({q, i}) => {
+  return (
+    <div className={cx("query")}>
+      <div className={cx("box")}><span className={cx("field")}>{q.field}</span></div>
+      <div className={cx("box")}><span className={cx("comp")}>{q.comp}</span></div>
+      <div className={cx("box")}><span className={cx("vals")}>{q.vals[0]}</span></div>
+    </div>
+  )
+}
+
+Query.propTypes = {
+  q: PropTypes.object.isRequired,
+  i: PropTypes.number.isRequired
+}
+
+const Filter = ({name, queries}) => {
+  return (
+    <div className={cx("filter")}>
+      <h2 className={cx("header")}>{name}</h2>
+      <ul className={cx("list-unstyled")}>
+        {queries.map((qy, i) =>
+          <li key={i}><Query q={qy} i={i}/></li>
+        )}
+      </ul>
+    </div>
+  )
+
+}
+
+Filter.propTypes = {
+  name: PropTypes.string.isRequired,
+  queries: PropTypes.array.isRequired
 }
 
 export default class Behavior extends Component {
@@ -131,48 +166,63 @@ export default class Behavior extends Component {
       'sales',
       'marketing',
       'web'
-    ]
+    ],
+    queries: {
+      segment: [
+        { field: 'Browser', comp: 'equals', vals: ['Chrome'] },
+        { field: 'Country', comp: 'equals', vals: ['India'] }
+      ],
+      frompage: [
+        { field: 'Page', comp: 'equals', vals: ['/dashboard'] }
+      ],
+      time: [
+        { field: 'From', comp: 'equals', vals: ['Last Week'] }
+      ]
+    }
   }
 
   render() {
     return (
       <div className={cx("container-fluid")}>
         <div className={cx("row", "behavior", "predict")}>
-          <div className={cx("col-md-6")}>
+          <div className={cx("col-md-4")}>
             <div className={cx("block")}>
               <div className={cx("block-heading")}>
                 <div className={cx("title")}>
-                  <h2>Test A: User Behavior</h2>
-                  <p>Behavior prediction for Test A</p>
+                  <h2>PREDICT FOR</h2>
+                  <p>Choose parameters for prediction</p>
                 </div>
-                <div className={cx("heading-elements")}>
-                  <Selector behavior={this.state.behavior}/>
-                </div>
+                <div className={cx("heading-elements")}>Clear</div>
               </div>
               <div className={cx("block-content")}>
-                <div className={cx("row", "graph-header")}>
-                  <div className={cx("col-md-7")}>Graph</div>
-                  <div className={cx("col-md-5")}>
-                    <div className={cx("col-md-6")}>Information</div>
-                    <div className={cx("col-md-6")}>Actions</div>
-                  </div>
-                </div>
-                <div className={cx("row", "graph-cont")}>
-                  <Graph height={this.state.gheight} width={this.state.gwidth}/>
-                  <GraphLabel gheight={this.state.gheight}
-                              timePos={this.state.timePos}
-                              behavior={this.state.behavior}/>
-                </div>
+                <div className={cx("row")}><Filter name="Segment" queries={this.state.queries.segment}/></div>
+                <div className={cx("row")}><Filter name="From page" queries={this.state.queries.frompage}/></div>
+                <div className={cx("row")}><Filter name="Time" queries={this.state.queries.time}/></div>
               </div>
             </div>
+            <div className={cx("block")}>
+              <div className={cx("block-heading")}>
+                  <div className={cx("title")}>
+                    <h2>Behaviors</h2>
+                    <p>Number of user's per behavior</p>
+                  </div>
+                  <div className={cx("heading-elements")}>
+                    <button type="button" className={cx("btn", "btn-default", "btn-icon-fixed", "dropdown-toggle")} data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                      <span className={cx("icon-calendar-full")}></span> June 13, 2016 - July 14, 2016
+                    </button>
+                  </div>
+                </div>
+                <div className={cx("block-content")}>
+                  <img src={behavior} className={cx("img-responsive")} alt="work"/>
+                </div>
+            </div>
           </div>
-
-          <div className={cx("col-md-6")}>
+          <div className={cx("col-md-8")}>
             <div className={cx("block")}>
               <div className={cx("block-heading")}>
                 <div className={cx("title")}>
-                  <h2>Test B: User Behavior</h2>
-                  <p>Behavior prediction for Test B</p>
+                  <h2>User Behavior</h2>
+                  <p>Behavior prediction</p>
                 </div>
                 <div className={cx("heading-elements")}>
                   <Selector behavior={this.state.behavior}/>
@@ -182,8 +232,9 @@ export default class Behavior extends Component {
                 <div className={cx("row", "graph-header")}>
                   <div className={cx("col-md-7")}>Graph</div>
                   <div className={cx("col-md-5")}>
-                    <div className={cx("col-md-6")}>Information</div>
-                    <div className={cx("col-md-6")}>Actions</div>
+                    <div className={cx("col-md-4")}>Information</div>
+                    <div className={cx("col-md-4")}>Actions</div>
+                    <div className={cx("col-md-4")}>User Reach</div>
                   </div>
                 </div>
                 <div className={cx("row", "graph-cont")}>

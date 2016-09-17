@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import classNames from 'classnames/bind';
 import styles from 'css/main';
-import Logo from 'components/Logo';
+import { Logo } from 'components/commons';
 
 const cx = classNames.bind(styles);
 

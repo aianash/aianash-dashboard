@@ -1,4 +1,5 @@
 import * as actions from 'actions'
+import {instancesCacheKey} from 'utils'
 
 const { CLUSTER } = actions
 
@@ -39,9 +40,11 @@ function clusters(state = {}, action) {
     case CLUSTER.SUCCESS:
     case CLUSTER.FAILURE:
     case CLUSTER.ABORT:
+      const {pageId, instanceId} = action
+      const key = instancesCacheKey(pageId, instanceId)
       return {
         ...state,
-        [action.key]: cluster(state[action.key], action)
+        [key]: cluster(state[action.key], action)
       }
     default:
       return state;

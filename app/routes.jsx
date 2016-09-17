@@ -1,19 +1,19 @@
-import React from 'react'
-import { IndexRoute, Route, IndexRedirect } from 'react-router'
+import React from 'react';
+import { IndexRedirect, Route } from 'react-router';
 
 import {
   App,
   Dashboard,
-  Behavior,
   LoginOrRegister,
-  NotFound,
+  NotFound
 } from 'containers'
 
 // [TODO] move to containers
 import {
+  Behavior,
   Predict,
   ABTest
-} from 'components/dashboard'
+} from 'containers';
 
 export default (store) => {
   const requireLogin = (nextState, replace, callback) => {

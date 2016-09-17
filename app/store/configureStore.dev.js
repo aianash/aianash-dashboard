@@ -26,6 +26,6 @@ export default function configureStore(initialState, history) {
   }
 
   store.runSaga = sagaMiddleware.run
-  store.clone = () => store.dispatch(END)
+  store.close = () => store.dispatch(END)
   return store
 }

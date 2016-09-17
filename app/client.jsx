@@ -1,3 +1,4 @@
+import 'babel-polyfill'
 import React from 'react'
 import ReactDOM from 'react-dom'
 import { Provider } from 'react-redux'
@@ -7,6 +8,8 @@ import { syncHistoryWithStore } from 'react-router-redux'
 import createRoutes from 'routes'
 import configureStore from 'store/configureStore'
 import preRenderMiddleware from 'middlewares/preRenderMiddleware'
+import rootSaga from 'sagas'
+import {DevTools} from 'containers'
 
 const initialState = window.__INITIAL_STATE__
 
@@ -14,6 +17,8 @@ const store = configureStore(initialState, browserHistory)
 const history = syncHistoryWithStore(browserHistory, store)
 const routes = createRoutes(store)
 const destination = document.getElementById('app')
+
+store.runSaga(rootSaga)
 
 /**
  * Callback function handling frontend route changes.
@@ -43,7 +48,9 @@ const component = (
 
 ReactDOM.render(
   <Provider store={store}>
-    {component}
+    <div>
+      {component}
+    </div>
   </Provider>,
   destination
 )

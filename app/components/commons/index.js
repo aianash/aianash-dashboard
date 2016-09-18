@@ -6,4 +6,4 @@ export Container from 'components/commons/Container'
 export Row from 'components/commons/Row'
 export Column from 'components/commons/Column'
 
-export { Widget, WidgetHeading, WidgetContent } from 'components/commons/Widget'
+export { Widget, WidgetHeading, WidgetContent, CountWidget } from 'components/commons/Widget'

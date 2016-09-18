@@ -266,7 +266,6 @@ function* fetchInitialState() {
     const action = yield take([INSTANCES.SUCCESS, PAGES.SUCCESS])
     switch (action.type) {
       case INSTANCES.SUCCESS:
-        console.log(action)
         const {spans} = action.config
         const span = spans[0]
         instanceId = createInstanceId(forDate, span)

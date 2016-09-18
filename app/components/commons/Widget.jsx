@@ -48,4 +48,23 @@ WidgetContent.propTypes = {
   children: PropTypes.node
 }
 
-export { Widget, WidgetHeading, WidgetContent }
+const CountWidget = ({className, title, subtitle, count}) => {
+  let clazz = cx('widget-counter')
+  if(className) clazz = clazz + ' ' + className
+  return (
+    <Widget className={clazz}>
+      <h3>{title}</h3>
+      <p>{subtitle}</p>
+      <h2>{count}</h2>
+    </Widget>
+  )
+}
+
+CountWidget.propTypes = {
+  className: PropTypes.string,
+  title: PropTypes.string.isRequired,
+  subtitle: PropTypes.string.isRequired,
+  count: PropTypes.string
+}
+
+export { Widget, WidgetHeading, WidgetContent, CountWidget }

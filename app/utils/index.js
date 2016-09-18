@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 //
 export function isInstancesValid(instances, forDate) {
   const {activeFrom, activeTo} = instances
@@ -18,4 +20,15 @@ export function instancesCacheKey(pageId, instanceId) {
 
 export function behaviorEntityCacheKey(pageId, instanceId, behaviorId) {
   return `${pageId}:${instanceId}:${behaviorId}`
+}
+
+export function findInstanceIdx(instanceId, spans = []) {
+  const components = instanceId.split('-')
+  if(components.length !== 0) {
+    const start = parseInt(components[3])
+    const end = parseInt(components[4])
+    return _.findIndex(spans, (span) =>
+      (span[0] === start && span[1] === end)
+    )
+  }
 }

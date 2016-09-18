@@ -6,4 +6,6 @@ export Cluster from 'components/behavior/Cluster'
 export Story from 'components/behavior/Story'
 export PageSeq from 'components/behavior/PageSeq'
 
+export Instances from 'components/behavior/Instances'
+
 // export Selector from 'components/behavior/Selector'

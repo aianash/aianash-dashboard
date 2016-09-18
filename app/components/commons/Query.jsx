@@ -3,6 +3,9 @@ import _ from 'lodash'
 import fuzzy from 'fuzzy'
 
 import styles from 'css/main'
+import {
+  Widget,
+  WidgetContent } from 'components/commons'
 
 const cx = require('classnames/bind').bind(styles)
 
@@ -53,20 +56,22 @@ export default class Query extends Component {
     const {collapsed, entries, mapper, formatter, onSelectEntry, ...others} = this.props
     const result = _.isEmpty(this.state.result) ? entries : this.state.result
     return (
-      <div {...others}>
+      <Widget {...others}>
         <input type="search" className={cx('form-control')} placeholder="Search webpages" onChange={this.onQuery}/>
-        <ol className={cx('list-unstyled')}>
-          {_.map(result, (entry, idx) => {
-            return (
-              <li key={idx}
-                  className={cx({selected: (this.state.selected === idx)})}
-                  onClick={this.onClick.bind(null, idx)}>
-                {formatter(entry)}
-              </li>
-            )
-          })}
-        </ol>
-      </div>
+        <WidgetContent>
+          <ol className={cx('list-unstyled')}>
+            {_.map(result, (entry, idx) => {
+              return (
+                <li key={idx}
+                    className={cx({selected: (this.state.selected === idx)})}
+                    onClick={this.onClick.bind(null, idx)}>
+                  {formatter(entry)}
+                </li>
+              )
+            })}
+          </ol>
+        </WidgetContent>
+      </Widget>
     )
   }
 }

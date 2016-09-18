@@ -23,7 +23,6 @@ export default class BehaviorStats extends Component {
     stat: PropTypes.object.isRequired
   }
 
-
   render() {
     const stat = this.props.stat.stat || {}
     const {avgDwellTime, newVisitors, pageViews, totalVisitors, previousPages, nextPages} = stat

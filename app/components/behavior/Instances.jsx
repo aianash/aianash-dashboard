@@ -4,7 +4,7 @@ import _ from 'lodash'
 const cx = require('classnames/bind').bind(styles)
 
 
-export default class HourOfDay extends Component {
+export default class Instances extends Component {
   constructor(props) {
     super(props)
     this.onClick = this.onClick.bind(this)

@@ -21,9 +21,9 @@ Widget.propTypes = {
 const WidgetHeading = ({title, subtitle, children}) => {
   return (
     <div className={cx('widget-heading')}>
-        {title && <h2 className={cx('title')}>{title}</h2>}
-        {subtitle && <p className={cx('subtitle')}>{subtitle}</p>}
-        {children && children}
+      {title && <h2 className={cx('title')}>{title}</h2>}
+      {subtitle && <p className={cx('subtitle')}>{subtitle}</p>}
+      {children && children}
     </div>
   )
 };

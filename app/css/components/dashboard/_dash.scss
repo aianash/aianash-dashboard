@@ -103,6 +103,38 @@
     border-radius: 0;
   }
 
+  .page-desc {
+    float: left;
+    width: 100%;
+    cursor: pointer;
+    padding: 4px 20px;
+    vertical-align: middle;
+
+    &.selected {
+      background-color: rgba($brand-primary, .6) !important;
+    }
+
+    &:hover {
+      background-color: $brand-lighter
+    }
+
+    h2 {
+      float: left;
+      font-size: 16px;
+      line-height: 22px;
+      margin: 0;
+    }
+
+    p {
+      color: rgba($brand-black, 0.6);
+      float: right;
+      margin: 0;
+      font-size: 14px;
+      line-height: 22px;
+      font-style: italic;
+    }
+  }
+
   .page-search {
     input {
       display: block;

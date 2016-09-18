@@ -9,17 +9,17 @@ import {
 
 const cx = require('classnames/bind').bind(styles)
 
+//
 export default class Query extends Component {
   constructor(props) {
     super(props)
-
     this.updateResult = _.debounce(this.updateResult, 500)
     this.onClick = this.onClick.bind(this)
     this.onQuery = this.onQuery.bind(this)
   }
 
   static propTypes = {
-    collapsed: PropTypes.bool,
+    isSelected: PropTypes.func.isRequired,
     entries: PropTypes.array.isRequired,
     mapper: PropTypes.func,
     formatter: PropTypes.func,
@@ -30,9 +30,12 @@ export default class Query extends Component {
     result: this.props.entries
   }
 
+  //////////////
+  // Handlers //
+  //////////////
+
   onClick(selected, event) {
     const {entries, onSelectEntry} = this.props
-    this.setState({selected})
     onSelectEntry(entries[selected])
     event.preventDefault()
   }
@@ -51,26 +54,23 @@ export default class Query extends Component {
     event.preventDefault()
   }
 
-
+  //
   render() {
-    const {collapsed, entries, mapper, formatter, onSelectEntry, ...others} = this.props
+    const {isSelected, entries, mapper, formatter, onSelectEntry, ...others} = this.props
     const result = _.isEmpty(this.state.result) ? entries : this.state.result
     return (
       <Widget {...others}>
         <input type="search" className={cx('form-control')} placeholder="Search webpages" onChange={this.onQuery}/>
-        <WidgetContent>
-          <ol className={cx('list-unstyled')}>
-            {_.map(result, (entry, idx) => {
-              return (
-                <li key={idx}
-                    className={cx({selected: (this.state.selected === idx)})}
-                    onClick={this.onClick.bind(null, idx)}>
-                  {formatter(entry)}
-                </li>
-              )
-            })}
-          </ol>
-        </WidgetContent>
+        <ol className={cx('list-unstyled')}>
+          {_.map(result, (entry, idx) => {
+            return (
+              <li key={idx}
+                  onClick={this.onClick.bind(null, idx)}>
+                {formatter(entry, isSelected(entry))}
+              </li>
+            )
+          })}
+        </ol>
       </Widget>
     )
   }

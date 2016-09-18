@@ -23,13 +23,18 @@ import {
 const cx = require('classnames/bind').bind(styles)
 
 const pageMapper = (page) => `${page.name}-${page.url}`;
-const pageEntryFormatter = (page) => `${page.name}-${page.url}`
+const pageEntryFormatter = (page, selected) =>
+  <div className={cx('page-desc', {selected})}>
+    <h2>{page.name}</h2>
+    <p>{page.url}</p>
+  </div>
 
 //
 export default class Header extends Component {
   constructor(props) {
     super(props)
 
+    this.isPageSelected = this.isPageSelected.bind(this)
     this.onSelectInstance = this.onSelectInstance.bind(this)
     this.toggleSelector   = this.toggleSelector.bind(this)
   }
@@ -58,6 +63,10 @@ export default class Header extends Component {
   componentWillReceiveProps(nextProps) {
     const selectedInstanceIdx = findInstanceIdx(nextProps.instanceId, nextProps.instances.spans)
     this.setState({selectedInstanceIdx})
+  }
+
+  isPageSelected(page) {
+    return this.props.pageId === page.pageId
   }
 
   //////////////
@@ -130,7 +139,7 @@ export default class Header extends Component {
 
         {/*page selector*/}
         <Column size='md-4'>
-          <Query collapsed={collapsed}
+          <Query isSelected={this.isPageSelected}
                  entries={pages.entities}
                  mapper={pageMapper}
                  formatter={pageEntryFormatter}

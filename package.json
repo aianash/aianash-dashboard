@@ -45,6 +45,7 @@
     "bluebird": "^3.3.5",
     "body-parser": "^1.15.0",
     "chai": "^3.5.0",
+    "chart.js": "^2.2.2",
     "classnames": "^2.2.3",
     "compression": "^1.6.2",
     "cross-env": "^2.0.0",

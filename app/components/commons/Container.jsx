@@ -3,10 +3,10 @@ import styles from 'css/main'
 
 const cx = require('classnames/bind').bind(styles)
 
-const Container = ({fluid, children}) => {
-  const clazz = fluid ? 'container-fluid' : 'container'
+const Container = ({className, fluid, children}) => {
+  const clazz = cx(fluid ? 'container-fluid' : 'container') + ' ' + className
   return (
-    <div className={cx(clazz)}>{children}</div>
+    <div className={clazz}>{children}</div>
   )
 };
 

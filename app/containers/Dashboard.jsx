@@ -18,11 +18,9 @@ export default class Dashboard extends Component {
   render() {
     return (
       <div className={cx("dashboard")}>
-        <div className={cx("main")}>
+        <div className={cx("dash")}>
           <Sidebar/>
-          <div className={cx("dash")}>
-            {this.props.children}
-          </div>
+          {this.props.children}
         </div>
       </div>
     )

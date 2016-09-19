@@ -36,9 +36,10 @@ WidgetHeading.propTypes = {
 
 
 //
-const WidgetContent = ({children}) => {
+const WidgetContent = ({className, children}) => {
+  const clazz = cx('widget-content') + ' ' + className
   return (
-    <div className={cx('widget-content')}>
+    <div className={clazz}>
       {children}
     </div>
   )

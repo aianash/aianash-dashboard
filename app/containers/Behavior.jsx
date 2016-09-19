@@ -15,9 +15,6 @@ class Behavior extends Component {
   constructor(props) {
     super(props)
 
-    // const {forDate, dispatch} = props
-    // dispatch(actions.instances.load({forDate}))
-
     this.refreshPages   = this.refreshPages.bind(this)
     this.selectPage     = this.selectPage.bind(this)
     this.selectForDate  = this.selectForDate.bind(this)
@@ -84,11 +81,12 @@ class Behavior extends Component {
     const {cluster, story, stat} = this.props
 
     return (
-      <Container fluid={true}>
+      <Container fluid={true} className={cx('behavior')}>
         <Header
           tokenId={tokenId}
           forDate={forDate}
           pageId={pageId}
+          instanceId={instanceId}
           pages={pages}
           instances={instances}
           pageStat={pageStat}
@@ -99,6 +97,7 @@ class Behavior extends Component {
         <Row>
           <Column size='md-2'>
             <Cluster
+              behaviorId={behaviorId}
               instanceId={instanceId}
               cluster={cluster}
               stat={stat}

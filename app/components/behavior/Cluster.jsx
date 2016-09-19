@@ -10,12 +10,14 @@ import {
 
 const cx = require('classnames/bind').bind(styles)
 
+//
 export default class Cluster extends Component {
   constructor(props) {
     super(props)
   }
 
   static propTypes = {
+    behaviorId: PropTypes.string.isRequired,
     instanceId: PropTypes.string.isRequired,
     cluster: PropTypes.object.isRequired,
     stat: PropTypes.object.isRequired,
@@ -27,23 +29,16 @@ export default class Cluster extends Component {
     return (
       <Widget className={cx('cluster')}>
         <WidgetHeading title='Behaviors' subtitle='List of user behaviors'/>
-        <WidgetContent>
-          <table className={cx('table', 'table-hover', 'table-bordered')}>
-            <thead>
-              <tr>
-                <th>Behavior Cluster</th>
-              </tr>
-            </thead>
-            <tbody>
-              {_.map(cluster.cluster, ({behaviorId, name}, idx) =>
-                <tr key={behaviorId}>
-                  <td key={behaviorId}
-                      onClick={selectBehavior.bind(null, behaviorId)}>{name}</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </WidgetContent>
+        <ul className={cx('list-unstyled')}>
+          {_.map(cluster.cluster, ({behaviorId, name}, idx) =>
+            <li className={cx({selected: (behaviorId === this.props.behaviorId)})}
+                key={behaviorId}
+                onClick={selectBehavior.bind(null, behaviorId)}>
+                <h2>{name}</h2>
+                <p>{"50% of total users"}</p>
+            </li>
+          )}
+        </ul>
       </Widget>
     )
   }

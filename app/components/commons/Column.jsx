@@ -3,9 +3,9 @@ import styles from 'css/main'
 
 const cx = require('classnames/bind').bind(styles)
 
-const Column = ({size, children}) => {
+const Column = ({className, size, children}) => {
   return (
-    <div className={cx(`col-${size}`)}>{children}</div>
+    <div className={cx(`col-${size}`) + ' ' + className}>{children}</div>
   )
 };
 

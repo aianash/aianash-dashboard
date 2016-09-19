@@ -5,9 +5,9 @@ import { Column } from 'components/commons'
 const cx = require('classnames/bind').bind(styles)
 
 const Row = (props) => {
-  const {column, children, ...other} = props
+  const {column, children, className, ...other} = props
   return (
-    <div {...other} className={cx('row')}>
+    <div {...other} className={cx('row') + ' ' + className}>
       {column ? <Column size={column}>{children}</Column> : children}
     </div>
   )

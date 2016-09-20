@@ -4,6 +4,7 @@ import _ from 'lodash'
 import {
   Row,
   Column,
+  Heading,
   Widget,
   WidgetHeading,
   WidgetContent,
@@ -15,12 +16,7 @@ const cx = require('classnames/bind').bind(styles)
 //
 const SectionSummary = ({sections}) => {
   const section = _.maxBy(_.toPairs(sections), (a) => a[1].mean)
-  console.log('section summary updated')
-  return (
-    <div className={cx('section-summary')}>
-      Most user visits <span>{section[1].name}</span>
-    </div>
-  )
+  return <p className={cx('stat-msg')}>Most user visits <span className={cx('name')}>{_.startCase(section[1].name)}</span></p>
 }
 
 SectionSummary.propTypes = {
@@ -30,8 +26,8 @@ SectionSummary.propTypes = {
 //
 const ActionSummary = ({actions}) => {
   return (
-    <div className={cx('action-summary')}>
-      <span>Action summary</span>
+    <div className={cx('timeline-action-summary')}>
+      <span className={cx('sm-hd', 'hd-hg')}>Action summary</span>
       <table >
         <tbody>
           {_.take(actions, 2).map((action, idx) =>
@@ -54,9 +50,9 @@ ActionSummary.propTypes = {
 //
 const StatsSummary = ({stats}) => {
   return (
-    <div className={cx('stat-summary')}>
-      <p><span>{stats.reach}</span> users reached</p>
-      <p><span>{stats.drop}</span> users dropped</p>
+    <div>
+      <p className={cx('stat-msg')}><span className={cx('value')}>{stats.reach}</span> users reached</p>
+      <p className={cx('stat-msg')}><span className={cx('value', 'warn')}>{stats.drop}</span> users dropped</p>
     </div>
   )
 }
@@ -69,9 +65,9 @@ StatsSummary.propTypes = {
 const InfoTagsSummary = ({tags}) => {
   const tag = _.maxBy(_.toPairs(tags), (a) => a[1].mean)
   return (
-    <div className={cx('tag-summary')}>
-      <p><span>{tag[1].mean + '%'}</span> interested in <span>{_.startCase(tag[0])}</span></p>
-    </div>
+    <p className={cx('stat-msg')}>
+      <span className={cx('name')}>{tag[1].mean + '%'}</span> interested in <span className={cx('value')}>{_.startCase(tag[0])}</span>
+    </p>
   )
 }
 
@@ -83,9 +79,9 @@ InfoTagsSummary.propTypes = {
 const InfoTags = ({tags}) => {
   tags = _.sortBy(_.toPairs(tags), (t) => -t[1].mean)
   return (
-    <div className={cx('infotags-full')}>
-      <span>Information</span>
-      <table className={cx('table')}>
+    <div className={cx('timeline-infotags')}>
+      <span className={cx('sm-hd', 'hd-hg')}>Information</span>
+      <table className={cx('table', 'table-compressed', 'center-aligned-2-col')}>
         <thead>
           <tr>
             <th>% Interested in</th>
@@ -96,8 +92,8 @@ const InfoTags = ({tags}) => {
           {_.map(tags, (tag, idx) =>
             <tr key={idx}>
               <td>
-                <div className={cx("progress")}>
-                  <div className={cx("progress-bar")} role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style={{width: (tag[1].mean + "%")}}>
+                <div className={cx('progress', 'compressed')}>
+                  <div className={cx('progress-bar', 'pull-right')} role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style={{width: (tag[1].mean + '%')}}>
                     {tag[1].mean}
                   </div>
                 </div>
@@ -129,8 +125,8 @@ const Section = ({sections}) => {
   }
 
   return (
-    <div className={cx('section-full')}>
-      <span>Section Visits</span>
+    <div className={cx('timeline-section-visits')}>
+      <span className={cx('sm-hd', 'hd-hg')}>Section Visits</span>
       <div><Doughnut data={data}/></div>
     </div>)
 }
@@ -166,12 +162,10 @@ const Action = ({actions}) => {
   })
 
   return (
-    <div className={cx('action-full')}>
-      <span>Action Stats</span>
+    <div className={cx('timeline-action')}>
+      <span className={cx('sm-hd', 'hd-hg')}>Action Stats</span>
       <table className={cx('table', 'table-bordered')}>
-        <tbody>
-          {rows}
-        </tbody>
+        <tbody>{rows}</tbody>
       </table>
     </div>
   )
@@ -196,9 +190,9 @@ class TimelineEvent extends Component {
   render() {
     const {event, expanded, onClick} = this.props
     return (
-      <Row className={cx('event-block', {selected: expanded})}
+      <Row className={cx('timeline-event-block', {selected: expanded})}
            onClick={onClick}>
-        <Column size='md-5' className={cx('event-information')}>
+        <Column size='md-5' className={cx('timeline-left-cont')}>
           <div className={cx('fadeIn', {hidden: expanded})}>
             <InfoTagsSummary tags={event.tags}/>
             <SectionSummary sections={event.sections}/>
@@ -209,11 +203,11 @@ class TimelineEvent extends Component {
           </div>
         </Column>
 
-        <Column size='md-1' className={cx('duration')}>
-          <span>{"10 secs"}</span>
+        <Column size='md-1' className={cx('timeline-duration')}>
+          <span>{'10 secs'}</span>
         </Column>
 
-        <Column size='md-6' className={cx('event-action')}>
+        <Column size='md-6' className={cx('timeline-right-cont')}>
           <div className={cx('fadeIn', {hidden: expanded})}>
             <StatsSummary stats={event.stats}/>
             <ActionSummary actions={event.actions}/>
@@ -252,11 +246,11 @@ export default class Timeline extends Component {
     const {timeline} = this.props
     const {selected} = this.state
     return (
-      <WidgetContent className={cx('timeline')}>
-        <div className={cx('th')}><span>TIMELINE</span></div>
-        <Row className={cx('event-block', 'no-hover')}>
-          <div className={cx('duration')}>
-            <span>START</span>
+      <WidgetContent className={cx('story-timeline-cont')}>
+        <Heading title='TIMELINE'/>
+        <Row className={cx('timeline-event-block', 'no-hover')}>
+          <div className={cx('timeline-duration', 'center-block')}>
+            <span className={cx('bg-bright-red')}>START</span>
           </div>
         </Row>
         {_.map(timeline, (event, idx) =>

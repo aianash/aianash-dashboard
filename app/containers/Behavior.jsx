@@ -85,7 +85,7 @@ class Behavior extends Component {
     const {cluster, story, stat} = this.props
 
     return (
-      <Container fluid={true} className={cx('behavior')}>
+      <Container fluid={true}>
         <Header
           tokenId={tokenId}
           forDate={forDate}

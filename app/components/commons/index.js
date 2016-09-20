@@ -5,6 +5,7 @@ export Query from 'components/commons/Query';
 export Container from 'components/commons/Container'
 export Row from 'components/commons/Row'
 export Column from 'components/commons/Column'
+export Heading from 'components/commons/Heading'
 
 export Doughnut from 'components/commons/Doughnut'
 export RadarChart from 'components/commons/RadarChart'

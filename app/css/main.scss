@@ -142,9 +142,12 @@ h1, h2, h3, h4, h5, h6, figure {
 }
 
 // dashboard
-@import 'components/dashboard/dash';
-@import 'components/dashboard/sidebar';
-@import 'components/dashboard/footer';
-@import 'components/dashboard/graph';
-@import 'components/dashboard/behavior';
-@import 'components/dashboard/predict';
+
+@import 'components/dash';
+
+@import 'components/commons/base';
+
+@import 'components/sidebar';
+@import 'components/footer';
+@import 'components/behavior/base';
+@import 'components/predict';

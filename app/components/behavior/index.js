@@ -7,5 +7,7 @@ export Story from 'components/behavior/Story'
 export PageSeq from 'components/behavior/PageSeq'
 
 export Instances from 'components/behavior/Instances'
+export Timeline from 'components/behavior/Timeline'
+export BehaviorInformation from 'components/behavior/BehaviorInformation'
 
 // export Selector from 'components/behavior/Selector'

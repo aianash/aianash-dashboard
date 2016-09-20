@@ -24,6 +24,12 @@ export default class Cluster extends Component {
     selectBehavior: PropTypes.func.isRequired,
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    const {behaviorId, cluster, selectBehavior} = this.props
+    if(_.isEmpty(behaviorId) && !_.isEmpty(cluster.cluster))
+      selectBehavior(cluster.cluster[0].behaviorId)
+  }
+
   render() {
     const {instanceId, cluster, stat, selectBehavior} = this.props
     return (

@@ -25,15 +25,21 @@ export default class RadarChart extends Component {
   componentWillReceiveProps(nextProps) {
     const {chart} = this.state
     if(chart) chart.destroy()
-    this.initializeChart(nextProps)
+    if(nextProps.data.labels.length !== 0) {
+      if(chart) {
+        this.updateChart(chart, nextProps.data)
+      } else this.initializeChart(nextProps)
+    }
   }
 
-  addData(nextProps, chart, setIndex, pointIndex) {
-    var values = [];
-    nextProps.data.datasets.forEach((set) => {
-      values.push(set.data[pointIndex]);
-    })
-    chart.addData(values, nextProps.data.labels[setIndex]);
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextProps.data.labels.length !== 0
+  }
+
+  updateChart(chart, data) {
+    chart.data.labels = data.labels
+    chart.data.datasets = data.datasets
+    chart.update()
   }
 
   initializeChart(props) {

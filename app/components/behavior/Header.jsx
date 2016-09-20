@@ -151,12 +151,12 @@ export default class Header extends Component {
         <Column size='md-6'>
           <Row className={cx('page-stat')}>
             <Column size='md-3' key={1}>
-              <CountWidget title={'VISITORS'}
+              <CountWidget title={'TOTAL VISITORS'}
                            subtitle={'decrease'}
                            count={totalVisitors}/>
             </Column>
             <Column size='md-3' key={2}>
-              <CountWidget title={'NEW VISITORS'}
+              <CountWidget title={'INTERESTED VISITORS'}
                            subtitle={'decrease'}
                            count={newVisitors}/>
             </Column>

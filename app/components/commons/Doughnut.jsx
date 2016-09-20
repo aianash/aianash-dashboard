@@ -14,6 +14,10 @@ export default class Doughnut extends Component {
     this.initializeChart(this.props)
   }
 
+  componentWillUnmount() {
+    this.state.chart.destroy()
+  }
+
   initializeChart(props) {
     const Chart = require('chart.js')
     const ctx = this.refs.canvass.getContext('2d')
@@ -27,6 +31,10 @@ export default class Doughnut extends Component {
       }
     })
     this.setState({chart})
+  }
+
+  componentDidUpdate() {
+    console.log("doughnut updated")
   }
 
   render() {

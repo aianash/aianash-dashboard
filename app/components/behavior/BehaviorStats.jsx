@@ -29,12 +29,12 @@ export default class BehaviorStats extends Component {
     return (
       <Row>
         <Column size='md-6' key={1}>
-          <CountWidget title={'VISITORS'}
+          <CountWidget title={'TOTAL VISITORS'}
                        subtitle={'decrease'}
                        count={totalVisitors}/>
         </Column>
         <Column size='md-6' key={2}>
-          <CountWidget title={'NEW VISITORS'}
+          <CountWidget title={'INTERESTED VISITORS'}
                        subtitle={'decrease'}
                        count={newVisitors}/>
         </Column>
@@ -51,11 +51,11 @@ export default class BehaviorStats extends Component {
         <Column size='md-12' key={5}>
           <Widget>
             <WidgetContent>
-              <ul>
+              {/*<ul>
                 {_.map(previousPages, (page) =>
                   <li key={page.pageId}>{page.name}-{page.url}-{page.count}</li>
                 )}
-              </ul>
+              </ul>*/}
             </WidgetContent>
           </Widget>
         </Column>

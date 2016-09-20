@@ -57,7 +57,7 @@ const loadStat  = loadBehaviorEntity.bind(null, stat, getStat, api.fetchStat)
 // will load entities related to a behavior
 function* watchLoadBehavior() {
   let storyTask, statTask
-  let prevBehaviorId
+  let prevBehaviorId, prevPageId, prevInstanceId
 
   while(true) {
     const action = yield take([BEHAVIOR.LOAD, BEHAVIOR.CANCEL_LOAD])
@@ -68,11 +68,13 @@ function* watchLoadBehavior() {
         if(statTask) yield cancel(statTask)
 
         prevBehaviorId = undefined
+        prevPageId = undefined
+        prevInstanceId = undefined
         break;
 
       case BEHAVIOR.LOAD:
         const {pageId, instanceId, behaviorId} = action
-        if(prevBehaviorId !== behaviorId) {
+        if(prevBehaviorId !== behaviorId || prevPageId !== pageId || prevInstanceId !== instanceId) {
           const tokenId = yield select(getTokenId)
 
           if(storyTask) yield cancel(storyTask)
@@ -83,6 +85,8 @@ function* watchLoadBehavior() {
         }
 
         prevBehaviorId = behaviorId
+        prevPageId = pageId
+        prevInstanceId = instanceId
         break;
     }
   }
@@ -240,6 +244,9 @@ function* watchLoadPageStats() {
 function* watchSelect() {
   while(true) {
     yield take([INSTANCES.SELECT, PAGES.SELECT])
+    yield put(cluster.cancelLoad())
+    yield put(pageStats.cancelLoad())
+
     const pageId = yield select(getPageId)
     const instanceId = yield select(getInstanceId)
     if(!_.isEmpty(pageId) && !_.isEmpty(instanceId)) {

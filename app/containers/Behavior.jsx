@@ -41,6 +41,10 @@ class Behavior extends Component {
     dispatch: PropTypes.func.isRequired
   }
 
+  // componentWillReceiveProps(nextProps) {
+
+  // }
+
   //
   refreshPages() {
     const {dispatch, tokenId} = this.props
@@ -97,15 +101,17 @@ class Behavior extends Component {
         <Row>
           <Column size='md-2'>
             <Cluster
-              behaviorId={behaviorId}
               instanceId={instanceId}
+              behaviorId={behaviorId}
               cluster={cluster}
               stat={stat}
               selectBehavior={this.selectBehavior}/>
           </Column>
           <Column size='md-10'>
             <Row>
-              <Column size='md-8'><Story story={story}/></Column>
+              <Column size='md-8'>
+                <Story story={story}/>
+              </Column>
               <Column size='md-4'><BehaviorStats stat={stat}/></Column>
             </Row>
           </Column>

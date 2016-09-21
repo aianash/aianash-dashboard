@@ -44,12 +44,17 @@
 
 .story-timeline-cont {
   position: relative;
-  padding: 1em 0px !important;
+  padding: 2em 0px !important;
   margin-bottom: 2em;
+
+  .md-hd {
+    margin-bottom: 0;
+  }
+
   &::before {
     content: '';
     position: absolute;
-    top: 5em;
+    top: 6em;
     left: 50%;
     height: 100%;
     width: 4px;

@@ -15,18 +15,18 @@
 }
 
 // works on only two column table
-.table.center-aligned-2-col {
-  td:first-child,
-  th:first-child {
-    text-align: right;
-    padding-right: 5px;
-  }
+// .table.center-aligned-2-col {
+//   td:first-child,
+//   th:first-child {
+//     text-align: right;
+//     padding-right: 5px;
+//   }
 
-  th:last-child,
-  td:last-child {
-    text-align: left;
-  }
-}
+//   th:last-child,
+//   td:last-child {
+//     text-align: left;
+//   }
+// }
 
 .progress.compressed {
   margin: 0;

@@ -76,6 +76,27 @@
   }
 }
 
+
+.anom-good {
+  border-radius: 50% !important;
+  background-color: $brand-success !important;
+  width: 28px;
+  height: 28px;
+  margin: 15px auto;
+  font-size: 20px !important;
+  line-height: 20px;
+}
+
+.anom-bad {
+  border-radius: 50% !important;
+  background-color: $brand-danger !important;
+  width: 28px;
+  height: 28px;
+  margin: 15px auto;
+  font-size: 20px !important;
+  line-height: 20px;
+}
+
 .timeline-duration {
   text-align: center;
   width: 8%;
@@ -88,7 +109,7 @@
     -webkit-transform: translateZ(0);
     -webkit-backface-visibility: hidden;
     border-radius: 4px;
-    box-shadow: 0 0 0 4px white, inset 0 2px 0 rgba(0, 0, 0, 0.08), 0 3px 0 4px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 0 0 4px white, inset 0 2px 0 rgba(0, 0, 0, 0.1), 0 3px 0 4px rgba(0, 0, 0, 0.1);
   }
 }
 
@@ -104,22 +125,8 @@
   text-align: left;
 }
 
-.timeline-infotags {
-  td:last-child {
-    font-size: 14px;
-    max-width: 80px;
-  }
-}
-
 .timeline-section-visits {
-  font-size: 14px;
-  color: $brand-black;
-
-  canvas {
-    max-width: 200px;
-    margin-left: auto;
-    margin-right: auto;
-  }
+  margin-top: 15px;
 }
 
 .timeline-action-summary {

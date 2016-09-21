@@ -11,5 +11,7 @@ export Separator from 'components/commons/Separator'
 export Doughnut from 'components/commons/Doughnut'
 export RadarChart from 'components/commons/RadarChart'
 export LineChart from 'components/commons/LineChart'
+export HorizontalChart from 'components/commons/HorizontalChart'
 
 export { Widget, WidgetHeading, WidgetContent, CountWidget } from 'components/commons/Widget'
+export { InlineStat } from 'components/commons/Stats'

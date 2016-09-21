@@ -8,7 +8,8 @@ import {
   Widget,
   WidgetHeading,
   CountWidget,
-  WidgetContent } from 'components/commons'
+  WidgetContent,
+  InlineStat } from 'components/commons'
 import {
   isInstancesValid,
   createInstanceId
@@ -48,7 +49,7 @@ const BehaviorStats = (props) => {
           <WidgetContent>
             <table className={cx('table', 'table-compressed')}>
               <tbody>
-              {_.take(previousPages, 2).map((page, idx) =>
+              {_.map(previousPages, (page, idx) =>
                 <tr key={idx}>
                   <td>{page.url.replace('http://', '')}</td>
                   <td>{page.count}</td>
@@ -63,7 +64,7 @@ const BehaviorStats = (props) => {
           <WidgetContent>
             <table className={cx('table', 'table-compressed')}>
               <tbody>
-              {_.take(previousPages, 2).map((page, idx) =>
+              {_.map(nextPages, (page, idx) =>
                 <tr key={idx}>
                   <td>{page.url.replace('http://', '')}</td>
                   <td>{page.count}</td>
@@ -73,9 +74,6 @@ const BehaviorStats = (props) => {
             </table>
           </WidgetContent>
         </Widget>
-      </Column>
-      <Column size='md-12' key={6}>
-
       </Column>
     </Row>
   )

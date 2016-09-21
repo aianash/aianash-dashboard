@@ -1,0 +1,41 @@
+.horiz-chart {
+
+  table {
+    margin: 0 auto;
+
+    td, th {
+      font-size: 14px;
+      width: 100px;
+    }
+
+    td:first-child,
+    th:first-child {
+      text-align: right;
+      padding-right: 5px;
+    }
+
+    th:last-child,
+    td:last-child {
+      text-align: left
+    }
+  }
+
+  &.left {
+    table {
+      td:first-child,
+      th:first-child {
+        text-align: right;
+        padding-right: 5px
+      }
+
+      .progress-bar {
+        float: right;
+      }
+
+      th:last-child,
+      td:last-child {
+        text-align: left;
+      }
+    }
+  }
+}

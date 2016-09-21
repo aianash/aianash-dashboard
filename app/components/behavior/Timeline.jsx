@@ -8,7 +8,8 @@ import {
   Widget,
   WidgetHeading,
   WidgetContent,
-  Doughnut,
+  HorizontalChart,
+  InlineStat,
   RadarChart } from 'components/commons'
 
 const cx = require('classnames/bind').bind(styles)
@@ -78,33 +79,14 @@ InfoTagsSummary.propTypes = {
 //
 const InfoTags = ({tags}) => {
   tags = _.sortBy(_.toPairs(tags), (t) => -t[1].mean)
+  const data = _.map(tags, (tag) => {return {label: tag[0], value: tag[1].mean}})
   return (
     <div className={cx('timeline-infotags')}>
       <span className={cx('sm-hd', 'hd-hg')}>Information</span>
-      <table className={cx('table', 'table-compressed', 'center-aligned-2-col')}>
-        <thead>
-          <tr>
-            <th>% Interested in</th>
-            <th>Topic</th>
-          </tr>
-        </thead>
-        <tbody>
-          {_.map(tags, (tag, idx) =>
-            <tr key={idx}>
-              <td>
-                <div className={cx('progress', 'compressed')}>
-                  <div className={cx('progress-bar', 'pull-right')} role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style={{width: (tag[1].mean + '%')}}>
-                    {tag[1].mean}
-                  </div>
-                </div>
-              </td>
-              <td>{_.startCase(tag[0])}</td>
-            </tr>
-          )}
-        </tbody>
-      </table>
-    </div>
-  )
+      <HorizontalChart data={data}
+                          titles={['% Interested', 'Information']}
+                          left/>
+    </div>)
 }
 
 InfoTags.propTypes = {
@@ -113,21 +95,19 @@ InfoTags.propTypes = {
 
 //
 const Section = ({sections}) => {
-  const data = {
-    labels: _.map(sections, (sec) => sec.name),
-    datasets: [
-      {
-        data: _.map(sections, (sec) => sec.mean),
-        backgroundColor: _.map(sections, (sec) => '#1abc9c'),
-        hoverBackgroundColor: _.map(sections, (sec) => '#16a085')
+  const data =
+    _.map(sections, (sec) => {
+      return {
+        label: sec.name,
+        value: sec.mean
       }
-    ]
-  }
+    })
 
   return (
     <div className={cx('timeline-section-visits')}>
       <span className={cx('sm-hd', 'hd-hg')}>Section Visits</span>
-      <div><Doughnut data={data}/></div>
+      <HorizontalChart data={data}
+                          titles={['% Visits', 'Section']}/>
     </div>)
 }
 
@@ -137,36 +117,26 @@ Section.propTypes = {
 
 //
 const Action = ({actions}) => {
-  const rows = []
-  var count = 0
-  _.forEach(actions, (action, idx) => {
-    rows.push(
-      <tr key={idx}><td colSpan={3} className={cx('h')}>{action.category}:{action.name} ({action.label})</td></tr>)
-    _.forEach(action.stats, (values, prop) => {
-      count += 1
-      rows.push(
-        <tr key={count + 'h'}>
-          <td>1</td>
-          <td colSpan={2}>{prop}</td>
-        </tr>)
-      _.forEach(values, (stat, value) => {
-        count += 1
-        rows.push(
-          <tr key={count + 's'}>
-            <td></td>
-            <td>{value}</td>
-            <td>{stat}</td>
-          </tr>)
-      })
-    })
-  })
+  let count = 1
+  const actionStats =
+    _.flatMap(actions, (action, idx) =>
+      _.flatMap(action.stats, (values, prop) =>
+        _.map(values, (stat, value) => {
+          count = count + 1
+          console.log("asdfsd")
+          return <InlineStat  key={count + ''}
+                              count={stat}
+                              title={`${action.category} > ${action.name}`}
+                              subtitle={`${action.label} ${value}`}
+                              compared={['increase', '15%', 'From Yesterday']}/>
+        })
+      )
+    )
 
   return (
     <div className={cx('timeline-action')}>
       <span className={cx('sm-hd', 'hd-hg')}>Action Stats</span>
-      <table className={cx('table', 'table-bordered')}>
-        <tbody>{rows}</tbody>
-      </table>
+      <div>{actionStats}</div>
     </div>
   )
 }
@@ -205,6 +175,9 @@ class TimelineEvent extends Component {
 
         <Column size='md-1' className={cx('timeline-duration')}>
           <span>{'10 secs'}</span>
+          {Math.random() > 0.5
+              ? <span className={cx('anom-good')}><i className={cx('icon-trending_up')}/></span>
+              : <span className={cx('anom-bad')}><i className={cx('icon-trending_down')}/></span>}
         </Column>
 
         <Column size='md-6' className={cx('timeline-right-cont')}>

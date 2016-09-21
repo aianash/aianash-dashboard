@@ -40,6 +40,13 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+
+.icon-trending_down:before {
+  content: "\e8e3";
+}
+.icon-trending_up:before {
+  content: "\e8e5";
+}
 .icon-arrow-up:before {
   content: "\ea3a";
 }

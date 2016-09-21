@@ -69,13 +69,13 @@ const BehaviorInformation = (props) => {
         <RadarChart data={data}/>
       </div>
       <div className={cx('timeline-information-bar')}>
-        <Heading title='HOW WELL INFORMATION SERVED USERS INTEREST'/>
+        <Heading title='INFORMATION EFFECTIVENESS PER USER INTEREST'/>
         <table>
           <thead>
             <tr>
               <th>USERS INTEREST</th>
               <th></th>
-              <th>INFORMATION GAINED</th>
+              <th>INFORMATION EFFECTIVENESS</th>
             </tr>
           </thead>
           <tbody>

@@ -25,6 +25,7 @@ export const fetchPages = (tokenId) => callApi('GET', `pages/${tokenId}`);
 export const fetchInstances = (tokenId, {forDate}) => callApi('GET', `instances/${tokenId}/${forDate.format('YYYY-MM-DD')}`);
 export const fetchCluster = (tokenId, {pageId, instanceId}) => callApi('GET', `clusters/${tokenId}/${pageId}/${instanceId}`);
 export const fetchPageStats = (tokenId, {pageId, instanceId}) => callApi('GET', `stats/${tokenId}/${pageId}/${instanceId}`);
+export const fetchInformation = (tokenId, {pageId, instanceId}) => callApi('GET', `informations/${tokenId}/${pageId}/${instanceId}`);
 
 //
 function fetchBehaviorEntities(name) {

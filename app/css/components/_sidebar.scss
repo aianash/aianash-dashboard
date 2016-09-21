@@ -1,7 +1,7 @@
 .sidebar {
   color: white;
   float: left;
-  position: absolute;
+  position: fixed;
   width: 150px;
   left: 0;
   top: 0;
@@ -13,17 +13,16 @@
   .navbar {
     border-radius: 0px;
     min-height: 0;
-    margin-bottom: 10px;
+    margin-bottom: 0px;
   }
 
   .aian-logo {
     font-size: 25px;
     line-height: 25px;
-
-    span {
-      font-size: 35px;
-      line-height: 35px;
-    }
+    height: 25px;
+    width: 112px;
+    background-size: cover;
+    display: block;
   }
 
   .sb-link {

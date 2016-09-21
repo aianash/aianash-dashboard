@@ -7,7 +7,9 @@ import {
   Column,
   Widget,
   WidgetHeading,
-  WidgetContent } from 'components/commons'
+  CountWidget,
+  WidgetContent,
+  InlineStat } from 'components/commons'
 import {
   isInstancesValid,
   createInstanceId
@@ -16,21 +18,69 @@ import {
 const cx = require('classnames/bind').bind(styles)
 
 //
-export default class BehaviorStats extends Component {
-
-  static propTypes = {
-    stat: PropTypes.object.isRequired
-  }
-
-  render() {
-    return (
-      <Row>
-        {_.map(this.props.stat.stat, (stat, name) =>
-          <Column size='md-4'>
-            <Widget><WidgetContent>{name}</WidgetContent></Widget>
-          </Column>
-        )}
-      </Row>
-    )
-  }
+const BehaviorStats = (props) => {
+  const stat = props.stat.stat || {}
+  const {avgDwellTime, newVisitors, pageViews, totalVisitors, previousPages, nextPages} = stat
+  return (
+    <Row>
+      <Column size='md-6' key={1}>
+        <CountWidget title={'TOTAL VISITORS'}
+                     subtitle={['increase', '15%', 'From Yesterday']}
+                     count={totalVisitors}/>
+      </Column>
+      <Column size='md-6' key={2}>
+        <CountWidget title={'INTERESTED VISITORS'}
+                     subtitle={['decrease', '5%', 'From Yesterday']}
+                     count={newVisitors}/>
+      </Column>
+      <Column size='md-6' key={3}>
+        <CountWidget title={'PAGE VIEWS'}
+                     subtitle={['increase', '4%', 'From Yesterday']}
+                     count={pageViews}/>
+      </Column>
+      <Column size='md-6' key={4}>
+        <CountWidget title={'AVG DWELL TIME'}
+                     subtitle={['increase', '6%', 'From Yesterday']}
+                     count={avgDwellTime}/>
+      </Column>
+      <Column size='md-12' key={5}>
+        <Widget>
+          <WidgetHeading title={"TOP PREVIOUS PAGES"} compressed/>
+          <WidgetContent>
+            <table className={cx('table', 'table-compressed')}>
+              <tbody>
+              {_.map(previousPages, (page, idx) =>
+                <tr key={idx}>
+                  <td>{page.url.replace('http://', '')}</td>
+                  <td>{page.count}</td>
+                </tr>
+              )}
+              </tbody>
+            </table>
+          </WidgetContent>
+        </Widget>
+        <Widget>
+          <WidgetHeading title={"TOP NEXT PAGES"} compressed/>
+          <WidgetContent>
+            <table className={cx('table', 'table-compressed')}>
+              <tbody>
+              {_.map(nextPages, (page, idx) =>
+                <tr key={idx}>
+                  <td>{page.url.replace('http://', '')}</td>
+                  <td>{page.count}</td>
+                </tr>
+              )}
+              </tbody>
+            </table>
+          </WidgetContent>
+        </Widget>
+      </Column>
+    </Row>
+  )
 }
+
+BehaviorStats.propTypes = {
+  stat: PropTypes.object.isRequired
+}
+
+export default BehaviorStats

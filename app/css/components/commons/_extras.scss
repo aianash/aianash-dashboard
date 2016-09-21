@@ -1,0 +1,40 @@
+.table.table-compressed {
+  margin-bottom: 0;
+  td {
+    padding: 0;
+    margin: 0;
+    border: none;
+  }
+
+  th {
+    font-weight: normal;
+    font-size: 12px;
+    padding: 0;
+    border: none;
+  }
+}
+
+// works on only two column table
+// .table.center-aligned-2-col {
+//   td:first-child,
+//   th:first-child {
+//     text-align: right;
+//     padding-right: 5px;
+//   }
+
+//   th:last-child,
+//   td:last-child {
+//     text-align: left;
+//   }
+// }
+
+.progress.compressed {
+  margin: 0;
+  height: 15px;
+  box-shadow: none;
+  border-radius: 0px;
+  background: none;
+  .progress-bar {
+    line-height: 15px;
+  }
+}

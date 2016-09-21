@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
-import classNames from 'classnames/bind';
-import styles from 'css/main';
-import { Logo } from 'components/commons';
+import React, { Component } from 'react'
+import classNames from 'classnames/bind'
+import styles from 'css/main'
+import { Logo } from 'components/commons'
 
-const cx = classNames.bind(styles);
+const cx = classNames.bind(styles)
 
 export default class Sidebar extends Component {
   constructor(props) {
-    super(props);
+    super(props)
   }
 
   render() {

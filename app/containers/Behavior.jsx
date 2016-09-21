@@ -2,8 +2,8 @@ import React, { PropTypes, Component } from 'react'
 import { connect } from 'react-redux'
 
 import styles from 'css/main'
-import { Container, Row, Column } from 'components/commons'
-import { Header, Cluster, Story, BehaviorStats } from 'components/behavior'
+import { Container, Row, Column, Separator } from 'components/commons'
+import { Header, Cluster, Story, BehaviorStats, Information } from 'components/behavior'
 import { instancesCacheKey, behaviorEntityCacheKey } from 'utils'
 
 const cx = require('classnames/bind').bind(styles)
@@ -14,9 +14,6 @@ import * as actions from 'actions'
 class Behavior extends Component {
   constructor(props) {
     super(props)
-
-    const {forDate, dispatch} = props
-    dispatch(actions.instances.load({forDate}))
 
     this.refreshPages   = this.refreshPages.bind(this)
     this.selectPage     = this.selectPage.bind(this)
@@ -29,6 +26,11 @@ class Behavior extends Component {
     if(this.props.pages.entities.length === 0) this.refreshPages()
   }
 
+  componentWillReceiveProps(nextProps) {
+    if(_.isEmpty(nextProps.behaviorId))
+      this.setState({showInformation: true})
+  }
+
   static propTypes = {
     tokenId: PropTypes.string.isRequired,
     forDate: PropTypes.object,
@@ -38,10 +40,15 @@ class Behavior extends Component {
     pageStat: PropTypes.object,
     instanceId: PropTypes.string,
     cluster: PropTypes.object,
+    information: PropTypes.object,
     behaviorId: PropTypes.string,
     story: PropTypes.object,
     stat: PropTypes.object,
     dispatch: PropTypes.func.isRequired
+  }
+
+  state = {
+    showInformation: true
   }
 
   //
@@ -72,23 +79,32 @@ class Behavior extends Component {
 
   //
   selectBehavior(behaviorId) {
-    const {dispatch, pageId, instanceId} = this.props
-    dispatch(actions.behavior.select({behaviorId}))
-    dispatch(actions.behavior.load({pageId, instanceId, behaviorId}))
+    console.log(behaviorId)
+    if(behaviorId === 'ALL') {
+      this.setState({showInformation: true})
+    } else {
+      const {dispatch, pageId, instanceId} = this.props
+      this.setState({showInformation: false})
+      dispatch(actions.behavior.select({behaviorId}))
+      dispatch(actions.behavior.load({pageId, instanceId, behaviorId}))
+    }
   }
 
   //
   render() {
     const {tokenId, forDate, pageId, instanceId, behaviorId} = this.props
     const {pages, instances, pageStat} = this.props
-    const {cluster, story, stat} = this.props
+    const {information, cluster, story, stat} = this.props
+    const {showInformation} = this.state
 
     return (
       <Container fluid={true}>
+        <Separator title='WEB PAGE'/>
         <Header
           tokenId={tokenId}
           forDate={forDate}
           pageId={pageId}
+          instanceId={instanceId}
           pages={pages}
           instances={instances}
           pageStat={pageStat}
@@ -96,17 +112,24 @@ class Behavior extends Component {
           selectPage={this.selectPage}
           selectForDate={this.selectForDate}
           selectInstance={this.selectInstance}/>
+        <Separator title='BEHAVIOR'/>
         <Row>
           <Column size='md-2'>
             <Cluster
               instanceId={instanceId}
+              behaviorId={showInformation ? 'ALL' : behaviorId}
               cluster={cluster}
               stat={stat}
               selectBehavior={this.selectBehavior}/>
           </Column>
           <Column size='md-10'>
-            <Row>
-              <Column size='md-8'><Story story={story}/></Column>
+            <Row column='md-12' className={cx({hidden: !showInformation})}>
+              <Information information={information} selectBehavior={this.selectBehavior}/>
+            </Row>
+            <Row className={cx({hidden: showInformation})}>
+              <Column size='md-8'>
+                <Story story={story}/>
+              </Column>
               <Column size='md-4'><BehaviorStats stat={stat}/></Column>
             </Row>
           </Column>
@@ -119,11 +142,12 @@ class Behavior extends Component {
 //
 function mapStateToProps(state) {
   const {tokenId, forDate, pageId, instanceId, pages, instances, pageStats} = state.context
-  const {behaviorId, clusters, stories, stats} = state.behaviors
+  const {behaviorId, clusters, stories, stats, informations} = state.behaviors
 
   const ikey = instancesCacheKey(pageId, instanceId)
   const pageStat = pageStats[ikey] || {}
   const cluster = clusters[ikey] || {}
+  const information = informations[ikey] || {}
 
   const key = behaviorEntityCacheKey(pageId, instanceId, behaviorId)
   const story = stories[key] || {}
@@ -138,6 +162,7 @@ function mapStateToProps(state) {
     pageStat,
     instanceId,
     cluster,
+    information,
     behaviorId,
     story,
     stat

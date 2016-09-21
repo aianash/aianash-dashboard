@@ -5,5 +5,13 @@ export Query from 'components/commons/Query';
 export Container from 'components/commons/Container'
 export Row from 'components/commons/Row'
 export Column from 'components/commons/Column'
+export Heading from 'components/commons/Heading'
+export Separator from 'components/commons/Separator'
 
-export { Widget, WidgetHeading, WidgetContent } from 'components/commons/Widget'
+export Doughnut from 'components/commons/Doughnut'
+export RadarChart from 'components/commons/RadarChart'
+export LineChart from 'components/commons/LineChart'
+export HorizontalChart from 'components/commons/HorizontalChart'
+
+export { Widget, WidgetHeading, WidgetContent, CountWidget } from 'components/commons/Widget'
+export { InlineStat } from 'components/commons/Stats'

@@ -40,24 +40,20 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-.icon-heart:before {
-  content: "\e024";
+
+.icon-trending_down:before {
+  content: "\e8e3";
 }
-.icon-check:before {
-  content: "\e116";
+.icon-trending_up:before {
+  content: "\e8e5";
 }
-.icon-google:before {
-  content: "\ea8a";
+.icon-arrow-up:before {
+  content: "\ea3a";
 }
-.icon-facebook:before {
-  content: "\ea91";
+.icon-arrow-down:before {
+  content: "\ea3e";
 }
-.icon-twitter:before {
-  content: "\ea96";
-}
-.icon-linkedin:before {
-  content: "\eac9";
-}
+
 
 body {
   font-family: $font-primary;
@@ -142,9 +138,12 @@ h1, h2, h3, h4, h5, h6, figure {
 }
 
 // dashboard
-@import 'components/dashboard/dash';
-@import 'components/dashboard/sidebar';
-@import 'components/dashboard/footer';
-@import 'components/dashboard/graph';
-@import 'components/dashboard/behavior';
-@import 'components/dashboard/predict';
+
+@import 'components/dash';
+
+@import 'components/commons/base';
+
+@import 'components/sidebar';
+@import 'components/footer';
+@import 'components/behavior/base';
+@import 'components/predict';

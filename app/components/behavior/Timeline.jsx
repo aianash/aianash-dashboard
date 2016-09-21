@@ -132,7 +132,7 @@ const Section = ({sections}) => {
 }
 
 Section.propTypes = {
-  sections: PropTypes.array.isRequired
+  sections: PropTypes.object.isRequired
 }
 
 //

@@ -9,6 +9,7 @@ import {
   getForDate,
   getInstances,
   getCluster,
+  getInformation,
   getPageStats,
   getPages,
   // behavior entities
@@ -23,8 +24,8 @@ import {
   instancesCacheKey
 } from 'utils'
 
-const { PAGES, INSTANCES, PAGE_STATS, BEHAVIOR, CLUSTER } = actions
-const { instances, pages, pageStats, cluster, story, stat, behavior } = actions
+const { PAGES, INSTANCES, PAGE_STATS, BEHAVIOR, CLUSTER, INFORMATION } = actions
+const { instances, pages, pageStats, cluster, story, stat, behavior, information } = actions
 
 // common subroutine for aync fetch cycle
 function* fetchEntity(entity, apiFn, tokenId, query) {
@@ -132,6 +133,46 @@ function* watchLoadCluster() {
   }
 }
 
+////////////////////////////
+// Watch Load Information //
+////////////////////////////
+
+const fetchInformation = fetchEntity.bind(null, information, api.fetchInformation)
+
+//
+function* loadInformation(tokenId, pageId, instanceId) {
+  const cacheKey = instancesCacheKey(pageId, instanceId)
+  const information = yield select(getInformation, cacheKey)
+  if(!information) yield call(fetchInformation, tokenId, {pageId, instanceId})
+}
+
+//
+function* watchLoadInformation() {
+  let task, prevPageId, prevInstanceId
+  while(true) {
+    const action = yield take([INFORMATION.LOAD, INFORMATION.CANCEL_LOAD])
+
+    switch (action.type) {
+      case INFORMATION.CANCEL_LOAD:
+        if(task) yield cancel(task)
+        prevPageId = undefined
+        prevInstanceId = undefined
+        break;
+
+      case INFORMATION.LOAD:
+        const {pageId, instanceId} = action
+        if(prevPageId !== pageId || prevInstanceId !== instanceId) {
+          const tokenId = yield select(getTokenId)
+          if(task) yield cancel(task)
+          task = yield fork(loadInformation, tokenId, pageId, instanceId)
+        }
+        prevPageId = pageId
+        prevInstanceId = instanceId
+        break;
+    }
+  }
+}
+
 ////////////////////////////////////////////////////////
 // Watching and Loading Instances for a page and date //
 ////////////////////////////////////////////////////////
@@ -188,7 +229,6 @@ function* fetchPages(tokenId) {
   }
 }
 
-
 function* watchLoadPages() {
   let task
   while(true) {
@@ -199,9 +239,9 @@ function* watchLoadPages() {
   }
 }
 
-//////////////////////
-// Watch Load Pages //
-//////////////////////
+///////////////////////////
+// Watch Load Page Stats //
+///////////////////////////
 
 const fetchPageStats = fetchEntity.bind(null, pageStats, api.fetchPageStats)
 
@@ -246,11 +286,13 @@ function* watchSelect() {
     yield take([INSTANCES.SELECT, PAGES.SELECT])
     yield put(cluster.cancelLoad())
     yield put(pageStats.cancelLoad())
+    yield put(information.cancelLoad())
 
     const pageId = yield select(getPageId)
     const instanceId = yield select(getInstanceId)
     if(!_.isEmpty(pageId) && !_.isEmpty(instanceId)) {
       yield put(cluster.load({pageId, instanceId}))
+      yield put(information.load({pageId, instanceId}))
       yield put(pageStats.load({pageId, instanceId}))
       yield put(behavior.invalidate())
     }
@@ -287,8 +329,6 @@ function* fetchInitialState() {
 
   const action = yield take(CLUSTER.SUCCESS)
   const behaviorId = action.cluster[0].behaviorId
-  yield put(behavior.select({behaviorId}))
-  yield put(behavior.load({pageId, instanceId, behaviorId}))
 }
 
 ///////////////
@@ -302,6 +342,7 @@ export default function* root() {
     fork(watchLoadPageStats),
     fork(watchLoadInstances),
     fork(watchLoadCluster),
+    fork(watchLoadInformation),
     fork(watchLoadBehavior)
   ]
 

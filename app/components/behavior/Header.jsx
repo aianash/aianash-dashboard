@@ -120,6 +120,7 @@ export default class Header extends Component {
         </ol>
     }
     const stat = pageStat.stats || {}
+    console.log(stat)
     const {avgDwellTime, newVisitors, pageViews, totalVisitors} = stat
 
     return (
@@ -150,33 +151,61 @@ export default class Header extends Component {
         {/*page stats*/}
         <Column size='md-6'>
           <Row className={cx('page-stat')}>
-            <Column size='md-3' key={1}>
-              <CountWidget title={'TOTAL VISITORS'}
-                           subtitle={'decrease'}
-                           count={totalVisitors}/>
-            </Column>
-            <Column size='md-3' key={2}>
-              <CountWidget title={'INTERESTED VISITORS'}
-                           subtitle={'decrease'}
-                           count={newVisitors}/>
-            </Column>
-            <Column size='md-3' key={3}>
-              <CountWidget title={'PAGE VIEWS'}
-                           subtitle={'decrease'}
-                           count={pageViews}/>
-            </Column>
-            <Column size='md-3' key={4}>
-              <CountWidget title={'AVG DWELL TIME'}
-                           subtitle={'decrease'}
-                           count={avgDwellTime}/>
-            </Column>
-          </Row>
-          <Row>
             <Column size='md-6'>
-              <Widget><WidgetContent>previous</WidgetContent></Widget>
+              <Row>
+                <Column size='md-6' key={1}>
+                  <CountWidget title={'TOTAL VISITORS'}
+                               subtitle={['increase', '15%', 'From Yesterday']}
+                               count={totalVisitors}/>
+                </Column>
+                <Column size='md-6' key={2}>
+                  <CountWidget title={'INTERESTED VISITORS'}
+                               subtitle={['decrease', '5%', 'From Yesterday']}
+                               count={newVisitors}/>
+                </Column>
+                <Column size='md-6' key={3}>
+                  <CountWidget title={'PAGE VIEWS'}
+                               subtitle={['increase', '4%', 'From Yesterday']}
+                               count={pageViews}/>
+                </Column>
+                <Column size='md-6' key={4}>
+                  <CountWidget title={'AVG DWELL TIME'}
+                               subtitle={['increase', '6%', 'From Yesterday']}
+                               count={avgDwellTime}/>
+                </Column>
+              </Row>
             </Column>
-            <Column size='md-6'>
-              <Widget><WidgetContent>previous</WidgetContent></Widget>
+            <Column size='md-6' className={cx('page-stat')}>
+              <Widget>
+                <WidgetHeading title={"TOP PREVIOUS PAGES"} compressed/>
+                <WidgetContent>
+                  <table className={cx('table', 'table-compressed')}>
+                    <tbody>
+                    {_.take(stat.previousPages, 2).map((page, idx) =>
+                      <tr key={idx}>
+                        <td>{page.url.replace('http://', '')}</td>
+                        <td>{page.count}</td>
+                      </tr>
+                    )}
+                    </tbody>
+                  </table>
+                </WidgetContent>
+              </Widget>
+              <Widget>
+                <WidgetHeading title={"TOP NEXT PAGES"} compressed/>
+                <WidgetContent>
+                  <table className={cx('table', 'table-compressed')}>
+                    <tbody>
+                    {_.take(stat.nextPages, 2).map((page, idx) =>
+                      <tr key={idx}>
+                        <td>{page.url.replace('http://', '')}</td>
+                        <td>{page.count}</td>
+                      </tr>
+                    )}
+                    </tbody>
+                  </table>
+                </WidgetContent>
+              </Widget>
             </Column>
           </Row>
         </Column>

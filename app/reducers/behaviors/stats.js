@@ -3,7 +3,7 @@ import * as actions from 'actions'
 const { STAT } = actions
 
 //
-function stat(state = {}, action) {
+function stat(state = {isFetching: false}, action) {
   switch (action.type) {
     case STAT.REQUEST:
       return {

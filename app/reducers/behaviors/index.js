@@ -1,17 +1,15 @@
 import { combineReducers } from 'redux'
 import * as actions from 'actions'
 
-import clusters from 'reducers/behaviors/clusters';
-import stories from 'reducers/behaviors/stories';
-import stats from 'reducers/behaviors/stats';
+import clusters from 'reducers/behaviors/clusters'
+import stories from 'reducers/behaviors/stories'
+import stats from 'reducers/behaviors/stats'
+import informations from 'reducers/behaviors/informations'
 
 const { BEHAVIOR } = actions
 
 //
-const behaviorId = (
-  state = '',
-  action
-) => {
+function behaviorId(state = '', action) {
   switch (action.type) {
     case BEHAVIOR.SELECT:
       return action.behaviorId
@@ -28,6 +26,7 @@ const behaviorsReducer = combineReducers({
   clusters,       // clusters
   stories,        // contain stories for behavior
   stats,          // contain both global and behavior stats
+  informations    // contains informations for all behavior for a page
 })
 
 export default behaviorsReducer

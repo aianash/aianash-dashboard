@@ -14,6 +14,7 @@ const cx = require('classnames/bind').bind(styles)
 export default class Cluster extends Component {
   constructor(props) {
     super(props)
+    this.onClick = this.onClick.bind(this)
   }
 
   static propTypes = {
@@ -21,27 +22,31 @@ export default class Cluster extends Component {
     instanceId: PropTypes.string.isRequired,
     cluster: PropTypes.object.isRequired,
     stat: PropTypes.object.isRequired,
-    selectBehavior: PropTypes.func.isRequired,
+    selectBehavior: PropTypes.func.isRequired
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    const {behaviorId, cluster, selectBehavior} = this.props
-    if(_.isEmpty(behaviorId) && !_.isEmpty(cluster.cluster))
-      selectBehavior(cluster.cluster[0].behaviorId)
+  onClick(behaviorId, event) {
+    this.props.selectBehavior(behaviorId)
+    event.preventDefault()
   }
 
   render() {
-    const {instanceId, cluster, stat, selectBehavior} = this.props
+    const {behaviorId, instanceId, cluster, stat, selectBehavior} = this.props
     return (
       <Widget className={cx('cluster')}>
         <WidgetHeading title='Behaviors' subtitle='List of user behaviors'/>
         <ul className={cx('list-unstyled')}>
+          <li className={cx({selected: ('ALL' === this.props.behaviorId)})}
+              key='ALL'
+              onClick={_.bind(this.onClick, this, 'ALL')}>
+            <h2>ALL BEHAVIORS</h2>
+          </li>
           {_.map(cluster.cluster, ({behaviorId, name}, idx) =>
             <li className={cx({selected: (behaviorId === this.props.behaviorId)})}
                 key={behaviorId}
-                onClick={selectBehavior.bind(null, behaviorId)}>
-                <h2>{name}</h2>
-                <p>{"50% of total users"}</p>
+                onClick={this.onClick.bind(null, behaviorId)}>
+              <h2>{name}</h2>
+              <p>{"50% of total users"}</p>
             </li>
           )}
         </ul>

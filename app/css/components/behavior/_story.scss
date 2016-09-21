@@ -2,14 +2,14 @@
   padding: 2em 0;
 }
 
-.behavior-information-island {
+.timeline-information-island {
   width: 50%;
   margin-left: auto;
   margin-right: auto;
   margin-top: 15px;
 }
 
-.behavior-information-bar {
+.timeline-information-bar {
   table {
     margin-top: 15px;
     margin-left: auto;
@@ -23,15 +23,7 @@
   }
 
   .progress {
-    margin: 0;
-    height: 15px;
-    box-shadow: none;
-    border-radius: 0px;
-    background: none;
     min-width: 200px;
-    .progress-bar {
-      line-height: 15px;
-    }
   }
 
   th {
@@ -42,11 +34,17 @@
   th:first-child {
     float: right;
   }
+
+  td:first-child {
+    .progress-bar {
+      background-color: rgba(44, 62, 80, 1);
+    }
+  }
 }
 
 .story-timeline-cont {
   position: relative;
-  padding: 1em 0px;
+  padding: 1em 0px !important;
   margin-bottom: 2em;
   &::before {
     content: '';

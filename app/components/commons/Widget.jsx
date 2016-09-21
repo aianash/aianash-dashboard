@@ -4,11 +4,11 @@ import styles from 'css/main'
 const cx = require('classnames/bind').bind(styles)
 
 //
-const Widget = ({className, children}) => {
+const Widget = ({className, children, ...others}) => {
   let clazz = cx('widget')
   if(className) clazz = clazz + ' ' + className
   return (
-    <div className={clazz}>{children}</div>
+    <div className={clazz} {...others}>{children}</div>
   )
 };
 
@@ -18,9 +18,9 @@ Widget.propTypes = {
 }
 
 //
-const WidgetHeading = ({title, subtitle, children}) => {
+const WidgetHeading = ({title, subtitle, children, compressed}) => {
   return (
-    <div className={cx('widget-heading')}>
+    <div className={cx('widget-heading', {compressed})}>
       {title && <h2 className={cx('title')}>{title}</h2>}
       {subtitle && <p className={cx('subtitle')}>{subtitle}</p>}
       {children && children}
@@ -31,7 +31,8 @@ const WidgetHeading = ({title, subtitle, children}) => {
 WidgetHeading.propTypes = {
   title: PropTypes.node,
   subtitle: PropTypes.node,
-  children: PropTypes.node
+  children: PropTypes.node,
+  compressed: PropTypes.bool
 }
 
 
@@ -52,11 +53,19 @@ WidgetContent.propTypes = {
 const CountWidget = ({className, title, subtitle, count}) => {
   let clazz = cx('widget-counter')
   if(className) clazz = clazz + ' ' + className
+  const iconcss = {
+    'icon-arrow-up': (subtitle[0] === 'increase'),
+    'icon-arrow-down': (subtitle[0] === 'decrease')
+  }
+  const valuecss = {
+    'text-danger': (subtitle[0] === 'decrease'),
+    'text-success': (subtitle[0] === 'increase'),
+  }
   return (
     <Widget className={clazz}>
-      <h3>{title}</h3>
-      <p>{subtitle}</p>
       <h2>{count}</h2>
+      <h3>{title}</h3>
+      <p><i className={cx(iconcss)}/> <span className={cx(valuecss)}>{subtitle[1]}</span> {subtitle[2]}</p>
     </Widget>
   )
 }
@@ -64,7 +73,7 @@ const CountWidget = ({className, title, subtitle, count}) => {
 CountWidget.propTypes = {
   className: PropTypes.string,
   title: PropTypes.string.isRequired,
-  subtitle: PropTypes.string.isRequired,
+  subtitle: PropTypes.array.isRequired,
   count: PropTypes.string
 }
 

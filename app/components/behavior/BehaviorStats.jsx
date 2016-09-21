@@ -17,52 +17,72 @@ import {
 const cx = require('classnames/bind').bind(styles)
 
 //
-export default class BehaviorStats extends Component {
+const BehaviorStats = (props) => {
+  const stat = props.stat.stat || {}
+  const {avgDwellTime, newVisitors, pageViews, totalVisitors, previousPages, nextPages} = stat
+  return (
+    <Row>
+      <Column size='md-6' key={1}>
+        <CountWidget title={'TOTAL VISITORS'}
+                     subtitle={['increase', '15%', 'From Yesterday']}
+                     count={totalVisitors}/>
+      </Column>
+      <Column size='md-6' key={2}>
+        <CountWidget title={'INTERESTED VISITORS'}
+                     subtitle={['decrease', '5%', 'From Yesterday']}
+                     count={newVisitors}/>
+      </Column>
+      <Column size='md-6' key={3}>
+        <CountWidget title={'PAGE VIEWS'}
+                     subtitle={['increase', '4%', 'From Yesterday']}
+                     count={pageViews}/>
+      </Column>
+      <Column size='md-6' key={4}>
+        <CountWidget title={'AVG DWELL TIME'}
+                     subtitle={['increase', '6%', 'From Yesterday']}
+                     count={avgDwellTime}/>
+      </Column>
+      <Column size='md-12' key={5}>
+        <Widget>
+          <WidgetHeading title={"TOP PREVIOUS PAGES"} compressed/>
+          <WidgetContent>
+            <table className={cx('table', 'table-compressed')}>
+              <tbody>
+              {_.take(previousPages, 2).map((page, idx) =>
+                <tr key={idx}>
+                  <td>{page.url.replace('http://', '')}</td>
+                  <td>{page.count}</td>
+                </tr>
+              )}
+              </tbody>
+            </table>
+          </WidgetContent>
+        </Widget>
+        <Widget>
+          <WidgetHeading title={"TOP NEXT PAGES"} compressed/>
+          <WidgetContent>
+            <table className={cx('table', 'table-compressed')}>
+              <tbody>
+              {_.take(previousPages, 2).map((page, idx) =>
+                <tr key={idx}>
+                  <td>{page.url.replace('http://', '')}</td>
+                  <td>{page.count}</td>
+                </tr>
+              )}
+              </tbody>
+            </table>
+          </WidgetContent>
+        </Widget>
+      </Column>
+      <Column size='md-12' key={6}>
 
-  static propTypes = {
-    stat: PropTypes.object.isRequired
-  }
-
-  render() {
-    const stat = this.props.stat.stat || {}
-    const {avgDwellTime, newVisitors, pageViews, totalVisitors, previousPages, nextPages} = stat
-    return (
-      <Row>
-        <Column size='md-6' key={1}>
-          <CountWidget title={'TOTAL VISITORS'}
-                       subtitle={'decrease'}
-                       count={totalVisitors}/>
-        </Column>
-        <Column size='md-6' key={2}>
-          <CountWidget title={'INTERESTED VISITORS'}
-                       subtitle={'decrease'}
-                       count={newVisitors}/>
-        </Column>
-        <Column size='md-6' key={3}>
-          <CountWidget title={'PAGE VIEWS'}
-                       subtitle={'decrease'}
-                       count={pageViews}/>
-        </Column>
-        <Column size='md-6' key={4}>
-          <CountWidget title={'AVG DWELL TIME'}
-                       subtitle={'decrease'}
-                       count={avgDwellTime}/>
-        </Column>
-        <Column size='md-12' key={5}>
-          <Widget>
-            <WidgetContent>
-              {/*<ul>
-                {_.map(previousPages, (page) =>
-                  <li key={page.pageId}>{page.name}-{page.url}-{page.count}</li>
-                )}
-              </ul>*/}
-            </WidgetContent>
-          </Widget>
-        </Column>
-        <Column size='md-12' key={6}>
-
-        </Column>
-      </Row>
-    )
-  }
+      </Column>
+    </Row>
+  )
 }
+
+BehaviorStats.propTypes = {
+  stat: PropTypes.object.isRequired
+}
+
+export default BehaviorStats

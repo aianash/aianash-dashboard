@@ -1,7 +1,7 @@
 import React, {Component, PropTypes} from 'react'
 import ReactDOM from 'react-dom'
 
-export default class Doughnut extends Component {
+export default class LineChart extends Component {
   constructor(props) {
     super(props)
   }
@@ -22,11 +22,19 @@ export default class Doughnut extends Component {
     const Chart = require('chart.js')
     const ctx = this.refs.canvass.getContext('2d')
     const chart = new Chart(ctx, {
-      type: 'doughnut',
+      type: 'line',
       data: props.data,
+      maintainAspectRatio: false,
+      responsive: true,
       options: {
         legend: {
           display: false
+        },
+        scales: {
+          display: false,
+          gridLines: {
+            display: false
+          }
         }
       }
     })
@@ -34,6 +42,6 @@ export default class Doughnut extends Component {
   }
 
   render() {
-    return (<canvas ref='canvass' width="100" height="100"></canvas>)
+    return (<canvas ref='canvass'></canvas>)
   }
 }

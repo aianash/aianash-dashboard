@@ -24,7 +24,7 @@ const priorConfig = {
 }
 
 const posteriorConfig = {
-  label: 'Information Lead To Conversion',
+  label: 'Information Led To Conversion',
   backgroundColor: 'rgba(52, 152, 219, 0.6)',
   borderColor: 'rgba(52, 152, 219, 1)',
   pointBackgroundColor: 'rgba(52, 152, 219, 1)',

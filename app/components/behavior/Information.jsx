@@ -25,7 +25,7 @@ const priorConfig = {
 }
 
 const posteriorConfig = {
-  label: 'Information Lead To Conversion',
+  label: 'Information Led To Conversion',
   backgroundColor: 'rgba(52, 152, 219, 0.6)',
   borderColor: 'rgba(52, 152, 219, 1)',
   pointBackgroundColor: 'rgba(52, 152, 219, 1)',
@@ -89,15 +89,21 @@ Stat.propTypes = {
   value: PropTypes.string.isRequired
 }
 
-const InformationEffectiveness = () => {
+const InformationEffectiveness = ({effectiveness}) => {
+  const iconcss = effectiveness == 0.3 ? 'icon-arrow-down' : 'icon-arrow-up'
+  const percss = effectiveness == 0.3 ? 'text-danger' : 'text-success'
   return (
     <div className={cx("stat-big")}>
-      <h2>0.3</h2>
+      <h2>{effectiveness}</h2>
       <div>
         <h3>INFORMATION EFFECTIVENESS</h3>
-        <p><i className={cx('icon-arrow-up')}/> <span className={cx('text-success')}>10%</span> From Yesterday</p>
+        <p><i className={cx(iconcss)}/> <span className={cx(percss)}>10%</span> From Yesterday</p>
       </div>
     </div>)
+}
+
+InformationEffectiveness.propTypes = {
+  effectiveness: PropTypes.number.isRequired
 }
 
 //
@@ -136,7 +142,7 @@ const Information = ({information, selectBehavior}) => {
           <Widget className={cx('information')}
                   onClick={_.bind(onClick, null, behavior.behaviorId)}>
             <WidgetHeading title={_.startCase(behavior.name)}/>
-            <InformationEffectiveness/>
+            <InformationEffectiveness effectiveness={behavior.behaviorId / 10}/>
             <WidgetContent>
               <BehaviorInformation information={behavior.information}/>
             </WidgetContent>

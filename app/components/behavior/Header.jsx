@@ -177,11 +177,11 @@ export default class Header extends Component {
             </Column>
             <Column size='md-6' className={cx('page-stat')}>
               <Widget>
-                <WidgetHeading title={"TOP PREVIOUS PAGES"} compressed/>
+                <WidgetHeading title={"TOP PREVIOUS PAGES BY VISITS"} compressed/>
                 <WidgetContent>
                   <table className={cx('table', 'table-compressed')}>
                     <tbody>
-                    {_.take(stat.previousPages, 2).map((page, idx) =>
+                    {_.take(_.sortBy(stat.previousPages, (p) => -p.count), 2).map((page, idx) =>
                       <tr key={idx}>
                         <td>{page.url.replace('http://', '')}</td>
                         <td>{page.count}</td>
@@ -192,11 +192,11 @@ export default class Header extends Component {
                 </WidgetContent>
               </Widget>
               <Widget>
-                <WidgetHeading title={"TOP NEXT PAGES"} compressed/>
+                <WidgetHeading title={"TOP NEXT PAGES BY VISITS"} compressed/>
                 <WidgetContent>
                   <table className={cx('table', 'table-compressed')}>
                     <tbody>
-                    {_.take(stat.nextPages, 2).map((page, idx) =>
+                    {_.take(_.sortBy(stat.nextPages, (p) => -p.count), 2).map((page, idx) =>
                       <tr key={idx}>
                         <td>{page.url.replace('http://', '')}</td>
                         <td>{page.count}</td>

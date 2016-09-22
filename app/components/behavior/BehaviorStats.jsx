@@ -25,31 +25,31 @@ const BehaviorStats = (props) => {
     <Row>
       <Column size='md-6' key={1}>
         <CountWidget title={'TOTAL VISITORS'}
-                     subtitle={['increase', '15%', 'From Yesterday']}
+                     subtitle={['increase', `${_.random(1, 15)}%`, 'From Yesterday']}
                      count={totalVisitors}/>
       </Column>
       <Column size='md-6' key={2}>
         <CountWidget title={'INTERESTED VISITORS'}
-                     subtitle={['decrease', '5%', 'From Yesterday']}
+                     subtitle={['decrease', `${_.random(1, 15)}%`, 'From Yesterday']}
                      count={newVisitors}/>
       </Column>
       <Column size='md-6' key={3}>
         <CountWidget title={'PAGE VIEWS'}
-                     subtitle={['increase', '4%', 'From Yesterday']}
+                     subtitle={['increase', `${_.random(1, 15)}%`, 'From Yesterday']}
                      count={pageViews}/>
       </Column>
       <Column size='md-6' key={4}>
         <CountWidget title={'AVG DWELL TIME'}
-                     subtitle={['increase', '6%', 'From Yesterday']}
+                     subtitle={['increase', `${_.random(1, 15)}%`, 'From Yesterday']}
                      count={avgDwellTime}/>
       </Column>
       <Column size='md-12' key={5}>
         <Widget>
-          <WidgetHeading title={"TOP PREVIOUS PAGES"} compressed/>
+          <WidgetHeading title={"TOP PREVIOUS PAGES BY VISITS"} compressed/>
           <WidgetContent>
             <table className={cx('table', 'table-compressed')}>
               <tbody>
-              {_.map(previousPages, (page, idx) =>
+              {_.sortBy(previousPages, (p) => -p.count).map((page, idx) =>
                 <tr key={idx}>
                   <td>{page.url.replace('http://', '')}</td>
                   <td>{page.count}</td>
@@ -60,11 +60,11 @@ const BehaviorStats = (props) => {
           </WidgetContent>
         </Widget>
         <Widget>
-          <WidgetHeading title={"TOP NEXT PAGES"} compressed/>
+          <WidgetHeading title={"TOP NEXT PAGES BY VISITS"} compressed/>
           <WidgetContent>
             <table className={cx('table', 'table-compressed')}>
               <tbody>
-              {_.map(nextPages, (page, idx) =>
+              {_.sortBy(nextPages, (p) => -p.count).map((page, idx) =>
                 <tr key={idx}>
                   <td>{page.url.replace('http://', '')}</td>
                   <td>{page.count}</td>

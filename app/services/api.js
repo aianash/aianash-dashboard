@@ -1,6 +1,6 @@
 import 'isomorphic-fetch';
 
-const API_ROOT = 'http://localhost:9000/api/';
+const API_ROOT = 'http://192.168.0.101:9000/api/';
 
 function callApi(method, endpoint, body) {
   const url = (endpoint.indexOf(API_ROOT) === -1) ? API_ROOT + endpoint : endpoint;

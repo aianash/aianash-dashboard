@@ -116,19 +116,19 @@ Section.propTypes = {
 }
 
 //
-const Action = ({actions}) => {
+const Action = ({actions, decrease}) => {
   let count = 1
   const actionStats =
     _.flatMap(actions, (action, idx) =>
       _.flatMap(action.stats, (values, prop) =>
         _.map(values, (stat, value) => {
           count = count + 1
-          console.log("asdfsd")
+          const inc = !!decrease ? 'decrease' : 'increase'
           return <InlineStat  key={count + ''}
                               count={stat}
                               title={`${action.category} > ${action.name}`}
                               subtitle={`${action.label} ${value}`}
-                              compared={['increase', '15%', 'From Yesterday']}/>
+                              compared={[inc, `${_.random(1, 15)}%`, 'From Yesterday']}/>
         })
       )
     )
@@ -142,7 +142,8 @@ const Action = ({actions}) => {
 }
 
 Action.propTypes = {
-  actions: PropTypes.array.isRequired
+  actions: PropTypes.array.isRequired,
+  decrease: PropTypes.bool,
 }
 
 //
@@ -159,6 +160,11 @@ class TimelineEvent extends Component {
 
   render() {
     const {event, expanded, onClick} = this.props
+    const decrease = _.reduce(event.tags, (res, value, key) => {
+      res = res + value.mean
+      return res
+    }, 0) < 180
+
     return (
       <Row className={cx('timeline-event-block', {selected: expanded})}
            onClick={onClick}>
@@ -175,7 +181,7 @@ class TimelineEvent extends Component {
 
         <Column size='md-1' className={cx('timeline-duration')}>
           <span>{'10 secs'}</span>
-          {Math.random() > 0.5
+          {!decrease
               ? <span className={cx('anom-good')}><i className={cx('icon-trending_up')}/></span>
               : <span className={cx('anom-bad')}><i className={cx('icon-trending_down')}/></span>}
         </Column>
@@ -187,7 +193,7 @@ class TimelineEvent extends Component {
           </div>
           <div className={cx('fadeIn', {hidden: !expanded})}>
             <StatsSummary stats={event.stats}/>
-            <Action actions={event.actions}/>
+            <Action actions={event.actions} decrease={decrease}/>
           </div>
         </Column>
       </Row>

@@ -41,12 +41,12 @@ export default class Cluster extends Component {
               onClick={_.bind(this.onClick, this, 'ALL')}>
             <h2>ALL BEHAVIORS</h2>
           </li>
-          {_.map(cluster.cluster, ({behaviorId, name}, idx) =>
+          {_.map(cluster.cluster, ({behaviorId, name, visitors}, idx) =>
             <li className={cx({selected: (behaviorId === this.props.behaviorId)})}
                 key={behaviorId}
                 onClick={this.onClick.bind(null, behaviorId)}>
               <h2>{name}</h2>
-              <p>{"50% of total users"}</p>
+              <p>{`${visitors}% of total users`}</p>
             </li>
           )}
         </ul>

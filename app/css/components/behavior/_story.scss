@@ -76,8 +76,11 @@
     background-color: rgba($brand-lighter,.4);
   }
 
-  &.no-hover:hover {
-    background: none !important;
+  &.no-hover {
+    cursor: auto;
+    &:hover {
+      background: none !important;
+    }
   }
 }
 

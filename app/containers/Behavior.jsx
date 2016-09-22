@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import styles from 'css/main'
 import { Container, Row, Column, Separator } from 'components/commons'
-import { Header, Cluster, Story, BehaviorStats, Information } from 'components/behavior'
+import { Header, Cluster, Story, BehaviorStats, Information, PageStats } from 'components/behavior'
 import { instancesCacheKey, behaviorEntityCacheKey } from 'utils'
 
 const cx = require('classnames/bind').bind(styles)
@@ -99,7 +99,6 @@ class Behavior extends Component {
 
     return (
       <Container fluid={true}>
-        <Separator title='WEB PAGE'/>
         <Header
           tokenId={tokenId}
           forDate={forDate}
@@ -107,11 +106,13 @@ class Behavior extends Component {
           instanceId={instanceId}
           pages={pages}
           instances={instances}
-          pageStat={pageStat}
           refreshPages={this.refreshPages}
           selectPage={this.selectPage}
           selectForDate={this.selectForDate}
           selectInstance={this.selectInstance}/>
+        <Separator title='WEB PAGE'/>
+        <PageStats
+          pageStat={pageStat}/>
         <Separator title='BEHAVIOR'/>
         <Row>
           <Column size='md-2'>

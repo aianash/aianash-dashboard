@@ -16,16 +16,16 @@ const cx = require('classnames/bind').bind(styles)
 
 const priorConfig = {
   label: 'Users Interest',
-  backgroundColor: 'rgba(44, 62, 80,.5)',
-  borderColor: 'rgba(44, 62, 80,1.0)',
-  pointBackgroundColor: 'rgba(44, 62, 80,1.0)',
+  backgroundColor: 'rgba(44, 62, 80,.3)',
+  borderColor: 'rgba(44, 62, 80,.6)',
+  pointBackgroundColor: 'rgba(44, 62, 80,.6)',
   pointBorderColor: '#fff',
   pointHoverBackgroundColor: '#fff',
-  pointHoverBorderColor: 'rgba(44, 62, 80,1.0)'
+  pointHoverBorderColor: 'rgba(44, 62, 80,.6)'
 }
 
 const posteriorConfig = {
-  label: 'Information Lead To Conversion',
+  label: 'Information Led To Conversion',
   backgroundColor: 'rgba(52, 152, 219, 0.6)',
   borderColor: 'rgba(52, 152, 219, 1)',
   pointBackgroundColor: 'rgba(52, 152, 219, 1)',
@@ -53,12 +53,12 @@ const BehaviorInformation = (props) => {
     labels: _.map(information, (t) => _.startCase(t.tag)) || [],
     datasets: [
       {
-        ...priorConfig,
-        data: _.map(information, (t) => t.prm.mean) || []
-      },
-      {
         ...posteriorConfig,
         data: _.map(information, (t) => t.pom.mean) || []
+      },
+      {
+        ...priorConfig,
+        data: _.map(information, (t) => t.prm.mean) || []
       }
     ]
   }
@@ -89,15 +89,21 @@ Stat.propTypes = {
   value: PropTypes.string.isRequired
 }
 
-const InformationEffectiveness = () => {
+const InformationEffectiveness = ({effectiveness}) => {
+  const iconcss = effectiveness == 0.3 ? 'icon-arrow-down' : 'icon-arrow-up'
+  const percss = effectiveness == 0.3 ? 'text-danger' : 'text-success'
   return (
     <div className={cx("stat-big")}>
-      <h2>0.3</h2>
+      <h2>{effectiveness}</h2>
       <div>
         <h3>INFORMATION EFFECTIVENESS</h3>
-        <p><i className={cx('icon-arrow-up')}/> <span className={cx('text-success')}>10%</span> From Yesterday</p>
+        <p><i className={cx(iconcss)}/> <span className={cx(percss)}>10%</span> From Yesterday</p>
       </div>
     </div>)
+}
+
+InformationEffectiveness.propTypes = {
+  effectiveness: PropTypes.number.isRequired
 }
 
 //
@@ -136,7 +142,7 @@ const Information = ({information, selectBehavior}) => {
           <Widget className={cx('information')}
                   onClick={_.bind(onClick, null, behavior.behaviorId)}>
             <WidgetHeading title={_.startCase(behavior.name)}/>
-            <InformationEffectiveness/>
+            <InformationEffectiveness effectiveness={behavior.behaviorId / 10}/>
             <WidgetContent>
               <BehaviorInformation information={behavior.information}/>
             </WidgetContent>

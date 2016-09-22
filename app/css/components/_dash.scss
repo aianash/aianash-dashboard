@@ -22,7 +22,7 @@
 }
 
 .seperator {
-  text-align: center;
+  // text-align: center;
   margin-top: 10px;
   margin-bottom: 10px;
 
@@ -37,6 +37,31 @@
     width: 100%;
     height: 0px;
     border-bottom: 2px dashed $brand-gray;
+  }
+
+  h2 {
+    letter-spacing: 4px;
+    padding: 10px 15px !important;
+    display: inline-block;
+    background-color: white;
+    font-size: 18px;
+    z-index: 99;
+
+    &:after {
+      content: " ";
+      display: inline-block;
+      width: 0;
+      height: 0;
+      border-top: 20px solid transparent;
+      border-bottom: 20px solid transparent;
+      border-left: 11px solid white;
+      position: absolute;
+      top: -20%;
+      margin-top: 10px;
+      z-index: 2;
+      overflow: hidden;
+      left: 150px;
+    }
   }
 
   h2 {

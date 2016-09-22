@@ -29,6 +29,7 @@ const pageEntryFormatter = (page, selected) =>
     <p>{page.url}</p>
   </div>
 
+
 //
 export default class Header extends Component {
   constructor(props) {
@@ -46,7 +47,6 @@ export default class Header extends Component {
     instanceId: PropTypes.string.isRequired,
     pages: PropTypes.object.isRequired,
     instances: PropTypes.object.isRequired,
-    pageStat: PropTypes.object.isRequired,
     refreshPages: PropTypes.func.isRequired,
     selectPage: PropTypes.func.isRequired,
     selectForDate: PropTypes.func.isRequired,
@@ -94,7 +94,6 @@ export default class Header extends Component {
       pageId,
       pages,
       instances,
-      pageStat,
       refreshPages,
       selectPage,
       selectForDate,
@@ -106,26 +105,30 @@ export default class Header extends Component {
       selectedPageId,
       showSelector } = this.state
 
-    let instanceRndr
-    if(instances) {
-      const {spans} = instances
-      instanceRndr =
-        <ol className={cx('list-unstyled')}>
-          {_.map(spans, (span, idx) =>
-            <li key={idx}
-                onClick={_.bind(this.onSelectInstance, null, idx, span)}>
-              {span[2]}: {span[0]} - {span[1]}
-            </li>
-          )}
+    const page = _.find(pages.entities, {pageId})
+
+    let selector
+    if(selectedInstanceIdx !== -1) {
+      const span = instances.spans[selectedInstanceIdx]
+      const fromHr = span[0] <= 12 ? span[0] + ' AM' : span[0] + ' PM'
+      const toHr = span[1] <= 12 ? span[1] + ' AM' : span[1] + ' PM'
+      selector =
+        <ol className={cx('selector-summary')}
+            onClick={this.toggleSelector}>
+          <li>{_.startCase(page.name)} ({page.url})</li>
+          <li>{forDate.format('Do MMM YYYY')}</li>
+          <li>{_.startCase(span[2])} ({fromHr} to {toHr})</li>
         </ol>
+    } else {
+      selector = <span>Select page and instance for a date</span>
     }
-    const stat = pageStat.stats || {}
-    console.log(stat)
-    const {avgDwellTime, newVisitors, pageViews, totalVisitors} = stat
 
     return (
       <Row>
-        <Column size='md-2'>
+        <Column size='md-12'>
+          <Widget className={cx('selector-cont')}>{selector}</Widget>
+        </Column>
+        <Column size='md-2' className={cx({'hidden': showSelector})}>
           <Widget className={cx('date-picker')}>
             <DatePicker fixedHeight
                         selected={forDate}
@@ -139,75 +142,13 @@ export default class Header extends Component {
         </Column>
 
         {/*page selector*/}
-        <Column size='md-4'>
+        <Column size='md-4' className={cx({'hidden': showSelector})}>
           <Query isSelected={this.isPageSelected}
                  entries={pages.entities}
                  mapper={pageMapper}
                  formatter={pageEntryFormatter}
                  onSelectEntry={selectPage}
                  className={cx('page-search')}/>
-        </Column>
-
-        {/*page stats*/}
-        <Column size='md-6'>
-          <Row className={cx('page-stat')}>
-            <Column size='md-6'>
-              <Row>
-                <Column size='md-6' key={1}>
-                  <CountWidget title={'TOTAL VISITORS'}
-                               subtitle={['increase', '15%', 'From Yesterday']}
-                               count={totalVisitors}/>
-                </Column>
-                <Column size='md-6' key={2}>
-                  <CountWidget title={'INTERESTED VISITORS'}
-                               subtitle={['decrease', '5%', 'From Yesterday']}
-                               count={newVisitors}/>
-                </Column>
-                <Column size='md-6' key={3}>
-                  <CountWidget title={'PAGE VIEWS'}
-                               subtitle={['increase', '4%', 'From Yesterday']}
-                               count={pageViews}/>
-                </Column>
-                <Column size='md-6' key={4}>
-                  <CountWidget title={'AVG DWELL TIME'}
-                               subtitle={['increase', '6%', 'From Yesterday']}
-                               count={avgDwellTime}/>
-                </Column>
-              </Row>
-            </Column>
-            <Column size='md-6' className={cx('page-stat')}>
-              <Widget>
-                <WidgetHeading title={"TOP PREVIOUS PAGES BY VISITS"} compressed/>
-                <WidgetContent>
-                  <table className={cx('table', 'table-compressed')}>
-                    <tbody>
-                    {_.take(_.sortBy(stat.previousPages, (p) => -p.count), 2).map((page, idx) =>
-                      <tr key={idx}>
-                        <td>{page.url.replace('http://', '')}</td>
-                        <td>{page.count}</td>
-                      </tr>
-                    )}
-                    </tbody>
-                  </table>
-                </WidgetContent>
-              </Widget>
-              <Widget>
-                <WidgetHeading title={"TOP NEXT PAGES BY VISITS"} compressed/>
-                <WidgetContent>
-                  <table className={cx('table', 'table-compressed')}>
-                    <tbody>
-                    {_.take(_.sortBy(stat.nextPages, (p) => -p.count), 2).map((page, idx) =>
-                      <tr key={idx}>
-                        <td>{page.url.replace('http://', '')}</td>
-                        <td>{page.count}</td>
-                      </tr>
-                    )}
-                    </tbody>
-                  </table>
-                </WidgetContent>
-              </Widget>
-            </Column>
-          </Row>
         </Column>
       </Row>
     )

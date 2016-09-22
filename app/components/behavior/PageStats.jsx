@@ -1,80 +1,105 @@
-import React, {Component, PropTypes} from 'react';
-import classNames from 'classnames/bind';
-import styles from 'css/main';
+import React, { PropTypes, Component } from 'react'
+import _ from 'lodash'
 
-const cx = classNames.bind(styles);
+import styles from 'css/main'
+import {Instances} from 'components/behavior'
+import {
+  Query,
+  Row,
+  Column,
+  Widget,
+  WidgetHeading,
+  CountWidget,
+  WidgetContent } from 'components/commons'
 
-const PageViews = () => (
-  <div className={cx("widget")}>
-    <div className={cx("line")}>
-      <div className={cx("title")}>Previous Pages</div>
-    </div>
-    <ul className={cx("list-unstyled", "links")}>
-      <li><a href="#">/dashboard</a></li>
-      <li><a href="#">/dashboard/analyze</a></li>
-    </ul>
-    <div className={cx("line")}>
-      <div className={cx("subtitle")}>Top previous pages for current behavior</div>
-    </div>
-  </div>
-)
+const cx = require('classnames/bind').bind(styles)
 
-const New = () => (
-  <div className={cx("widget")}>
-    <div className={cx("line")}>
-      <div className={cx("title")}>Next Pages</div>
-    </div>
-    <ul className={cx("list-unstyled", "links")}>
-      <li><a href="#">/dashboard</a></li>
-      <li><a href="#">/dashboard/predict</a></li>
-    </ul>
-    <div className={cx("line")}>
-      <div className={cx("subtitle")}>Top next pages for current behavior</div>
-    </div>
-  </div>
-)
-
-const Returned = () => (
-  <div className={cx("widget")}>
-    <div className={cx("line")}>
-      <div className={cx("mtitle")}>New</div>
-      <div className={cx("mtitle")}>Returned</div>
-      <div className={cx("mtitle")}>Total</div>
-    </div>
-    <div className={cx("mval")}>10,427</div>
-    <div className={cx("mval")}>9,427</div>
-    <div className={cx("mval")}>19,427</div>
-    <div className={cx("line")}>
-      <div className={cx("subtitle")}>visitors per month</div>
-    </div>
-  </div>
-)
-
-const Registered = () => (
-  <div className={cx("widget")}>
-    <div className={cx("line")}>
-      <div className={cx("title")}>Registered</div>
-    </div>
-    <div className={cx("val")}>29,427</div>
-    <div className={cx("line")}>
-      <div className={cx("subtitle")}>total registered users</div>
-    </div>
-  </div>
-)
-
+//
 export default class PageStats extends Component {
   constructor(props) {
-    super(props);
+    super(props)
   }
 
+  static propTypes = {
+    pageStat: PropTypes.object.isRequired,
+  }
+
+  //////////////
+  // Handlers //
+  //////////////
+
+  //
   render() {
+    const { pageStat } = this.props
+    const stat = pageStat.stats || {}
+    const {avgDwellTime, newVisitors, pageViews, totalVisitors} = stat
+
     return (
-        <div className={cx("row", "page-stats")}>
-          <div className={cx("col-md-3")}><PageViews/></div>
-          <div className={cx("col-md-3")}><New/></div>
-          <div className={cx("col-md-3")}><Returned/></div>
-          <div className={cx("col-md-3")}><Registered/></div>
-        </div>
+      <Row>
+        {/*page stats*/}
+        <Column size='md-6'>
+          <Row className={cx('page-stat')}>
+            <Column size='md-3' key={1}>
+              <CountWidget title={'TOTAL VISITORS'}
+                           subtitle={['increase', '15%', 'From Yesterday']}
+                           count={totalVisitors}/>
+            </Column>
+            <Column size='md-3' key={2}>
+              <CountWidget title={'INTERESTED VISITORS'}
+                           subtitle={['decrease', '5%', 'From Yesterday']}
+                           count={newVisitors}/>
+            </Column>
+            <Column size='md-3' key={3}>
+              <CountWidget title={'PAGE VIEWS'}
+                           subtitle={['increase', '4%', 'From Yesterday']}
+                           count={pageViews}/>
+            </Column>
+            <Column size='md-3' key={4}>
+              <CountWidget title={'AVG DWELL TIME'}
+                           subtitle={['increase', '6%', 'From Yesterday']}
+                           count={avgDwellTime}/>
+            </Column>
+          </Row>
+        </Column>
+        <Column size='md-6' className={cx('page-stat')}>
+          <Row>
+            <Column size='md-6'>
+              <Widget>
+                <WidgetHeading title={"TOP PREVIOUS PAGES BY VISITS"} compressed/>
+                <WidgetContent>
+                  <table className={cx('table', 'table-compressed')}>
+                    <tbody>
+                    {_.take(_.sortBy(stat.previousPages, (p) => -p.count), 2).map((page, idx) =>
+                      <tr key={idx}>
+                        <td>{page.url.replace('http://', '')}</td>
+                        <td>{page.count}</td>
+                      </tr>
+                    )}
+                    </tbody>
+                  </table>
+                </WidgetContent>
+              </Widget>
+            </Column>
+            <Column size='md-6'>
+              <Widget>
+                <WidgetHeading title={"TOP NEXT PAGES BY VISITS"} compressed/>
+                <WidgetContent>
+                  <table className={cx('table', 'table-compressed')}>
+                    <tbody>
+                    {_.take(_.sortBy(stat.nextPages, (p) => -p.count), 2).map((page, idx) =>
+                      <tr key={idx}>
+                        <td>{page.url.replace('http://', '')}</td>
+                        <td>{page.count}</td>
+                      </tr>
+                    )}
+                    </tbody>
+                  </table>
+                </WidgetContent>
+              </Widget>
+            </Column>
+          </Row>
+        </Column>
+      </Row>
     )
   }
 }

@@ -15,12 +15,12 @@ const cx = require('classnames/bind').bind(styles)
 
 const priorConfig = {
   label: 'Users Interest',
-  backgroundColor: 'rgba(44, 62, 80,.5)',
-  borderColor: 'rgba(44, 62, 80,1.0)',
-  pointBackgroundColor: 'rgba(44, 62, 80,1.0)',
+  backgroundColor: 'rgba(44, 62, 80,.3)',
+  borderColor: 'rgba(44, 62, 80,.6)',
+  pointBackgroundColor: 'rgba(44, 62, 80,.6)',
   pointBorderColor: '#fff',
   pointHoverBackgroundColor: '#fff',
-  pointHoverBorderColor: 'rgba(44, 62, 80,1.0)'
+  pointHoverBorderColor: 'rgba(44, 62, 80,.6)'
 }
 
 const posteriorConfig = {

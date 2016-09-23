@@ -11,6 +11,7 @@ import {
   Doughnut,
   RadarChart,
   LineChart } from 'components/commons'
+import {InformationExplanation} from 'components/behavior'
 
 const cx = require('classnames/bind').bind(styles)
 
@@ -89,21 +90,48 @@ Stat.propTypes = {
   value: PropTypes.string.isRequired
 }
 
-const InformationEffectiveness = ({effectiveness}) => {
-  const iconcss = effectiveness == 0.3 ? 'icon-arrow-down' : 'icon-arrow-up'
-  const percss = effectiveness == 0.3 ? 'text-danger' : 'text-success'
-  return (
-    <div className={cx("stat-big")}>
-      <h2>{effectiveness}</h2>
-      <div>
-        <h3>INFORMATION EFFECTIVENESS</h3>
-        <p><i className={cx(iconcss)}/> <span className={cx(percss)}>10%</span> From Yesterday</p>
-      </div>
-    </div>)
-}
+class InformationEffectiveness extends Component {
+  constructor(props) {
+    super(props)
+    this.toggle = this.toggle.bind(this)
+  }
 
-InformationEffectiveness.propTypes = {
-  effectiveness: PropTypes.number.isRequired
+  static propTypes = {
+    information: PropTypes.object.isRequired
+  }
+
+  state = {
+    showExplanation: false
+  }
+
+  toggle(e) {
+    this.setState({showExplanation: !this.state.showExplanation})
+    e.preventDefault()
+  }
+
+  render() {
+    const {information} = this.props
+    const {incper, effectiveness, explanation} = information
+    const iconcss = incper < 0 ? 'icon-arrow-down' : 'icon-arrow-up'
+    const percss = incper < 0 ? 'text-danger' : 'text-success'
+    const {showExplanation} = this.state
+    return (
+      <div className={cx('information-eff')}>
+        <div className={cx("stat-big")}>
+          <h2>{effectiveness}</h2>
+          <div>
+            <h3>INFORMATION EFFECTIVENESS</h3>
+            <p><i className={cx(iconcss)}/> <span className={cx(percss)}>{incper}%</span> From Yesterday</p>
+          </div>
+          <div className={cx('stat-button')} onClick={this.toggle}>TOGGLE EXPLAIN</div>
+        </div>
+        {showExplanation && <InformationExplanation explanation={explanation}/>}
+        {!showExplanation &&
+          <WidgetContent>
+            <BehaviorInformation information={information}/>
+          </WidgetContent>}
+      </div>)
+  }
 }
 
 //
@@ -128,35 +156,42 @@ InformationStats.propTypes = {
 }
 
 //
-const Information = ({information, selectBehavior}) => {
-  const behaviors = information.information
-  const onClick = (behaviorId, e) => {
-    selectBehavior(behaviorId)
+export default class Information extends Component {
+  constructor(props) {
+    super(props)
+    this.onShowTimeline = this.onShowTimeline.bind(this)
+  }
+
+  static propTypes = {
+    information: PropTypes.object.isRequired,
+    selectBehavior: PropTypes.func.isRequired
+  }
+
+  onShowTimeline(behaviorId, e) {
+    this.props.selectBehavior(behaviorId)
     e.preventDefault()
-  };
+  }
 
-  return (
-    <Row>
-      {_.map(behaviors, (behavior, idx) =>
-        <Column key={idx} size='md-4'>
-          <Widget className={cx('information')}
-                  onClick={_.bind(onClick, null, behavior.behaviorId)}>
-            <WidgetHeading title={_.startCase(behavior.name)}/>
-            <InformationEffectiveness effectiveness={behavior.behaviorId / 10}/>
-            <WidgetContent>
-              <BehaviorInformation information={behavior.information}/>
-            </WidgetContent>
-            <InformationStats stat={behavior.stat}/>
-          </Widget>
-        </Column>
-      )}
-    </Row>
-  )
+  render() {
+    const {information, selectBehavior} = this.props
+    const behaviors = information.information
+
+    return (
+      <Row>
+        {_.map(behaviors, (behavior, idx) =>
+          <Column key={idx} size='md-4'>
+            <Widget className={cx('information')}>
+              <WidgetHeading>
+                <h2 className={cx('title')}>{_.startCase(behavior.name)}</h2>
+                <span className={cx('header-button-right')}
+                      onClick={_.bind(this.onShowTimeline, this, behavior.behaviorId)}>TIMELINE</span>
+              </WidgetHeading>
+              <InformationEffectiveness information={behavior.information}/>
+              <InformationStats stat={behavior.stat}/>
+            </Widget>
+          </Column>
+        )}
+      </Row>
+    )
+  }
 }
-
-Information.propTypes = {
-  information: PropTypes.object.isRequired,
-  selectBehavior: PropTypes.func.isRequired
-}
-
-export default Information

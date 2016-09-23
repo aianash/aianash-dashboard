@@ -41,22 +41,22 @@ export default class PageStats extends Component {
           <Row className={cx('page-stat')}>
             <Column size='md-3' key={1}>
               <CountWidget title={'TOTAL VISITORS'}
-                           subtitle={['increase', '15%', 'From Yesterday']}
+                           subtitle={['increase', '15%', 'From Last Week']}
                            count={totalVisitors}/>
             </Column>
             <Column size='md-3' key={2}>
               <CountWidget title={'INTERESTED VISITORS'}
-                           subtitle={['decrease', '5%', 'From Yesterday']}
+                           subtitle={['decrease', '5%', 'From Last Week']}
                            count={newVisitors}/>
             </Column>
             <Column size='md-3' key={3}>
               <CountWidget title={'PAGE VIEWS'}
-                           subtitle={['increase', '4%', 'From Yesterday']}
+                           subtitle={['increase', '4%', 'From Last Week']}
                            count={pageViews}/>
             </Column>
             <Column size='md-3' key={4}>
               <CountWidget title={'AVG DWELL TIME'}
-                           subtitle={['increase', '6%', 'From Yesterday']}
+                           subtitle={['increase', '6%', 'From Last Week']}
                            count={avgDwellTime}/>
             </Column>
           </Row>

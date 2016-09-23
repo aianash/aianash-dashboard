@@ -101,7 +101,7 @@ class InformationEffectiveness extends Component {
   }
 
   state = {
-    showExplanation: false
+    showExplanation: (this.props.information.effectiveness < 0 ? true : false)
   }
 
   toggle(e) {
@@ -118,12 +118,12 @@ class InformationEffectiveness extends Component {
     return (
       <div className={cx('information-eff')}>
         <div className={cx("stat-big")}>
-          <h2>{effectiveness}</h2>
+          <h2 className={cx({'text-danger': (effectiveness <= 0)})}>{effectiveness}</h2>
           <div>
-            <h3>INFORMATION EFFECTIVENESS</h3>
+            <h3>NET INFORMATION EFFECTIVENESS</h3>
             <p><i className={cx(iconcss)}/> <span className={cx(percss)}>{incper}%</span> From Yesterday</p>
           </div>
-          <div className={cx('stat-button')} onClick={this.toggle}>TOGGLE EXPLAIN</div>
+          <div className={cx('stat-button')} onClick={this.toggle}>EXPLAIN</div>
         </div>
         {showExplanation && <InformationExplanation explanation={explanation}/>}
         {!showExplanation &&

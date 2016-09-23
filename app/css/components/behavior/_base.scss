@@ -4,6 +4,7 @@
 
 .behavior-timeseries {
   // padding: 0 10px;
+  // 
   &.all {
     margin-bottom: 20px;
   }
@@ -150,15 +151,23 @@
 }
 
 .page-stat {
+  &.row {
+    display: flex;
+    flex-wrap: wrap;
+  }
   .widget {
-    height: 118px;
+    // height: 118px;
+  }
+
+  .col-md-3 {
+    min-width: 198px
   }
 
   td {
     font-size: 16px;
   }
   td:last-child {
-    font-size: 18px;
+    font-size: 16px;
     font-weight: 300;
   }
 }

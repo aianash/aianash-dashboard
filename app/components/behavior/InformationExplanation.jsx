@@ -17,10 +17,9 @@ const cx = require('classnames/bind').bind(styles)
 const InformationExplanation = ({explanation}) => {
 
   return (
-    <Widget className={cx('information-explanation')}>
-      <WidgetHeading title='Effectiveness Score Detail'/>
+    <Widget>
+      <WidgetHeading title='User Engagement Score Breakdown' compressed/>
       <WidgetContent>
-        {_.chunk(explanation, 3).map((explanation) =>
           <Row>
             {_.map(explanation, ({tag, score, rNew, rExisting, interest, information, increase, divergence}, idx) => {
               const iconcss = increase < 0 ? 'icon-arrow-down' : 'icon-arrow-up'
@@ -40,7 +39,6 @@ const InformationExplanation = ({explanation}) => {
               </div>
             })}
           </Row>
-        )}
       </WidgetContent>
     </Widget>
   )

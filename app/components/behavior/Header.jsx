@@ -108,7 +108,7 @@ export default class Header extends Component {
     const page = _.find(pages.entities, {pageId})
 
     let selector
-    if(selectedInstanceIdx !== -1) {
+    if(selectedInstanceIdx !== -1 && page) {
       const span = instances.spans[selectedInstanceIdx]
       const fromHr = span[0] <= 12 ? span[0] + ' AM' : span[0] + ' PM'
       const toHr = span[1] <= 12 ? span[1] + ' AM' : span[1] + ' PM'

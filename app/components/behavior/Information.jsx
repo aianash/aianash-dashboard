@@ -16,7 +16,7 @@ import {InformationExplanation, BehaviorTimeSeries} from 'components/behavior'
 const cx = require('classnames/bind').bind(styles)
 
 const priorConfig = {
-  label: 'Users Interest',
+  label: 'Users Interest (%)',
   backgroundColor: 'rgba(44, 62, 80,.3)',
   borderColor: 'rgba(44, 62, 80,.6)',
   pointBackgroundColor: 'rgba(44, 62, 80,.6)',
@@ -26,7 +26,7 @@ const priorConfig = {
 }
 
 const posteriorConfig = {
-  label: 'Information Led To Conversion',
+  label: 'Interest Converted To Action (%)',
   backgroundColor: 'rgba(52, 152, 219, 0.6)',
   borderColor: 'rgba(52, 152, 219, 1)',
   pointBackgroundColor: 'rgba(52, 152, 219, 1)',
@@ -54,12 +54,12 @@ const BehaviorInformation = (props) => {
     labels: _.map(information, (t) => _.startCase(t.tag)) || [],
     datasets: [
       {
-        ...posteriorConfig,
-        data: _.map(information, (t) => t.pom.mean) || []
-      },
-      {
         ...priorConfig,
         data: _.map(information, (t) => t.prm.mean) || []
+      },
+      {
+        ...posteriorConfig,
+        data: _.map(information, (t) => t.pom.mean) || []
       }
     ]
   }
@@ -120,7 +120,7 @@ class InformationEffectiveness extends Component {
         <div className={cx("stat-big")}>
           <h2 className={cx({'text-danger': (effectiveness <= 0)})}>{effectiveness}</h2>
           <div>
-            <h3>NET INFORMATION EFFECTIVENESS</h3>
+            <h3>USER ENGAGEMENT SCORE</h3>
             <p><i className={cx(iconcss)}/> <span className={cx(percss)}>{incper}%</span> From Yesterday</p>
           </div>
         </div>
@@ -192,7 +192,7 @@ export default class Information extends Component {
             <Row column='md-12' className={cx('info-timeseries')}>
               <BehaviorTimeSeries information={information} behaviorId={behavior.behaviorId}/>
             </Row>
-            <Row column='md-12'>
+            <Row column='md-12' className={cx('information-explanation')}>
               <InformationExplanation explanation={behavior.information.explanation}/>
             </Row>
           </Column>

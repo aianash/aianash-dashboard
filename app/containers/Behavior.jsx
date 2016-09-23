@@ -10,6 +10,67 @@ const cx = require('classnames/bind').bind(styles)
 
 import * as actions from 'actions'
 
+
+class BehaviorDetail extends Component {
+  constructor(props) {
+    super(props)
+    this.selectBehavior = this.selectBehavior.bind(this)
+  }
+
+  static propTypes = {
+    instanceId: PropTypes.string.isRequired,
+    behaviorId: PropTypes.string.isRequired,
+    cluster: PropTypes.object.isRequired,
+    stat: PropTypes.object.isRequired,
+    information: PropTypes.object.isRequired,
+    story: PropTypes.object.isRequired,
+    selectBehavior: PropTypes.func.isRequired
+  }
+
+  state = {
+    showInformation: true
+  }
+
+  selectBehavior(behaviorId) {
+    if(behaviorId === 'ALL') {
+      this.setState({showInformation: true})
+    } else {
+      this.setState({showInformation: false})
+      this.props.selectBehavior(behaviorId)
+    }
+  }
+
+  render() {
+    const {pageId, instanceId, behaviorId} = this.props
+    const {information, cluster, story, stat} = this.props
+    const {showInformation} = this.state
+
+    return (
+      <Row>
+        <Column size='md-2'>
+          <Cluster
+            instanceId={instanceId}
+            behaviorId={showInformation ? 'ALL' : behaviorId}
+            cluster={cluster}
+            selectBehavior={this.selectBehavior}/>
+        </Column>
+        <Column size='md-10'>
+          <Row column='md-12' className={cx({hidden: !showInformation})}>
+            <Information information={information} selectBehavior={this.selectBehavior}/>
+          </Row>
+          <Row className={cx({hidden: showInformation})}>
+            <Column size='md-8'>
+              <Story story={story}/>
+            </Column>
+            <Column size='md-4'><BehaviorStats stat={stat}/></Column>
+          </Row>
+        </Column>
+      </Row>
+    )
+  }
+}
+
+
 //
 class Behavior extends Component {
   constructor(props) {
@@ -47,10 +108,6 @@ class Behavior extends Component {
     dispatch: PropTypes.func.isRequired
   }
 
-  state = {
-    showInformation: true
-  }
-
   //
   refreshPages() {
     const {dispatch, tokenId} = this.props
@@ -79,15 +136,9 @@ class Behavior extends Component {
 
   //
   selectBehavior(behaviorId) {
-    console.log(behaviorId)
-    if(behaviorId === 'ALL') {
-      this.setState({showInformation: true})
-    } else {
-      const {dispatch, pageId, instanceId} = this.props
-      this.setState({showInformation: false})
-      dispatch(actions.behavior.select({behaviorId}))
-      dispatch(actions.behavior.load({pageId, instanceId, behaviorId}))
-    }
+    const {dispatch, pageId, instanceId} = this.props
+    dispatch(actions.behavior.select({behaviorId}))
+    dispatch(actions.behavior.load({pageId, instanceId, behaviorId}))
   }
 
   //
@@ -95,7 +146,6 @@ class Behavior extends Component {
     const {tokenId, forDate, pageId, instanceId, behaviorId} = this.props
     const {pages, instances, pageStat} = this.props
     const {information, cluster, story, stat} = this.props
-    const {showInformation} = this.state
 
     return (
       <Container fluid={true}>
@@ -115,29 +165,20 @@ class Behavior extends Component {
           pageStat={pageStat}/>
         <Separator title='BEHAVIOR'/>
         <Row column='md-12'>
-          <BehaviorTimeSeries information={information} behaviorId='ALL'/>
+          <BehaviorTimeSeries information={information}
+                              behaviorId='ALL'
+                              forDate={forDate}
+                              pageId={pageId}
+                              instanceId={instanceId}/>
         </Row>
-        <Row>
-          <Column size='md-2'>
-            <Cluster
-              instanceId={instanceId}
-              behaviorId={showInformation ? 'ALL' : behaviorId}
-              cluster={cluster}
-              stat={stat}
-              selectBehavior={this.selectBehavior}/>
-          </Column>
-          <Column size='md-10'>
-            <Row column='md-12' className={cx({hidden: !showInformation})}>
-              <Information information={information} selectBehavior={this.selectBehavior}/>
-            </Row>
-            <Row className={cx({hidden: showInformation})}>
-              <Column size='md-8'>
-                <Story story={story}/>
-              </Column>
-              <Column size='md-4'><BehaviorStats stat={stat}/></Column>
-            </Row>
-          </Column>
-        </Row>
+        <BehaviorDetail
+          instanceId={instanceId}
+          behaviorId={behaviorId}
+          cluster={cluster}
+          stat={stat}
+          information={information}
+          story={story}
+          selectBehavior={this.selectBehavior}/>
       </Container>
     )
   }

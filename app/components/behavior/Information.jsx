@@ -11,7 +11,7 @@ import {
   Doughnut,
   RadarChart,
   LineChart } from 'components/commons'
-import {InformationExplanation} from 'components/behavior'
+import {InformationExplanation, BehaviorTimeSeries} from 'components/behavior'
 
 const cx = require('classnames/bind').bind(styles)
 
@@ -123,13 +123,10 @@ class InformationEffectiveness extends Component {
             <h3>NET INFORMATION EFFECTIVENESS</h3>
             <p><i className={cx(iconcss)}/> <span className={cx(percss)}>{incper}%</span> From Yesterday</p>
           </div>
-          <div className={cx('stat-button')} onClick={this.toggle}>EXPLAIN</div>
         </div>
-        {showExplanation && <InformationExplanation explanation={explanation}/>}
-        {!showExplanation &&
-          <WidgetContent>
-            <BehaviorInformation information={information}/>
-          </WidgetContent>}
+        <WidgetContent>
+          <BehaviorInformation information={information}/>
+        </WidgetContent>
       </div>)
   }
 }
@@ -177,12 +174,13 @@ export default class Information extends Component {
     const behaviors = information.information
 
     return (
-      <Row>
-        {_.map(behaviors, (behavior, idx) =>
+      <div className={cx('information-cont')}>
+      {_.map(behaviors, (behavior, idx) =>
+        <Row key={idx}>
           <Column key={idx} size='md-4'>
             <Widget className={cx('information')}>
               <WidgetHeading>
-                <h2 className={cx('title')}>{_.startCase(behavior.name)}</h2>
+                <h2 className={cx('title')}>{_.upperCase(behavior.name)}</h2>
                 <span className={cx('header-button-right')}
                       onClick={_.bind(this.onShowTimeline, this, behavior.behaviorId)}>TIMELINE</span>
               </WidgetHeading>
@@ -190,8 +188,17 @@ export default class Information extends Component {
               <InformationStats stat={behavior.stat}/>
             </Widget>
           </Column>
-        )}
-      </Row>
+          <Column size='md-8'>
+            <Row column='md-12' className={cx('info-timeseries')}>
+              <BehaviorTimeSeries information={information} behaviorId={behavior.behaviorId}/>
+            </Row>
+            <Row column='md-12'>
+              <InformationExplanation explanation={behavior.information.explanation}/>
+            </Row>
+          </Column>
+        </Row>
+       )}
+      </div>
     )
   }
 }

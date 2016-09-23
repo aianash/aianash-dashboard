@@ -6,6 +6,7 @@ export Cluster from 'components/behavior/Cluster'
 export Story from 'components/behavior/Story'
 export PageSeq from 'components/behavior/PageSeq'
 export Information from 'components/behavior/Information'
+export BehaviorTimeSeries from 'components/behavior/BehaviorTimeSeries'
 
 export Instances from 'components/behavior/Instances'
 export Timeline from 'components/behavior/Timeline'

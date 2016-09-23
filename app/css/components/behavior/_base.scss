@@ -2,6 +2,13 @@
 @import 'components/behavior/story';
 @import 'components/behavior/information';
 
+.behavior-timeseries {
+  // padding: 0 10px;
+  &.all {
+    margin-bottom: 20px;
+  }
+}
+
 .selector-cont {
   background: none !important;
   border: none !important;

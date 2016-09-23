@@ -1,9 +1,22 @@
+.information-cont {
+  & > .row {
+    margin-bottom: 5px;
+  }
+}
+
 .information {
   // cursor: pointer;
-  height: 655px;
+  height: 655px !important;
 
   .widget-heading {
     margin-bottom: 10px !important;
+  }
+}
+
+.info-timeseries {
+  .behavior-timeseries {
+    height: 313px;
+    padding: 20px 20px;
   }
 }
 
@@ -17,23 +30,39 @@
   float: left;
   width: 100%;
   padding: 0 20px;
+  height: 328px;
+
   .row {
-    margin-bottom: 10px;
-    border-bottom: 1px solid $brand-lighter;
+    margin-bottom: 15px;
 
     &:last-child {
-      border-bottom: none;
+      margin-bottom: 0;
     }
   }
 
-  h2 {
+  .score {
     font-size: 35px;
     font-weight: 300;
     line-height: 35px;
+    padding-right: 10px;
+    float: left;
+    max-width: 22%;
+  }
+
+  ul {
+    margin-top: 15px;
+  }
+
+  li {
+    margin-bottom: 15px;
   }
 }
 
 .expln-stat {
+  float: left;
+  max-width: 78%;
+  word-wrap: break-word;
+
   h3 {
     margin: 0;
     font-size: 14px;

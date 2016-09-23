@@ -7,7 +7,7 @@ const cx = require('classnames/bind').bind(styles)
 const Row = (props) => {
   const {column, children, className, ...other} = props
   return (
-    <div {...other} className={cx('row') + ' ' + className}>
+    <div {...other} className={cx('row') + (className ? ' ' + className : '')}>
       {column ? <Column size={column}>{children}</Column> : children}
     </div>
   )

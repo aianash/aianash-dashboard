@@ -3,7 +3,7 @@ import { connect } from 'react-redux'
 
 import styles from 'css/main'
 import { Container, Row, Column, Separator } from 'components/commons'
-import { Header, Cluster, Story, BehaviorStats, Information, PageStats } from 'components/behavior'
+import { Header, Cluster, Story, BehaviorStats, Information, PageStats, BehaviorTimeSeries } from 'components/behavior'
 import { instancesCacheKey, behaviorEntityCacheKey } from 'utils'
 
 const cx = require('classnames/bind').bind(styles)
@@ -114,6 +114,9 @@ class Behavior extends Component {
         <PageStats
           pageStat={pageStat}/>
         <Separator title='BEHAVIOR'/>
+        <Row column='md-12'>
+          <BehaviorTimeSeries information={information} behaviorId='ALL'/>
+        </Row>
         <Row>
           <Column size='md-2'>
             <Cluster

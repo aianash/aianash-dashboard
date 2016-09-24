@@ -32,7 +32,7 @@ const InformationExplanation = ({explanation}) => {
                 <h2 className={cx('score', scorecss)}>{score > 0 ? '+' : ''}{score}</h2>
                 <div className={cx('expln-stat')}>
                   <h3>{_.startCase(tag)}</h3>
-                  <p>Information aligned towards interest: <span className={cx('v')}>{divergence} {slow}</span></p>
+                  <p>Interest Conversion Rate: <span className={cx('v')}>{divergence} {slow}</span></p>
                   <p>Affected <span className={cx('v')}>{rExisting}% {elow}</span> of Existing and <span className={cx('v')}>{rNew}% {nlow}</span> of New Users</p>
                   <p><span className={cx(percss)}><i className={cx(iconcss)}/>{increase}%</span> from last week</p>
                 </div>

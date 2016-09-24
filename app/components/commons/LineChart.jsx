@@ -46,29 +46,18 @@ export default class LineChart extends Component {
             stepSize: 0.3,
             max: 1,
             min: 0
-          }
-        },
-        {
-          ticks: {
-            stepSize: 0.3,
-            max: 1,
-            min: 0
-          }
-        },
-        {
-          ticks: {
-            stepSize: 0.3,
-            max: 1,
-            min: 0
-          }
-        },
-        {
-          ticks: {
-            stepSize: 0.3,
-            max: 1,
-            min: 0
-          }
+          },
+          type: 'linear',
+          display: true,
+          position: 'left',
+          id: "y-axis-1"
         }]
+        // {
+        //   type: "linear", // only linear but allow scale type registration. This allows extensions to exist solely for log scale for instance
+        //   display: true,
+        //   position: "right",
+        //   id: "y-axis-2"
+        // }]
       }
     })
     this.setState({chart})

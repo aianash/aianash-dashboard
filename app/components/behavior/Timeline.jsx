@@ -160,10 +160,13 @@ class TimelineEvent extends Component {
 
   render() {
     const {event, expanded, onClick} = this.props
-    const decrease = _.reduce(event.tags, (res, value, key) => {
+    const avg = _.reduce(event.tags, (res, value, key) => {
       res = res + value.mean
       return res
-    }, 0) < 180
+    }, 0) / 5
+    const decrease = avg < 40
+    const increase = avg > 70
+    console.log(avg)
 
     return (
       <Row className={cx('timeline-event-block', {selected: expanded})}
@@ -181,9 +184,8 @@ class TimelineEvent extends Component {
 
         <Column size='md-1' className={cx('timeline-duration')}>
           <span>{'10 secs'}</span>
-          {!decrease
-              ? <span className={cx('anom-good')}><i className={cx('icon-trending_up')}/></span>
-              : <span className={cx('anom-bad')}><i className={cx('icon-trending_down')}/></span>}
+          {decrease && <span className={cx('anom-bad')}><i className={cx('icon-trending_down')}/></span>}
+          {increase && <span className={cx('anom-good')}><i className={cx('icon-trending_up')}/></span>}
         </Column>
 
         <Column size='md-6' className={cx('timeline-right-cont')}>

@@ -68,39 +68,6 @@ const BehaviorInformation = (props) => {
       <div className={cx('timeline-information-island')}>
         <RadarChart data={data}/>
       </div>
-      <div className={cx('timeline-information-bar')}>
-        <Heading title='INFORMATION EFFECTIVENESS PER USER INTEREST'/>
-        <table>
-          <thead>
-            <tr>
-              <th>USERS INTEREST</th>
-              <th></th>
-              <th>INFORMATION EFFECTIVENESS</th>
-            </tr>
-          </thead>
-          <tbody>
-            {_.map(information, (t) =>
-              <tr key={t.tag}>
-                <td>
-                  <div className={cx('progress', 'compressed')}>
-                    <div className={cx('progress-bar', 'pull-right')} role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style={{width: (t.prm.mean + '%')}}>
-                      {t.prm.mean}
-                    </div>
-                  </div>
-                </td>
-                <td className={cx('tag')}>{_.startCase(t.tag)}</td>
-                <td>
-                  <div className={cx('progress', 'compressed')}>
-                    <div className={cx('progress-bar')} role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style={{width: (t.pom.mean + '%')}}>
-                      {t.pom.mean}
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
     </WidgetContent>
   )
 }
@@ -110,3 +77,36 @@ BehaviorInformation.propTypes = {
 }
 
 export default BehaviorInformation
+      // <div className={cx('timeline-information-bar')}>
+      //   <Heading title='INFORMATION EFFECTIVENESS PER USER INTEREST'/>
+      //   <table>
+      //     <thead>
+      //       <tr>
+      //         <th>USERS INTEREST</th>
+      //         <th></th>
+      //         <th>INFORMATION EFFECTIVENESS</th>
+      //       </tr>
+      //     </thead>
+      //     <tbody>
+      //       {_.map(information, (t) =>
+      //         <tr key={t.tag}>
+      //           <td>
+      //             <div className={cx('progress', 'compressed')}>
+      //               <div className={cx('progress-bar', 'pull-right')} role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style={{width: (t.prm.mean + '%')}}>
+      //                 {t.prm.mean}
+      //               </div>
+      //             </div>
+      //           </td>
+      //           <td className={cx('tag')}>{_.startCase(t.tag)}</td>
+      //           <td>
+      //             <div className={cx('progress', 'compressed')}>
+      //               <div className={cx('progress-bar')} role='progressbar' aria-valuenow='60' aria-valuemin='0' aria-valuemax='100' style={{width: (t.pom.mean + '%')}}>
+      //                 {t.pom.mean}
+      //               </div>
+      //             </div>
+      //           </td>
+      //         </tr>
+      //       )}
+      //     </tbody>
+      //   </table>
+      // </div>

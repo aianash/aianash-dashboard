@@ -21,6 +21,32 @@
   }
 }
 
+.feedback {
+    position: absolute;
+    bottom: 6px;
+    text-align: center;
+    z-index: 999;
+
+  .typeform-share.button {
+    margin: 0px auto;
+    background-color: #34495e;
+    background-image: none;
+    color: white;
+    font-size: 18px;
+    padding: 8px 15px;
+    text-transform: uppercase;
+    display: inline;
+    float: none;
+    margin-left: 900px;
+
+    &:hover {
+      background-color: #34495e;
+      background-image: none;
+      color: white;
+    }
+  }
+}
+
 .seperator {
   // text-align: center;
   margin-top: 10px;

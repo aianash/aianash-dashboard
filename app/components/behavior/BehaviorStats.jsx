@@ -25,22 +25,22 @@ const BehaviorStats = (props) => {
     <Row>
       <Column size='md-6' key={1}>
         <CountWidget title={'TOTAL VISITORS'}
-                     subtitle={['increase', `${_.random(1, 15)}%`, 'From Yesterday']}
+                     subtitle={['increase', `${_.random(1, 15)}%`, 'From Last Week']}
                      count={totalVisitors}/>
       </Column>
       <Column size='md-6' key={2}>
         <CountWidget title={'INTERESTED VISITORS'}
-                     subtitle={['decrease', `${_.random(1, 15)}%`, 'From Yesterday']}
+                     subtitle={['decrease', `${_.random(1, 15)}%`, 'From Last Week']}
                      count={newVisitors}/>
       </Column>
       <Column size='md-6' key={3}>
         <CountWidget title={'PAGE VIEWS'}
-                     subtitle={['increase', `${_.random(1, 15)}%`, 'From Yesterday']}
+                     subtitle={['increase', `${_.random(1, 15)}%`, 'From Last Week']}
                      count={pageViews}/>
       </Column>
       <Column size='md-6' key={4}>
         <CountWidget title={'AVG DWELL TIME'}
-                     subtitle={['increase', `${_.random(1, 15)}%`, 'From Yesterday']}
+                     subtitle={['increase', `${_.random(1, 15)}%`, 'From Last Week']}
                      count={avgDwellTime}/>
       </Column>
       <Column size='md-12' key={5}>

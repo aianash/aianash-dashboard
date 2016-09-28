@@ -5,7 +5,7 @@ const cx = require('classnames/bind').bind(styles)
 
 const Column = ({className, size, children}) => {
   return (
-    <div className={cx(`col-${size}`) + ' ' + className}>{children}</div>
+    <div className={cx(`col-${size}`) + (className ? ' ' + className : '')}>{children}</div>
   )
 };
 

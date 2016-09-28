@@ -64,8 +64,8 @@ const CountWidget = ({className, title, subtitle, count}) => {
   return (
     <Widget className={clazz}>
       <h2>{count}</h2>
-      <h3>{title}</h3>
-      <p><i className={cx(iconcss)}/> <span className={cx(valuecss)}>{subtitle[1]}</span> {subtitle[2]}</p>
+      <h5>{title}</h5>
+      <small><i className={cx(iconcss)}/> <span className={cx(valuecss)}>{subtitle[1]}</span> {subtitle[2]}</small>
     </Widget>
   )
 }

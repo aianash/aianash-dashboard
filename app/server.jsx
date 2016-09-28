@@ -105,9 +105,11 @@ export default function render(req, res) {
                 ${header.link.toString()}
               </head>
               <body>
+              <div class="feedback"><a class="typeform-share button" href="https://aianash.typeform.com/to/sveJ8Y" data-mode="2" target="_blank">Feedback</a></div>
                 <div id="app">${componentHTML}</div>
                 <script>window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}</script>
                 <script type="text/javascript" charset="utf-8" src="/assets/app.js"></script>
+                <script>(function(){var qs,js,q,s,d=document,gi=d.getElementById,ce=d.createElement,gt=d.getElementsByTagName,id='typef_orm',b='https://s3-eu-west-1.amazonaws.com/share.typeform.com/';if(!gi.call(d,id)){js=ce.call(d,'script');js.id=id;js.src=b+'share.js';q=gt.call(d,'script')[0];q.parentNode.insertBefore(js,q)}id=id+'_';if(!gi.call(d,id)){qs=ce.call(d,'link');qs.rel='stylesheet';qs.id=id;qs.href=b+'share-button.css';s=gt.call(d,'head')[0];s.appendChild(qs,s)}})()</script>
               </body>
             </html>
           `)

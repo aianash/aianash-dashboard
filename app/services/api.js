@@ -1,10 +1,16 @@
 import 'isomorphic-fetch';
 
-const API_ROOT = 'http://192.168.0.103:9000/api/';
+const API_ROOT = 'http://localhost:9000/api/';
 
 function callApi(method, endpoint, body) {
   const url = (endpoint.indexOf(API_ROOT) === -1) ? API_ROOT + endpoint : endpoint;
-  const options = {method, body};
+  const options = { method }
+  if(body) {
+    options.body = JSON.stringify(body)
+    options.headers = {
+      'content-type': 'text/json'
+    }
+  }
 
   return fetch(url, options)
     .then(response =>
@@ -34,3 +40,8 @@ function fetchBehaviorEntities(name) {
 }
 export const fetchStory = fetchBehaviorEntities('stories')
 export const fetchStat = fetchBehaviorEntities('stats')
+
+export const searchTrail = (tokenId, {query}) => callApi('POST', `trail/${tokenId}`, query)
+export const forkTrail = (tokenId, {query}) => callApi('POST', `fork/${tokenId}`, query)
+export const fetchEvents = (tokenId) => callApi('GET', `events/${tokenId}`)
+export const fetchEventProperties = (tokenId, {name}) => callApi('GET', `events/properties/${tokenId}/${name}`)

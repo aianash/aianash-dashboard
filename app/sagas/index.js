@@ -14,7 +14,9 @@ import {
   getPages,
   // behavior entities
   getStory,
-  getStat
+  getStat,
+  //
+  getEvent
 } from 'reducers/selectors'
 
 import {
@@ -24,14 +26,15 @@ import {
   instancesCacheKey
 } from 'utils'
 
-const { PAGES, INSTANCES, PAGE_STATS, BEHAVIOR, CLUSTER, INFORMATION } = actions
-const { instances, pages, pageStats, cluster, story, stat, behavior, information } = actions
+const { PAGES, EVENTS, TRAIL, INSTANCES, PAGE_STATS, BEHAVIOR, CLUSTER, INFORMATION } = actions
+const { instances, events, trail, pages, pageStats, cluster, story, stat, behavior, information } = actions
 
 // common subroutine for aync fetch cycle
 function* fetchEntity(entity, apiFn, tokenId, query) {
   try {
     yield put(entity.request(query))
-    const {response, error} = yield call(apiFn, tokenId, query)
+    const _query = _.omitBy(query, (v, k) => k[0] === '_')
+    const {response, error} = yield call(apiFn, tokenId, _query)
     if(response) yield put(entity.success(query, response))
     else yield put(entity.failure(query, error))
   } finally {
@@ -277,6 +280,80 @@ function* watchLoadPageStats() {
   }
 }
 
+
+//////////////////////////////////////
+// Watch Load Events and Properties //
+//////////////////////////////////////
+
+
+const fetchEvents = fetchEntity.bind(null, events, api.fetchEvents)
+const fetchEventProperties = fetchEntity.bind(null, events, api.fetchEventProperties)
+
+function* loadEventProperties(tokenId, name) {
+  const event = yield select(getEvent, name)
+  if(!event.props)
+    yield call(fetchEventProperties, tokenId, {name})
+}
+
+function* watchLoadEvents() {
+  let task
+
+  while(true) {
+    const action = yield take([EVENTS.LOAD, EVENTS.CANCEL_LOAD])
+
+    switch (action.type) {
+      case EVENTS.CANCEL_LOAD:
+        if(task) yield cancel(task)
+        break
+
+      case EVENTS.LOAD:
+        const {name} = action
+        const tokenId = yield select(getTokenId)
+        if(name) task = yield fork(loadEventProperties, tokenId, name)
+        else task = yield fork(fetchEvents, tokenId)
+    }
+  }
+}
+
+////////////////////////
+// Watch Search Trail //
+////////////////////////
+
+const searchTrail = fetchEntity.bind(null, trail, api.searchTrail)
+const forkTrail = fetchEntity.bind(null, trail, api.forkTrail)
+
+function* watchSearchTrail() {
+  let trailTask, forkTasks = {}
+
+  while(true) {
+    const action = yield take([TRAIL.SEARCH, TRAIL.CANCEL_SEARCH])
+    const {query} = action
+
+    if(!query.isfork) {
+      if(trailTask) yield cancel(trailTask)
+      for(tid in _.keys(forkTasks)) {
+        yield cancel(forkTasks[tid])
+      }
+
+      if(action.type === TRAIL.SEARCH) {
+        const tokenId = yield select(getTokenId)
+        trailTask = yield fork(searchTrail, tokenId, {query})
+      }
+    } else {
+      let forkTask = forkTasks[query._fid]
+      if(forkTask) yield cancel(forkTask)
+
+      if(action.type === TRAIL.SEARCH) {
+        const tokenId = yield select(getTokenId)
+        forkTask = yield fork(forkTrail, tokenId, {query})
+      } else forkTask = undefined
+
+      forkTasks[query._fid] = forkTask
+    }
+  }
+}
+
+
 /////////////////////
 // Watch Selectors //
 /////////////////////
@@ -343,7 +420,9 @@ export default function* root() {
     fork(watchLoadInstances),
     fork(watchLoadCluster),
     fork(watchLoadInformation),
-    fork(watchLoadBehavior)
+    fork(watchLoadBehavior),
+    fork(watchLoadEvents),
+    fork(watchSearchTrail)
   ]
 
   yield fork(fetchInitialState)

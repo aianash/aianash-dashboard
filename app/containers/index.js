@@ -2,6 +2,7 @@ export App from 'containers/App';
 
 export Dashboard from 'containers/Dashboard';
 export Behavior from 'containers/Behavior';
+export Trail from 'containers/Trail';
 export Predict from 'containers/Predict';
 export ABTest from 'containers/ABTest';
 

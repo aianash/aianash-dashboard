@@ -44,6 +44,11 @@ export default function render(req, res) {
       },
       pageStats: {}
     },
+    trails: {
+      query: {},
+      trail: {},
+      forks: {}
+    },
     behaviors: {
       behaviorId: '',
       clusters: {},

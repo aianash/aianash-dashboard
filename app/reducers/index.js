@@ -1,7 +1,8 @@
 import { combineReducers } from 'redux'
 import { routerReducer as routing } from 'react-router-redux'
-import behaviors from 'reducers/behaviors'
 import context from 'reducers/context'
+import trails from 'reducers/trails'
+import behaviors from 'reducers/behaviors'
 import * as AT from 'actions'
 
 function errorMessage(state = null, action) {
@@ -17,6 +18,7 @@ function errorMessage(state = null, action) {
 
 const rootReducer = combineReducers({
   context,
+  trails,
   behaviors,
   errorMessage,
   routing

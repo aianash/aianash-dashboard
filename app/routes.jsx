@@ -10,6 +10,7 @@ import {
 
 // [TODO] move to containers
 import {
+  Trail,
   Behavior,
   Predict,
   ABTest
@@ -39,7 +40,8 @@ export default (store) => {
   return (
     <Route path="/" component={App}>
       <Route path="dashboard" component={Dashboard}>
-        <IndexRedirect to="behavior"/>
+        <IndexRedirect to="trail"/>
+        <Route path="trail" component={Trail}/>
         <Route path="behavior" component={Behavior}/>
         <Route path="predict" component={Predict}/>
         <Route path="abtest" component={ABTest}/>

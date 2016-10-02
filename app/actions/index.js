@@ -13,6 +13,9 @@ const CANCEL_LOAD = 'CANCEL_LOAD'
 const SELECT = 'SELECT'
 const INVALIDATE = 'INVALIDATE'
 
+const SEARCH = 'SEARCH'
+const CANCEL_SEARCH = 'CANCEL_SEARCH'
+
 function createActionTypes(base, types) {
   return types.reduce((acc, type) => {
     acc[type] = `${base}_${type}`
@@ -23,6 +26,7 @@ function createActionTypes(base, types) {
 const RequestTypes = [REQUEST, SUCCESS, FAILURE, ABORT]
 const LoadTypes    = [LOAD, CANCEL_LOAD]
 const SelectTypes  = [SELECT, INVALIDATE]
+const SearchTypes  = [SEARCH, CANCEL_SEARCH]
 
 export const FOR_DATE    = createActionTypes('FOR_DATE', [...SelectTypes])
 export const INSTANCES   = createActionTypes('INSTANCES', [...RequestTypes, ...LoadTypes, ...SelectTypes])
@@ -35,6 +39,9 @@ export const STORY       = createActionTypes('STORY', [...RequestTypes])
 export const STAT        = createActionTypes('STAT', [...RequestTypes])
 export const BEHAVIOR    = createActionTypes('BEHAVIOR', [...LoadTypes, ...SelectTypes])
 
+export const EVENTS      = createActionTypes('EVENTS', [...LoadTypes, ...RequestTypes])
+export const TRAIL       = createActionTypes('TRAIL', [...SearchTypes, ...RequestTypes])
+
 export const RESET_ERROR_MESSAGE = 'RESET_ERROR_MESSAGE'
 
 //////////////////////
@@ -45,15 +52,16 @@ function action(type, payload = {}) {
   return {type, ...payload}
 }
 
-function createActionCreators(ACTION, respName) {
+function createActionCreators(ACTION, ...names) {
   let requestCreators = {}
   let loadCreators = {}
   let selectCreators = {}
+  let searchCreators = {}
 
   if(ACTION.REQUEST)
     requestCreators = {
       request: query => action(ACTION.REQUEST, query),
-      success: (query, response) => action(ACTION.SUCCESS, {...query, [respName]: response[respName]}),
+      success: (query, response) => action(ACTION.SUCCESS, {...query, ..._.pick(response, names)}),
       failure: (query, error) => action(ACTION.FAILURE, {...query, error}),
       abort  : query => action(ACTION.ABORT, query)
     }
@@ -70,10 +78,17 @@ function createActionCreators(ACTION, respName) {
       invalidate: query => action(ACTION.INVALIDATE, query)
     }
 
+  if(ACTION.SEARCH)
+    searchCreators = {
+      search: query => action(ACTION.SEARCH, query),
+      cancelSearch: query => action(ACTION.CANCEL_SEARCH, query)
+    }
+
   return {
     ...requestCreators,
     ...loadCreators,
-    ...selectCreators
+    ...selectCreators,
+    ...searchCreators
   }
 }
 
@@ -87,5 +102,8 @@ export const cluster     = createActionCreators(CLUSTER, 'cluster')
 export const story       = createActionCreators(STORY, 'story')
 export const stat        = createActionCreators(STAT, 'stat')
 export const behavior    = createActionCreators(BEHAVIOR)
+
+export const events      = createActionCreators(EVENTS, 'events', 'event')
+export const trail       = createActionCreators(TRAIL, 'trail')
 
 export const resetErrorMessage = () => action(RESET_ERROR_MESSAGE);

@@ -26,7 +26,6 @@ export default class TrailQuery extends Component {
     return (
       <Widget>
         <WidgetContent>
-
           <button onClick={_.bind(onShowTrail, null, query)}>Show</button>
         </WidgetContent>
       </Widget>

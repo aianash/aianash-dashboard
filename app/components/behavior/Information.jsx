@@ -112,7 +112,7 @@ class InformationEffectiveness extends Component {
   render() {
     const {information} = this.props
     const {incper, effectiveness, explanation} = information
-    const iconcss = incper < 0 ? 'icon-arrow-down' : 'icon-arrow-up'
+    const iconcss = incper < 0 ? 'icon-arrow_downward' : 'icon-arrow_upward'
     const percss = incper < 0 ? 'text-danger' : 'text-success'
     const {showExplanation} = this.state
     return (

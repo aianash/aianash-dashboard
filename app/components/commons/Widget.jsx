@@ -54,8 +54,8 @@ const CountWidget = ({className, title, subtitle, count}) => {
   let clazz = cx('widget-counter')
   if(className) clazz = clazz + ' ' + className
   const iconcss = {
-    'icon-arrow-up': (subtitle[0] === 'increase'),
-    'icon-arrow-down': (subtitle[0] === 'decrease')
+    'icon-arrow_upward': (subtitle[0] === 'increase'),
+    'icon-arrow_downward': (subtitle[0] === 'decrease')
   }
   const valuecss = {
     'text-danger': (subtitle[0] === 'decrease'),

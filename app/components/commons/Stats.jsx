@@ -16,8 +16,8 @@ const InlineStat = ({className, title, subtitle, compared, count}) => {
   let clazz = cx('inline-stat')
   if(className) clazz = clazz + ' ' + className
   const iconcss = {
-    'icon-arrow-up': (compared[0] === 'increase'),
-    'icon-arrow-down': (compared[0] === 'decrease')
+    'icon-arrow_upward': (compared[0] === 'increase'),
+    'icon-arrow_downward': (compared[0] === 'decrease')
   }
   const valuecss = {
     'text-danger': (compared[0] === 'decrease'),

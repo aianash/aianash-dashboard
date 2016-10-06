@@ -33,7 +33,7 @@ export default class TrailTimeseries extends Component {
 
     const datasets = [
       {
-        label : 'Engagement Score for - asdf',
+        label : 'Engagement Score for - Original Trail',
         fill : true,
         lineTension: 0,
         backgroundColor: 'rgba(26, 188, 156,.4)',
@@ -55,9 +55,9 @@ export default class TrailTimeseries extends Component {
       }
     ]
 
-    const forkDatasets = _.map(forks, fork => {
+    const forkDatasets = _.map(forks, (fork, idx) => {
       return {
-        label: 'asdf',
+        label: 'Fork ' + (idx + 1),
         fill: false,
         lineTension: 0,
         backgroundColor: 'rgba(26, 188, 156,.4)',

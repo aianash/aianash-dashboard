@@ -1,0 +1,89 @@
+.trail, .fork {
+  display: flex;
+  flex-wrap: wrap;
+  .trail-action {
+    padding-bottom: 5px;
+    padding-top: 20px;
+    & > div {
+      border: 1px solid $brand-black;
+      height: 100%;
+      padding: 8px;
+    }
+    &:last-child {
+      i {
+        display: none;
+      }
+    }
+    i {
+      position: absolute;
+      font-size: 1.5em;
+      float: right;
+      right: -12px;
+      top: 40px;
+      color: #e74c3c;
+    }
+    .trail-action-stats {
+      .label {
+        text-transform: uppercase;
+        font-size: 0.6em;
+        margin-left: 2px;
+        letter-spacing: 0.5px;
+        vertical-align: middle;
+      }
+    }
+    h4 {
+      position: relative;
+      display: inline-block;
+      margin: 0px;
+      font-size: 1em;
+      color: #34495e;
+    }
+    ul {
+      margin: 0px;
+      li {
+        font-size: 0.8em;
+      }
+    }
+    .diverged-info {
+      font-size: 0.8em;
+    }
+  }
+}
+
+.trail {
+  .trail-action {
+    & > div {
+      &:hover {
+        cursor: pointer;
+      }
+      &:hover {
+        background-color: #edeff0;
+      }
+    }
+  }
+  .no-click {
+    & > div {
+      background-color: #edeff0;
+      &:hover {
+        cursor: default;
+      }
+    }
+  }
+}
+
+.diverged-from {
+  margin-top: 15px;
+  font-size: 0.8em;
+  span {
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+}
+
+.fork {
+  .diverged {
+    & > div {
+      background-color: #edeff0;
+    }
+  }
+}

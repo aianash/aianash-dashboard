@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import classNames from 'classnames/bind'
+import _ from 'lodash'
 import styles from 'css/main'
 import { Logo } from 'components/commons'
 
@@ -11,18 +12,21 @@ export default class Sidebar extends Component {
   }
 
   render() {
+    const currloc = !_.isEmpty(location.pathname) ? _.split(location.pathname, '/')[2] : 'trail'
+
     return (
-      <div className={cx("sidebar")}>
-        <nav className={cx("navbar")}>
-          <div className={cx("container-fluid")}>
-            <div className={cx("navbar-header")}>
+      <div className={cx('sidebar')}>
+        <nav className={cx('navbar')}>
+          <div className={cx('container-fluid')}>
+            <div className={cx('navbar-header')}>
               <Logo/>
             </div>
           </div>
         </nav>
-        <a href="/dashboard/behavior" className={cx("sb-link", "selected")}>Behavior</a>
-        <a href="/dashboard/predict" className={cx("sb-link")}>Predict</a>
-        <a href="/dashboard/abtest" className={cx("sb-link")}>A/B Test</a>
+        <a href='/dashboard/trail' className={cx('sb-link', {'selected': currloc == 'trail'})}>Trail</a>
+        <a href='/dashboard/behavior' className={cx('sb-link', {'selected': currloc == 'behavior'})}>Behavior</a>
+        <a href='/dashboard/predict' className={cx('sb-link', {'selected': currloc == 'predict'})}>Predict</a>
+        <a href='/dashboard/abtest' className={cx('sb-link', {'selected': currloc == 'abtest'})}>A/B Test</a>
       </div>
     )
   }

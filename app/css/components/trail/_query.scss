@@ -1,0 +1,84 @@
+.trail-query {
+  .action-select, .action-includes {
+    margin-top: 10px;
+    padding-right: 20px;
+    h4 {
+      font-size: 0.9em;
+      margin: 0px;
+      text-transform: uppercase;
+    }
+    i {
+      vertical-align: middle;
+      font-size: 0.8em;
+      &:hover {
+        cursor: pointer;
+      }
+    }
+    span {
+      font-size: 0.7em;
+      text-transform: uppercase;
+    }
+    .select-props {
+      margin-bottom: 5px;
+      select {
+        border: 1px solid #ccc;
+        width: 45%;
+        border-radius: 3px;
+        font-size: 0.9em;
+        height: 25px;
+      }
+      .prop-value {
+        width: 45%;
+        margin-left: 10%;
+        font-size: 0.9em;
+        height: 25px;
+      }
+    }
+    .select-action {
+      margin-top: 15px;
+      position: relative;
+      input {
+        border-radius: 0;
+      }
+      ol {
+        border: 1px solid #ccc;
+        position: absolute;
+        width: 100%;
+        background-color: #fff;
+        font-size: 0.9em;
+        li {
+          padding: 5px 15px;
+          &:hover {
+            cursor: pointer;
+            background-color: #EDEFF0;
+          }
+        }
+      }
+      .hide-suggestions {
+        display: none;
+      }
+    }
+  }
+  .add-item {
+    display: inline-block;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  .add-action {
+    margin: 20px 10px;
+    background-color: #ccc;
+    padding: 0px 10px;
+  }
+  .action-select {
+    border-right: 1px solid #ccc;
+    button {
+      background-color: #3498db;
+      border: none;
+      padding: 0 10px;
+      color: white;
+      float: right;
+      margin-top: 15px;
+    }
+  }
+}

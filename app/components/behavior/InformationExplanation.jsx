@@ -22,7 +22,7 @@ const InformationExplanation = ({explanation}) => {
       <WidgetContent>
           <Row>
             {_.map(explanation, ({tag, score, rNew, rExisting, interest, information, increase, divergence}, idx) => {
-              const iconcss = increase < 0 ? 'icon-arrow-down' : 'icon-arrow-up'
+              const iconcss = increase < 0 ? 'icon-arrow_downward' : 'icon-arrow_upward'
               const percss = increase < 0 ? 'text-danger' : 'text-success'
               const scorecss = score < 0 ? 'text-danger' : 'text-success'
               const slow = score < 0 && (divergence < .5) ? '(LOW)' : ''

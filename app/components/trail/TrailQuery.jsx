@@ -77,6 +77,7 @@ class ActionProp extends Component {
     super(props)
     this.onKeySelection = this.onKeySelection.bind(this)
     this.onValueSelection = this.onValueSelection.bind(this)
+    this.elementForValue = this.elementForValue.bind(this)
   }
 
   static propTypes = {
@@ -91,14 +92,34 @@ class ActionProp extends Component {
 
   onKeySelection(event) {
     const key = event.target.value
-    this.setState({key})
-    this.props.onChange({key, value: this.state.value})
+    this.setState({key, value: ''})
+    this.props.onChange({key, value: ''})
   }
 
   onValueSelection(event) {
     const value = event.target.value
     this.setState({value})
     this.props.onChange({key: this.state.key, value})
+  }
+
+  elementForValue(selectedprop) {
+    switch(selectedprop.type) {
+      case 'Categorical':
+        return (
+          <select className={cx('prop-value')} value={this.state.value} onChange={this.onValueSelection}>
+            <option value=''>--Select--</option>
+            {_.map(selectedprop.values, (value, idx) =>
+              <option key={idx} value={value}>{_.startCase(value)}</option>
+            )}
+          </select>
+        )
+
+      case 'String':
+        return <input type='text' className={cx('prop-value')} value={this.state.value} placeholder='Value' onChange={this.onValueSelection}/>
+
+      default:
+        return <input type='text' className={cx('prop-value')} placeholder='Value' disabled/>
+    }
   }
 
   render() {
@@ -113,25 +134,7 @@ class ActionProp extends Component {
             <option key={idx} value={propkey}>{_.startCase(propkey)}</option>
           )}
         </select>
-        {(() => {
-          switch(selectedprop.type) {
-            case 'Categorical':
-              return (
-                <select className={cx('prop-value')} onChange={this.onValueSelection}>
-                  <option value=''>--Select--</option>
-                  {_.map(selectedprop.values, (value, idx) =>
-                    <option key={idx} value={value}>{_.startCase(value)}</option>
-                  )}
-                </select>
-              )
-
-            case 'String':
-              return <input type='text' className={cx('prop-value')} placeholder='Value'/>
-
-            default:
-              return <input type='text' className={cx('prop-value')} placeholder='Value' disabled/>
-          }
-        })()}
+        {this.elementForValue(selectedprop)}
       </div>
     )
   }
@@ -198,8 +201,10 @@ class ActionSelect extends Component {
         <ActionSearchBox
           updateResult={this.updateResult}
           onActionSelection={this.onActionSelection}/>
-        <i className='icon-add' onClick={this.addActionProperty}></i>
-        <span>Add a Property</span>
+        <div className={cx('add-item')} onClick={this.addActionProperty}>
+          <i className='icon-add'></i>
+          <span>Add a Property</span>
+        </div>
         {_.map(this.state.props, (property, idx) =>
           <ActionProp
             key={idx}
@@ -299,6 +304,7 @@ export default class TrailQuery extends Component {
               mapper={mapper}
               updateQuery={this.updateSelect}
               loadActionProperties={this.props.loadActionProperties}/>
+            <button onClick={this.showTrail}>Show</button>
           </Column>
           <Column key='action-includes' className={cx('action-includes')} size='md-10'>
             <h4>Include Events in Trail</h4>
@@ -311,10 +317,11 @@ export default class TrailQuery extends Component {
                   loadActionProperties={this.props.loadActionProperties}/>
               </Column>
             )}
-            <i className={cx('icon-add')} onClick={this.addIncludeActionBox}></i>
-            <span>Add an Event</span>
+            <div className={cx('add-item', 'add-action')} onClick={this.addIncludeActionBox}>
+              <i className={cx('icon-add')}></i>
+              <span>Add an Event</span>
+            </div>
             <br/>
-            <button onClick={this.showTrail}>Show</button>
           </Column>
         </WidgetContent>
       </Widget>

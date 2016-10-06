@@ -60,7 +60,7 @@ class Action extends Component {
             <h4>{_.startCase(action.name)}</h4>
             <ul className={cx('list-unstyled')}>
               {_.map(action.props, (v, k) =>
-                <li key={k}>{_.startCase(k)}: {mk(v)}</li>
+                <li key={k}>{_.startCase(k)}: {_.startCase(v)}</li>
               )}
             </ul>
           </div>
@@ -86,6 +86,9 @@ class Fork extends Component {
     return (
       <Widget>
         <WidgetContent>
+          <div className={cx('diverged-from')}>
+            Diverged From <span>{_.startCase(fork.divergedFrom)}</span>
+          </div>
           <Row className={cx('fork')}>
             {_.map(fork.timeline, (action, idx) => {
               const obj = <Action key={idx} action={action} diverged={diverged}/>

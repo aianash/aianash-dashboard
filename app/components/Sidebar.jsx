@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import classNames from 'classnames/bind'
+import _ from 'lodash'
 import styles from 'css/main'
 import { Logo } from 'components/commons'
 
@@ -11,7 +12,7 @@ export default class Sidebar extends Component {
   }
 
   render() {
-    const currloc = location.pathname.split('/')[2]
+    const currloc = !_.isEmpty(location.pathname) ? _.split(location.pathname, '/')[2] : 'trail'
 
     return (
       <div className={cx('sidebar')}>

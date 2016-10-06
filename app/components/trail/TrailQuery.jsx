@@ -91,14 +91,14 @@ class ActionProp extends Component {
 
   onKeySelection(event) {
     const key = event.target.value
-    this.setState({key: key})
-    this.props.onChange({key: key, value: this.state.value})
+    this.setState({key})
+    this.props.onChange({key, value: this.state.value})
   }
 
   onValueSelection(event) {
     const value = event.target.value
-    this.setState({value: value})
-    this.props.onChange({key: this.state.key, value: value})
+    this.setState({value})
+    this.props.onChange({key: this.state.key, value})
   }
 
   render() {
@@ -176,18 +176,18 @@ class ActionSelect extends Component {
   }
 
   addActionProperty(event) {
-    var {name, props} = this.state
+    let {name, props} = this.state
     props = props.concat({key: '', value: ''})
-    this.setState({props: props})
-    this.props.updateQuery({name: name, props: props})
+    this.setState({props})
+    this.props.updateQuery({name, props})
     event.preventDefault()
   }
 
   updateActionProperty(idx, newprop) {
-    var {name, props} = this.state
+    let {name, props} = this.state
     props[idx] = newprop
-    this.setState({props: props})
-    this.props.updateQuery({name: name, props: props})
+    this.setState({props})
+    this.props.updateQuery({name, props})
   }
 
   render() {
@@ -236,20 +236,20 @@ export default class TrailQuery extends Component {
     const query = this.state.query
     query.includes = query.includes || []
     query.includes = query.includes.concat({name: '', props: []})
-    this.setState({query: query})
+    this.setState({query})
     event.preventDefault()
   }
 
   updateSelect(newselect) {
     const query = this.state.query
     query.select = newselect
-    this.setState({query: query})
+    this.setState({query})
   }
 
-  updateWhere(idx, newwhere) {
+  updateIncludes(idx, newwhere) {
     const query = this.state.query
     query.includes[idx] = newwhere
-    this.setState({query: query})
+    this.setState({query})
   }
 
   createQueryString() {
@@ -262,7 +262,7 @@ export default class TrailQuery extends Component {
     queryobj.select = query.select.name
     queryobj.where =
       _.reduce(query.select.props, (res, prop) => {
-        if(_.isEmpty(prop.key)) res[prop.key] = prop.value
+        if(!_.isEmpty(prop.key)) res[prop.key] = prop.value
         return res
       }, {})
 
@@ -272,7 +272,7 @@ export default class TrailQuery extends Component {
       if(_.isEmpty(w.name)) return {}
       else
       return queryobj.includes[w.name] = _.reduce(w.props, (res, prop) => {
-        if(_.isEmpty(prop.key)) res[prop.key] = prop.value
+        if(!_.isEmpty(prop.key)) res[prop.key] = prop.value
         return res
       }, {})
     })
@@ -301,18 +301,18 @@ export default class TrailQuery extends Component {
               loadEventProperties={this.props.loadEventProperties}/>
           </Column>
           <Column key='action-includes' className={cx('action-includes')} size='md-10'>
-            <h4>Include Events</h4>
+            <h4>Include Events in Trail</h4>
             {_.map(query.includes, (action, idx) =>
               <Column key={idx} size='md-2'>
                 <ActionSelect
                   actions={events.entities}
                   mapper={mapper}
-                  updateQuery={this.updateWhere.bind(this, idx)}
+                  updateQuery={this.updateIncludes.bind(this, idx)}
                   loadEventProperties={this.props.loadEventProperties}/>
               </Column>
             )}
             <i className={cx('icon-add')} onClick={this.addIncludeActionBox}></i>
-            <span>Add an intermediary Action</span>
+            <span>Add an Event</span>
             <br/>
             <button onClick={this.showTrail}>Show</button>
           </Column>

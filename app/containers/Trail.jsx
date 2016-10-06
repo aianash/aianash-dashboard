@@ -9,7 +9,6 @@ import {TrailQuery, TrailTimeseries, Trails} from 'components/trail'
 const cx = require('classnames/bind').bind(styles)
 
 const eventMapper = (event) => {
-    console.log("eventMapper = ", event)
     return `${event.name}`
   }
 
@@ -59,8 +58,7 @@ class Trail extends Component {
   //
   onShowTrail(query) {
     const {dispatch} = this.props
-    console.log(JSON.stringify(query))
-    this.setState({query: query})
+    this.setState({query})
     dispatch(actions.trail.search({query}))
   }
 
@@ -68,8 +66,6 @@ class Trail extends Component {
   fork(action) {
     const fcntr = this.state.fcntr + 1
     const query = _.merge(this.state.query, {isfork: true, _fid: fcntr, fork: action.name})
-    console.log(this.state.query)
-    console.log(query)
     this.setState({fcntr})
     this.props.dispatch(actions.trail.search({query}))
   }

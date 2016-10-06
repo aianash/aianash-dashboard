@@ -82,7 +82,7 @@ class Fork extends Component {
 
   render() {
     const {fork} = this.props
-    var diverged = true
+    let diverged = true
     return (
       <Widget>
         <WidgetContent>

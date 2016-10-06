@@ -76,8 +76,8 @@ class Trail extends Component {
     const forkTimeseries = _.map(forks, f => f.timeseries)
     return (
       <Container fluid={true}>
-        <TrailQuery events={events}
-                    loadEventProperties={this.loadEventProperties}
+        <TrailQuery actions={events}
+                    loadActionProperties={this.loadEventProperties}
                     onShowTrail={this.onShowTrail}
                     mapper={eventMapper}/>
         <TrailTimeseries trail={trail.timeseries || []} forks={forkTimeseries}/>

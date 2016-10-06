@@ -8,50 +8,50 @@ import { Widget, WidgetContent } from 'components/commons'
 const cx = require('classnames/bind').bind(styles)
 
 //
-class EventSearchBox extends Component {
+class ActionSearchBox extends Component {
   constructor(props) {
     super(props)
     this.onQuery = this.onQuery.bind(this)
     this.onFocus = this.onFocus.bind(this)
-    this.selectEvent = this.selectEvent.bind(this)
+    this.selectAction = this.selectAction.bind(this)
   }
 
   static propTypes = {
     updateResult: PropTypes.func.isRequired,
-    onEventSelection: PropTypes.func.isRequired
+    onActionSelection: PropTypes.func.isRequired
   }
 
   state = {
-    events: {},
+    actions: {},
     suggestions: false
   }
 
   onFocus(event) {
     const query = event.target.value
     const result = this.props.updateResult(query)
-    this.setState({events: result, suggestions: true})
+    this.setState({actions: result, suggestions: true})
     event.preventDefault()
   }
 
   onQuery(event) {
     const query = event.target.value
     const result = this.props.updateResult(query)
-    this.setState({events: result})
+    this.setState({actions: result})
     event.preventDefault()
   }
 
-  selectEvent(eventD, event) {
-    this.refs.queryInput.value = _.startCase(eventD.name)
-    this.setState({event: eventD, suggestions: false})
-    this.props.onEventSelection(eventD)
+  selectAction(action, event) {
+    this.refs.queryInput.value = _.startCase(action.name)
+    this.setState({suggestions: false})
+    this.props.onActionSelection(action)
     event.preventDefault()
   }
 
   render() {
-    const {events, suggestions} = this.state
+    const {actions, suggestions} = this.state
 
     return (
-      <div className={cx('select-event')}>
+      <div className={cx('select-action')}>
         <input
           type='text'
           className={cx('form-control')}
@@ -59,10 +59,10 @@ class EventSearchBox extends Component {
           onFocus={this.onFocus}
           onChange={this.onQuery}
           ref='queryInput'/>
-        <ol className={cx('list-unstyled event-options', {'hide-suggestions': !suggestions})}>
-          {_.map(events, (event, idx) =>
-            <li key={idx} value={event.name} onClick={this.selectEvent.bind(this, event)}>
-              {_.startCase(event.name)}
+        <ol className={cx('list-unstyled action-options', {'hide-suggestions': !suggestions})}>
+          {_.map(actions, (action, idx) =>
+            <li key={idx} value={action.name} onClick={this.selectAction.bind(this, action)}>
+              {_.startCase(action.name)}
             </li>
           )}
         </ol>
@@ -151,7 +151,7 @@ class ActionSelect extends Component {
     actions: PropTypes.object.isRequired,
     mapper: PropTypes.func.isRequired,
     updateQuery: PropTypes.func.isRequired,
-    loadEventProperties: PropTypes.func.isRequired
+    loadActionProperties: PropTypes.func.isRequired
   }
 
   state = {
@@ -169,7 +169,7 @@ class ActionSelect extends Component {
   }
 
   onActionSelection(action) {
-    this.props.loadEventProperties(action.name)
+    this.props.loadActionProperties(action.name)
     const state = {name: action.name, props: []}
     this.setState(state)
     this.props.updateQuery(state)
@@ -195,9 +195,9 @@ class ActionSelect extends Component {
 
     return (
       <div>
-        <EventSearchBox
+        <ActionSearchBox
           updateResult={this.updateResult}
-          onEventSelection={this.onActionSelection}/>
+          onActionSelection={this.onActionSelection}/>
         <i className='icon-add' onClick={this.addActionProperty}></i>
         <span>Add a Property</span>
         {_.map(this.state.props, (property, idx) =>
@@ -222,10 +222,10 @@ export default class TrailQuery extends Component {
   }
 
   static propTypes = {
-    events: PropTypes.object.isRequired,
+    actions: PropTypes.object.isRequired,
     mapper: PropTypes.func,
     onShowTrail: PropTypes.func.isRequired,
-    loadEventProperties: PropTypes.func.isRequired
+    loadActionProperties: PropTypes.func.isRequired
   }
 
   state = {
@@ -286,7 +286,7 @@ export default class TrailQuery extends Component {
   }
 
   render() {
-    const {events, mapper, onShowTrail} = this.props
+    const {actions, mapper, onShowTrail} = this.props
     const {query} = this.state
 
     return (
@@ -295,20 +295,20 @@ export default class TrailQuery extends Component {
           <Column key='action-select' className={cx('action-select')} size='md-2'>
             <h4>Select an Event</h4>
             <ActionSelect
-              actions={events.entities}
+              actions={actions.entities}
               mapper={mapper}
               updateQuery={this.updateSelect}
-              loadEventProperties={this.props.loadEventProperties}/>
+              loadActionProperties={this.props.loadActionProperties}/>
           </Column>
           <Column key='action-includes' className={cx('action-includes')} size='md-10'>
             <h4>Include Events in Trail</h4>
             {_.map(query.includes, (action, idx) =>
               <Column key={idx} size='md-2'>
                 <ActionSelect
-                  actions={events.entities}
+                  actions={actions.entities}
                   mapper={mapper}
                   updateQuery={this.updateIncludes.bind(this, idx)}
-                  loadEventProperties={this.props.loadEventProperties}/>
+                  loadActionProperties={this.props.loadActionProperties}/>
               </Column>
             )}
             <i className={cx('icon-add')} onClick={this.addIncludeActionBox}></i>

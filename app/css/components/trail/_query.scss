@@ -1,0 +1,74 @@
+.trail-query {
+  .action-select, .action-includes {
+    margin-top: 10px;
+    padding-right: 20px;
+    h4 {
+      font-size: 0.9em;
+      margin: 0px;
+      text-transform: uppercase;
+    }
+    i {
+      &:hover {
+        cursor: pointer;
+      }
+    }
+    span {
+      font-size: 0.7em;
+      text-transform: uppercase;
+    }
+    .select-props {
+      margin-bottom: 5px;
+      select {
+        border: 1px solid #ccc;
+        width: 45%;
+        border-radius: 3px;
+        font-size: 0.9em;
+        height: 25px;
+      }
+      .prop-value {
+        width: 45%;
+        margin-left: 10%;
+        font-size: 0.9em;
+        height: 25px;
+      }
+    }
+    .select-event {
+      margin-top: 15px;
+      position: relative;
+      input {
+        border-radius: 0;
+      }
+      ol {
+        border: 1px solid #ccc;
+        position: absolute;
+        width: 100%;
+        background-color: #fff;
+        font-size: 0.9em;
+        li {
+          padding: 5px 15px;
+          &:hover {
+            cursor: pointer;
+            background-color: #EDEFF0;
+          }
+        }
+      }
+      .hide-suggestions {
+        display: none;
+      }
+    }
+  }
+
+  .action-select {
+    border-right: 1px solid #ccc;
+  }
+
+  .action-includes {
+    border-left: 1px solid #ccc;
+    button {
+      background-color: #3498db;
+      border: none;
+      padding: 0 10px;
+      color: white;
+    }
+  }
+}

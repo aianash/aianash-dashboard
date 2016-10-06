@@ -49,7 +49,7 @@ class Action extends Component {
     const {clicked} = this.state
 
     return (
-      <Column className={cx('trail-action', {'no-click' : clicked, 'not-diverged': (diverged === false)})} size='md-2' key={action.name}>
+      <Column className={cx('trail-action', {'no-click' : clicked, 'diverged': diverged})} size='md-2' key={action.name}>
         <i className={cx('icon-arrow_back')}></i>
         <div onClick={this.fork}>
           <div className={cx('trail-action-stats')}>

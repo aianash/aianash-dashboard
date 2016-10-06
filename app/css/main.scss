@@ -40,6 +40,9 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+.icon-add:before {
+  content: "\e145";
+}
 .icon-arrow_back:before {
   content: "\e5c4";
 }
@@ -57,9 +60,6 @@
 }
 .icon-trending_up:before {
   content: "\e8e5";
-}
-.icon-trending_up2:before {
-  content: "\e900";
 }
 
 

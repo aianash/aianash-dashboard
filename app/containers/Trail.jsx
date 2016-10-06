@@ -8,6 +8,11 @@ import {TrailQuery, TrailTimeseries, Trails} from 'components/trail'
 
 const cx = require('classnames/bind').bind(styles)
 
+const eventMapper = (event) => {
+    console.log("eventMapper = ", event)
+    return `${event.name}`
+  }
+
 //
 class Trail extends Component {
   constructor(props) {
@@ -27,7 +32,8 @@ class Trail extends Component {
   }
 
   state = {
-    fcntr: 0
+    fcntr: 0,
+    query: {}
   }
 
   componentDidMount() {
@@ -53,13 +59,18 @@ class Trail extends Component {
   //
   onShowTrail(query) {
     const {dispatch} = this.props
+    console.log(JSON.stringify(query))
+    this.setState({query: query})
     dispatch(actions.trail.search({query}))
   }
 
+  //
   fork(action) {
     const fcntr = this.state.fcntr + 1
+    const query = _.merge(this.state.query, {isfork: true, _fid: fcntr, fork: action.name})
+    console.log(this.state.query)
+    console.log(query)
     this.setState({fcntr})
-    const query = {isfork: true, _fid: fcntr}
     this.props.dispatch(actions.trail.search({query}))
   }
 
@@ -68,10 +79,11 @@ class Trail extends Component {
     const {events, trail, forks} = this.props
     const forkTimeseries = _.map(forks, f => f.timeseries)
     return (
-      <Container fluid={true}s>
+      <Container fluid={true}>
         <TrailQuery events={events}
                     loadEventProperties={this.loadEventProperties}
-                    onShowTrail={this.onShowTrail}/>
+                    onShowTrail={this.onShowTrail}
+                    mapper={eventMapper}/>
         <TrailTimeseries trail={trail.timeseries || []} forks={forkTimeseries}/>
         <Trails trail={trail} forks={forks} fork={this.fork}/>
       </Container>

@@ -1,13 +1,79 @@
+.trail {
+  .trail-action:last-child {
+    & > div {
+      cursor: default;
+      background-color: rgba(26, 188, 156, .2);
+      &:hover {
+        background-color: rgba(26, 188, 156, .2);
+      }
+    }
+  }
+}
 .trail, .fork {
   display: flex;
   flex-wrap: wrap;
   .trail-action {
     padding-bottom: 5px;
     padding-top: 20px;
+    max-width: 230px;
     & > div {
-      border: 1px solid $brand-black;
+      border: 1px solid $brand-gray;
       height: 100%;
-      padding: 8px;
+    }
+    .action-info {
+      width: 80%;
+      float: right;
+      padding: 5px 5px 40px 5px;
+      height: 100%;
+      .label {
+        text-transform: uppercase;
+        font-size: 0.8em;
+        margin-left: 2px;
+        letter-spacing: 0.5px;
+        vertical-align: middle;
+        padding: 0.1em 0.6em;
+        border: 1px solid #cfcfcf;
+        background-color: white;
+        font-weight: normal;
+        &.label-success {
+          color: rgba(22, 160, 133, 1);
+        }
+        &.label-danger {
+          color: rgba(231, 76, 60, 1);
+        }
+        &.label-info {
+          color: #3498db;
+        }
+      }
+      .action-stats {
+        font-size: 0.8em;
+        position: absolute;
+        bottom: 10px;
+      }
+    }
+    .action-stats-plot {
+      width: 20%;
+      height: 100%;
+      float: left;
+      position: relative;
+      padding-left: 5px;
+      .new-users {
+        width: 50%;
+        float: left;
+        height: 70%;
+        position: absolute;
+        bottom: 0px;
+        border-left: 10px solid rgba(22, 160, 133, 0.6);
+      }
+      .dropped-users {
+        width: 50%;
+        float: right;
+        height: 40%;
+        position: absolute;
+        bottom: 0px;
+        border-left: 10px solid rgba(231, 76, 60, 0.6);
+        left: 40%;
+      }
     }
     &:last-child {
       i {
@@ -16,26 +82,17 @@
     }
     i {
       position: absolute;
-      font-size: 1.5em;
+      font-size: 1.1em;
       float: right;
-      right: -12px;
-      top: 40px;
-      color: #e74c3c;
-    }
-    .trail-action-stats {
-      .label {
-        text-transform: uppercase;
-        font-size: 0.6em;
-        margin-left: 2px;
-        letter-spacing: 0.5px;
-        vertical-align: middle;
-      }
+      right: -9px;
+      top: 27px;
+      color: rgba(52, 73, 94,.8);
     }
     h4 {
       position: relative;
       display: inline-block;
       margin: 0px;
-      font-size: 1em;
+      font-size: 0.9em;
       color: #34495e;
     }
     ul {
@@ -53,9 +110,7 @@
 .trail {
   .trail-action {
     & > div {
-      &:hover {
-        cursor: pointer;
-      }
+      cursor: pointer;
       &:hover {
         background-color: #edeff0;
       }
@@ -64,9 +119,7 @@
   .no-click {
     & > div {
       background-color: #edeff0;
-      &:hover {
-        cursor: default;
-      }
+      cursor: default;
     }
   }
 }

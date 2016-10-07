@@ -11,8 +11,16 @@ export default class Sidebar extends Component {
     super(props)
   }
 
+  componentDidMount() {
+    this.setState({currloc: location ? _.split(location.pathname, '/')[2] : ''})
+  }
+
+  state = {
+    currloc: 'trail'
+  }
+
   render() {
-    const currloc = !_.isEmpty(location.pathname) ? _.split(location.pathname, '/')[2] : 'trail'
+    const {currloc} = this.state
 
     return (
       <div className={cx('sidebar')}>

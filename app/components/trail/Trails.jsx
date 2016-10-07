@@ -28,6 +28,7 @@ class Action extends Component {
   static propTypes = {
     action: PropTypes.object.isRequired,
     diverged: PropTypes.bool,
+    isLast: PropTypes.bool,
     onFork: PropTypes.func
   }
 
@@ -36,7 +37,7 @@ class Action extends Component {
   }
 
   fork(event) {
-    if(this.state.clicked) {
+    if(this.state.clicked || this.props.isLast) {
       return
     } else {
       this.setState({clicked: true})
@@ -45,30 +46,38 @@ class Action extends Component {
   }
 
   render() {
-    const {action, diverged, onFork} = this.props
+    const {action, diverged, isLast, onFork} = this.props
     const {clicked} = this.state
+    // const newstyle = {height: action.new.percent + '%'}
+    // const dropstyle = {height: action.drop.percent + '%'}
+    // const newusers = action.new * 100 / (action.new + action.drop)
+    // const dropusers = action.drop * 100 / (action.new + action.drop)
 
     return (
       <Column className={cx('trail-action', {'no-click' : clicked, 'diverged': diverged})} size='md-2' key={action.name}>
-        <i className={cx('icon-arrow_back')}></i>
+        <i className={cx('icon-arrow_forward')}></i>
         <div onClick={this.fork}>
-          <div className={cx('trail-action-stats')}>
-            {action.new} <span className={cx('label label-success')}>New</span>&nbsp;&nbsp;
-            {action.drop} <span className={cx('label label-danger')}>Dropped</span>
+          <div className={cx('action-stats-plot')}>
+            <div className={cx('new-users')} style={{height: action.new.percent + '%'}}></div>
+            <div className={cx('dropped-users')} style={{height: action.drop.percent + '%'}}></div>
           </div>
-          <div>
+          <div className={cx('action-info')}>
             <h4>{_.startCase(action.name)}</h4>
             <ul className={cx('list-unstyled')}>
               {_.map(action.props, (v, k) =>
-                <li key={k}>{_.startCase(k)}: {_.startCase(v)}</li>
+                <li key={k}><span className={cx('label label-info')}>{_.startCase(k)}</span>&nbsp;&nbsp;{_.startCase(v)}</li>
               )}
             </ul>
+            <div className={cx('action-stats')}>
+              {action.new.count} <span className={cx('label label-success')}>New</span>&nbsp;&nbsp;
+              {action.drop.count} <span className={cx('label label-danger')}>Drop</span>
+            </div>
           </div>
-          {(action.divergedFrom) ? <div className={cx('diverged-info')}>Diverged from <h4>{_.startCase(action.divergedFrom)}</h4></div> : ""}
         </div>
       </Column>)
   }
 }
+          // {(action.divergedFrom) ? <div className={cx('diverged-info')}>Diverged from <h4>{_.startCase(action.divergedFrom)}</h4></div> : ""}
 
 //
 class Fork extends Component {
@@ -82,7 +91,9 @@ class Fork extends Component {
 
   render() {
     const {fork} = this.props
-    let diverged = true
+    let diverged = false
+    const timeline = (fork.timeline || []).slice().reverse()
+
     return (
       <Widget>
         <WidgetContent>
@@ -90,12 +101,11 @@ class Fork extends Component {
             Diverged From <span>{_.startCase(fork.divergedFrom)}</span>
           </div>
           <Row className={cx('fork')}>
-            {_.map(fork.timeline, (action, idx) => {
-              const obj = <Action key={idx} action={action} diverged={diverged}/>
+            {_.map(timeline, (action, idx) => {
               if("divergedFrom" in action) {
-                diverged = false
+                diverged = true
               }
-              return obj
+              return <Action key={idx} action={action} diverged={diverged}/>
             })}
           </Row>
         </WidgetContent>
@@ -124,14 +134,14 @@ export default class Trails extends Component {
 
   render() {
     const {trail, forks} = this.props
-
+    const timeline = (trail.timeline || []).slice().reverse()
     return (
       <div>
         <Widget>
           <WidgetContent>
             <Row className={cx('trail')}>
-              {_.map(trail.timeline, (action, idx) =>
-                <Action key={idx} action={action} onFork={this.onFork.bind(this, action)}/>
+              {_.map(timeline , (action, idx) =>
+                <Action key={idx} action={action} isLast={(idx >= (timeline.length - 1))} onFork={this.onFork.bind(this, action)}/>
               )}
             </Row>
           </WidgetContent>

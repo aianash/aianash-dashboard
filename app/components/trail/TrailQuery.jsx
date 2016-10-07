@@ -77,6 +77,7 @@ class ActionProp extends Component {
     super(props)
     this.onKeySelection = this.onKeySelection.bind(this)
     this.onValueSelection = this.onValueSelection.bind(this)
+    this.onOperatorSelection = this.onOperatorSelection.bind(this)
     this.elementForValue = this.elementForValue.bind(this)
   }
 
@@ -87,19 +88,29 @@ class ActionProp extends Component {
 
   state = {
     key: '',
+    op: '',
     value: ''
   }
 
   onKeySelection(event) {
     const key = event.target.value
     this.setState({key, value: ''})
-    this.props.onChange({key, value: ''})
+    this.props.onChange({key, op: this.state.op, value: ''})
+    event.preventDefault()
   }
 
   onValueSelection(event) {
     const value = event.target.value
     this.setState({value})
-    this.props.onChange({key: this.state.key, value})
+    this.props.onChange({key: this.state.key, op: this.state.op, value})
+    event.preventDefault()
+  }
+
+  onOperatorSelection(event) {
+    const op = event.target.value
+    this.setState({op})
+    this.props.onChange({key: this.state.key, op, value: this.state.value})
+    event.preventDefault()
   }
 
   elementForValue(selectedprop) {
@@ -133,6 +144,13 @@ class ActionProp extends Component {
           {_.map(_.keys(actionprops), (propkey, idx) =>
             <option key={idx} value={propkey}>{_.startCase(propkey)}</option>
           )}
+        </select>
+        <select className={cx('select-operator')} onChange={this.onOperatorSelection}>
+          <option value=''>--Select--</option>
+          <option value="eq">Equal</option>
+          <option value="neq">Not Equal</option>
+          <option value="gt">Greater Than</option>
+          <option value="lt">Less Than</option>
         </select>
         {this.elementForValue(selectedprop)}
       </div>

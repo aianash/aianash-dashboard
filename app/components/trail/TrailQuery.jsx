@@ -147,10 +147,10 @@ class ActionProp extends Component {
         </select>
         <select className={cx('select-operator')} onChange={this.onOperatorSelection}>
           <option value=''>--Select--</option>
-          <option value="eq">Equal</option>
-          <option value="neq">Not Equal</option>
-          <option value="gt">Greater Than</option>
-          <option value="lt">Less Than</option>
+          <option value="eq">{'='}</option>
+          <option value="neq">{'!='}</option>
+          <option value="gt">{'>'}</option>
+          <option value="lt">{'<'}</option>
         </select>
         {this.elementForValue(selectedprop)}
       </div>

@@ -33,7 +33,7 @@ export default class TrailTimeseries extends Component {
 
     const datasets = [
       {
-        label : 'Engagement Score for - Original Trail',
+        label : 'Total Users - Original Trail',
         fill : true,
         lineTension: 0,
         backgroundColor: 'rgba(26, 188, 156,.4)',

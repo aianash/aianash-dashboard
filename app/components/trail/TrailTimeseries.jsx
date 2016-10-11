@@ -22,11 +22,12 @@ export default class TrailTimeseries extends Component {
 
   static propTypes = {
     trail: PropTypes.array.isRequired,
-    forks: PropTypes.array.isRequired
+    forks: PropTypes.array.isRequired,
+    colors: PropTypes.object.isRequired
   }
 
   render() {
-    const {trail, forks} = this.props
+    const {trail, forks, colors} = this.props
     const timeline = _.map(Array(15), (v, idx) =>
       moment().add(-idx, 'days').format('MMM Do')
     ).reverse()
@@ -57,11 +58,11 @@ export default class TrailTimeseries extends Component {
 
     const forkDatasets = _.map(forks, (fork, idx) => {
       return {
-        label: 'Fork ' + (idx + 1),
+        label: _.startCase(fork.divergedFrom),
         fill: false,
         lineTension: 0,
-        backgroundColor: 'rgba(26, 188, 156,.4)',
-        borderColor: 'rgba(26, 188, 156,.4)',
+        backgroundColor: colors[fork.divergedFrom].getRGBA(0.4),
+        borderColor: colors[fork.divergedFrom].getRGBA(0.4),
         borderCapStyle: 'butt',
         borderDash: [],
         borderDashOffset: 0.0,
@@ -74,7 +75,7 @@ export default class TrailTimeseries extends Component {
         pointHoverBorderColor: "rgba(220,220,220,1)",
         pointHoverBorderWidth: 2,
         pointHitRadius: 10,
-        data: fork,
+        data: fork.timeseries,
         spanGaps: false,
       }
     })

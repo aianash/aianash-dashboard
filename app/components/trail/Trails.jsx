@@ -29,6 +29,7 @@ class Action extends Component {
   static propTypes = {
     action: PropTypes.object.isRequired,
     diverged: PropTypes.bool,
+    color: PropTypes.object.isRequired,
     onFork: PropTypes.func
   }
 
@@ -52,12 +53,13 @@ class Action extends Component {
   }
 
   render() {
-    const {action, diverged, onFork} = this.props
+    const {action, diverged, color, onFork} = this.props
     const {clicked} = this.state
+    const boxcolor = !_.isEmpty(color) ? {backgroundColor: color.getRGBA(0.1)} : {}
 
     return (
-      <Column className={cx('trail-action', {'no-click' : clicked, 'dashed-border': !!action.diverging, 'diverged': diverged})} size='md-2' key={action.name}>
-        <div onClick={this.fork}>
+      <Column className={cx('trail-action', {'no-click' : clicked, 'dashed-border': !!action.diverging, 'diverged': diverged})} size='md-3' key={action.name}>
+        <div onClick={this.fork} style={boxcolor}>
           {this.arrowOrSeparator(action)}
           <div className={cx('action-stats-plot')}>
             <div className={cx('new-users')} style={{height: action.new.percent + '%'}}></div>
@@ -87,11 +89,12 @@ class Fork extends Component {
   }
 
   static propTypes = {
-    fork: PropTypes.object.isRequired
+    fork: PropTypes.object.isRequired,
+    color: PropTypes.object.isRequired
   }
 
   render() {
-    const {fork} = this.props
+    const {fork, color} = this.props
     let diverged = false
     const timeline = (fork.timeline || []).slice().reverse()
 
@@ -103,7 +106,8 @@ class Fork extends Component {
           </div>
           <Row className={cx('fork')}>
             {_.map(timeline, (action, idx) => {
-              const obj = <Action key={idx} action={action} diverged={diverged}/>
+              const boxcolor = diverged ? color : {}
+              const obj = <Action key={idx} action={action} color={boxcolor} diverged={diverged}/>
               if(action.diverging) {
                 diverged = true
               }
@@ -126,7 +130,8 @@ export default class Trails extends Component {
   static propTypes = {
     trail: PropTypes.object.isRequired,
     forks: PropTypes.object.isRequired,
-    fork: PropTypes.func.isRequired
+    fork: PropTypes.func.isRequired,
+    colors: PropTypes.object.isRequired
   }
 
   onFork(action, fork, event) {
@@ -140,6 +145,8 @@ export default class Trails extends Component {
 
   render() {
     const {trail, forks} = this.props
+    const colors = this.props.colors || {}
+
     const timeline = (trail.timeline || []).slice().reverse()
     return (
       <div>
@@ -148,12 +155,12 @@ export default class Trails extends Component {
             <Row className={cx('trail')}>
               {_.map(timeline , (action, idx) => {
                 const fork = (idx == 0 || idx >= timeline.length - 1)
-                return <Action key={idx} action={action} onFork={this.onFork.bind(this, action, !fork)}/>
+                return <Action key={idx} action={action} color={colors[action.name] || {}} onFork={this.onFork.bind(this, action, !fork)}/>
               })}
             </Row>
           </WidgetContent>
         </Widget>
-        {_.map(forks, (fork, fid) => <Fork key={fid} fork={fork}/>)}
+        {_.map(forks, (fork, fid) => <Fork key={fid} color={colors[fork.divergedFrom]} fork={fork}/>)}
       </div>
     )
   }
